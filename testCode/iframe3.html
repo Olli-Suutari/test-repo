@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<style>
+			iframe {
+				overflow: hidden;
+				overflow-x:hidden;
+				overflow-y:hidden;
+				height:110%;
+				width:100%;
+				position:absolute;
+				top:0px;
+				left:0px;
+				right:0px;
+				bottom:0px
+			}​
+			body {
+				margin:0px;padding:0px;overflow:hidden
+			}
+		</style>
+	</head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+	<body>
+
+
+
+		<div id="YOUR_CONTAINER_ID">
+			<iframe id="testFrame" allowfullscreen="" scrolling="no" sandbox="allow-top-navigation allow-same-origin allow-scripts allow-popups allow-pointer-lock" src="https://hakemisto.kirjastot.fi/jyvaskyla/jyvaskyla_paakirjasto" frameborder="0" height="100%" width="100%"></iframe>
+		</div>
+	<body>
+
+
+	<script>
+	var head = jQuery("#testFrame").contents().find("head");
+	var css = '<style type="text/css">' +
+			'.main-navigation{display:none}; ' +
+			'</style>';
+	jQuery(head).append(css);
+	console.log("A");
+
+
+	var myConfObj = {
+	iframeMouseOver : false
+	}
+	window.addEventListener('blur',function(){
+	if(myConfObj.iframeMouseOver){
+		console.log('Wow! Iframe Click!');
+	}
+	});
+
+	document.getElementById('YOUR_CONTAINER_ID').addEventListener('mouseover',function(){
+	myConfObj.iframeMouseOver = true;
+	});
+	document.getElementById('YOUR_CONTAINER_ID').addEventListener('mouseout',function(){
+		myConfObj.iframeMouseOver = false;
+	});
+
+
+	</script>
+</html>

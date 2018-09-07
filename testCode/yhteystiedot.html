@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="fi"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+        @import url("style.css");
+        @import url("https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700|Roboto:300,300i,400,700");
+  </style>
+      <script
+      src="https://code.jquery.com/jquery-1.12.4.min.js"
+      integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+      crossorigin="anonymous"></script>
+  </head>
+<body id="page--contact-info">
+    <main class="container main content">
+      <div class="row">
+    <div class="col-md-8">
+      
+        <header>
+            <nav class="nav nav-pills nav-library-page">
+                    <a class="nav-item nav-link  index.html" href="index.html">Esittely</a>
+                    <a class="nav-item nav-link active yhteystiedot.html" href="yhteystiedot.html">Ota yhteyttä</a>
+                    <a class="nav-item nav-link  palvelut.html" href="palvelut.html">Palvelut</a>
+            </nav>
+        </header>
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <section class="contact-details">
+        <div class="row">
+          <div class="col-md-8">
+            <h2><i class="fa fa-map-o" aria-hidden="true"></i> Yhteystiedot</h2>
+            <div class="responsive-table">
+              <table class="table table-sm table-inverse contact">
+                <thead>
+                  <tr>
+                    <th>Osoite</th>
+                    <th>Postiosoite</th>
+                    <th>Sähköposti</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td id="streetAddress"></td>
+                    <td id="postalAddress"></td>
+                    <td id="email"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="map-container">
+              <div class="map-scroll-block" id="block-85159">
+                <div class="ol-full-screen ol-unselectable ol-control ">
+                  <!-- <button class="ol-full-screen-false" type="button" title="Toggle full-screen">⤢</button> -->
+                </div>
+              </div>
+              <!-- TO DO: Map canvas position relative goes under where the map should start, absolute does not move when scrolled.-->
+              <div class="map-view" data-map="62.23846200,25.74279600" data-scroll-block="block-85159">
+                <div class="ol-viewport" data-view="5" style="position: absolute; overflow: hidden; width: 100%; height: 100%; touch-action: none;">
+                  <canvas class="ol-unselectable" width="350" height="208" style="width: 100%; height: 100%; display: block;">
+                  </canvas>
+                  <div class="ol-overlaycontainer"></div>
+                  <div class="ol-overlaycontainer-stopevent">
+                    <div class="ol-full-screen ol-unselectable ol-control ">
+                      <button class="ol-full-screen-false" type="button" title="Toggle full-screen">⤢</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
+        </div>
+      </section>
+      <section class="phone-numbers">
+        <h2><i class="fa fa-phone" aria-hidden="true"></i> Puhelinnumerot</h2>
+
+        <div class="responsive-table">
+          <table class="table table-striped table-sm phones">
+            <thead class="thead-default">
+              <tr>
+                <th>Osasto</th>
+                <th>Numero</th>
+              </tr>
+            </thead>
+            <tbody>
+                              <tr>
+                  <td>LAINOJEN UUSINTA, KADONNUT KORTTI</td>
+                  <td>014 266 4123</td>
+                </tr>
+                                              <tr>
+                  <td>NEUVONTA: Aikuisten osasto, aineiston varaaminen, tietopalvelu, hankintaehdotukset</td>
+                  <td>014 266 4104</td>
+                </tr>
+                                              <tr>
+                  <td>MUSIIKKIOSASTO: Digitointi ja soitonharjoittelutilat</td>
+                  <td>014 266 4115</td>
+                </tr>
+                                              <tr>
+                  <td>Tilavaraukset (salit, kerhohuone)</td>
+                  <td>014 266 4111</td>
+                </tr>
+                                              <tr>
+                  <td>Lasten- ja nuorten osasto</td>
+                  <td>014 266 4113</td>
+                </tr>
+                                              <tr>
+                  <td>Sanoma- ja aikakauslehdet / lehtilukusali</td>
+                  <td>014 266 4119</td>
+                </tr>
+                                              <tr>
+                  <td>Tiedotus/Viestintä</td>
+                  <td>014 266 4097</td>
+                </tr>
+                                              <tr>
+                  <td>Vahtimestari</td>
+                  <td>014 266 4100</td>
+                </tr>
+                                              <tr>
+                  <td>Näyttelyvaraukset, ala-aula</td>
+                  <td>014 266 4120</td>
+                </tr>
+                                              <tr>
+                  <td>Näyttelyvaraukset, 2. kerros</td>
+                  <td>014 266 4118</td>
+                </tr>
+                                              <tr>
+                  <td>Kaukopalvelu</td>
+                  <td>014 266 4131</td>
+                </tr>
+                                              <tr>
+                  <td>Maakuntakokoelma, aluetietokanta</td>
+                  <td>014 266 4130</td>
+                </tr>
+                                          </tbody>
+          </table>
+        </div>
+      </section>
+
+              <section class="staff">
+          <h2><i class="fa fa-address-card-o" aria-hidden="true"></i> Henkilökunta</h2>
+
+          <div class="responsive-table">
+            <table class="table table-striped table-sm persons">
+              <thead class="thead-default">
+                <tr>
+                  <th>Nimi</th>
+                  <th>Työnimike</th>
+                  <th>Yhteystiedot</th>
+                </tr>
+              </thead>
+              <tbody>
+                                  <tr>
+                    <td>Sanna-Maija Haapala</td>
+                    <td>
+                      kirjastovirkailija
+                      
+                    </td>
+                    <td>
+                      sanna-maija.haapala@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Enni Hakkarainen</td>
+                    <td>
+                      kirjastovirkailija
+                      
+                    </td>
+                    <td>
+                      enni.hakkarainen@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Lea Hassinen</td>
+                    <td>
+                      Osastosihteeri
+                      
+                    </td>
+                    <td>
+                      etunimi.sukunimi@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Sirpa Heinonen</td>
+                    <td>
+                      Kirjastovirkailija
+                      
+                    </td>
+                    <td>
+                      etunimi.sukunimi@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Maija Herrala</td>
+                    <td>
+                      Kirjastovirkailija
+                      
+                    </td>
+                    <td>
+                      etunimi.sukunimi@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Juha Hälinen</td>
+                    <td>
+                      verkkopalvelusuunnittelija
+                      
+                    </td>
+                    <td>
+                      juha.halinen@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Heli Joensuu</td>
+                    <td>
+                      informaatikko
+                      kaunokirjallisuus
+                    </td>
+                    <td>
+                      heli.joensuu@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Anna Kainulainen</td>
+                    <td>
+                      Kirjastonhoitaja
+                      
+                    </td>
+                    <td>
+                      anna.kainulainen@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Marita Kallio</td>
+                    <td>
+                      Kirjastovirkailija
+                      Kaukopalvelu
+                    </td>
+                    <td>
+                      etunimi.sukunimi@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Tarja Katajamäki</td>
+                    <td>
+                      kirjastovirkailija
+                      
+                    </td>
+                    <td>
+                      tarja.katajamaki@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Sanna Keralampi</td>
+                    <td>
+                      Kirjastonhoitaja
+                      
+                    </td>
+                    <td>
+                      sanna.keralampi@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Irmeli Koivisto</td>
+                    <td>
+                      kirjastonhoitaja
+                      
+                    </td>
+                    <td>
+                      irmeli.koivisto@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Piia Koskinen</td>
+                    <td>
+                      kirjastovirkailija
+                      
+                    </td>
+                    <td>
+                      piia.koskinen@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Leena Kruuti</td>
+                    <td>
+                      Osastonjohtaja
+                      
+                    </td>
+                    <td>
+                      leena.kruuti@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Juhani Kärkkäinen</td>
+                    <td>
+                      kirjastonhoitaja
+                      
+                    </td>
+                    <td>
+                      juhani.karkkainen@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Birgitta Lappalainen</td>
+                    <td>
+                      Kirjastovirkailija
+                      
+                    </td>
+                    <td>
+                      birgitta.lappalainen@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Sirpa Leskinen</td>
+                    <td>
+                      Kirjastovirkailija
+                      
+                    </td>
+                    <td>
+                      sirpa.leskinen@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Anita Naukkarinen</td>
+                    <td>
+                      Kirjastovirkailija
+                      
+                    </td>
+                    <td>
+                      anita.naukkarinen@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Sirpa Nieminen</td>
+                    <td>
+                      vastaava kirjastovirkailija
+                      
+                    </td>
+                    <td>
+                      sirpa.marja.nieminen@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Katri Niskanen</td>
+                    <td>
+                      Kirjastonhoitaja
+                      
+                    </td>
+                    <td>
+                      katri.niskanen@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Riitta Nuutinen</td>
+                    <td>
+                      Kirjastovirkailija
+                      
+                    </td>
+                    <td>
+                      etunimi.sukunimi@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Anne Oinonen</td>
+                    <td>
+                      Kirjastonhoitaja
+                      
+                    </td>
+                    <td>
+                      anne.oinonen@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Timo Okkolin</td>
+                    <td>
+                      Erikoiskirjastovirkailija
+                      Mikrotuki
+                    </td>
+                    <td>
+                      timo.okkolin@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Ursula Pilkkakangas</td>
+                    <td>
+                      Kirjastovirkailija
+                      
+                    </td>
+                    <td>
+                      ursula.pilkkakangas@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Katja Prevot</td>
+                    <td>
+                      Kirjastovirkailija
+                      
+                    </td>
+                    <td>
+                      etunimi.sukunimi@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Jyrki Pärnänen</td>
+                    <td>
+                      kirjastovirkailija
+                      
+                    </td>
+                    <td>
+                      jyrki.parnanen@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Airi Rautalampi</td>
+                    <td>
+                      vastaava kirjastovirkailija
+                      
+                    </td>
+                    <td>
+                      airi.rautalampi@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Aapo Ruuttunen</td>
+                    <td>
+                      Informaatikko
+                      
+                    </td>
+                    <td>
+                      aapo.ruuttunen@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Anu Sormunen</td>
+                    <td>
+                      Kirjastonhoitaja
+                      
+                    </td>
+                    <td>
+                      anu.sormunen@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Tiina Teijonsalo</td>
+                    <td>
+                      Informaatikko
+                      maakuntakirjastoasiat
+                    </td>
+                    <td>
+                      tiina.teijonsalo@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Marianna Tiensuu</td>
+                    <td>
+                      kirjastovirkailija
+                      
+                    </td>
+                    <td>
+                      marianna.tiensuu@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Mari Vuorinen</td>
+                    <td>
+                      pedagoginen informaatikko
+                      
+                    </td>
+                    <td>
+                      mari.vuorinen@jkl.fi
+                      
+                    </td>
+                  </tr>
+                                  <tr>
+                    <td>Heidi Väisänen</td>
+                    <td>
+                      Kirjastonhoitaja
+                      
+                    </td>
+                    <td>
+                      heidi.i.vaisanen@jkl.fi
+                      
+                    </td>
+                  </tr>
+                              </tbody>
+            </table>
+          </div>
+        </section>
+          </div>
+  </div>
+  </main>
+</div>
+
+    </footer>
+
+  <script type="text/x-twig" id="twig-gallery">PGRpdiBjbGFzcz0ibW9kYWwgZ2FsbGVyeSIgdGFiaW5kZXg9Ii0xIiByb2xlPSJkaWFsb2ciPgogIDx1bCBjbGFzcz0idGh1bWJuYWlscyI+CiAgICB7JSBmb3IgcGljIGluIHBpY3R1cmVzICV9CiAgICAgIDxsaSBjbGFzcz0idGh1bWIiPgogICAgICAgIDxhIGhyZWY9Int7IHBpYy5maWxlcy5sYXJnZSB9fSIgZGF0YS1waWN0dXJlPSJ7eyBsb29wLmluZGV4MCB9fSIgYXJpYS1sYWJlbD0ie3sgJ2dhbGxlcnkuc2hvd19waWN0dXJlJ3x0cmFucyB9fSI+CiAgICAgICAgICA8aW1nIHNyYz0ie3sgcGljLmZpbGVzLnNtYWxsIH19IiBhbHQ9IiIvPgogICAgICAgIDwvYT4KICAgICAgPC9saT4KICAgIHslIGVuZGZvciAlfQogIDwvdWw+CiAgCiAgPGJ1dHRvbiB0eXBlPSJidXR0b24iIGNsYXNzPSJjbG9zZSIgZGF0YS1kaXNtaXNzPSJtb2RhbCIgYXJpYS1sYWJlbD0ie3sgJ2dhbGxlcnkuY2xvc2UnfHRyYW5zIH19Ij4KICAgIDxzcGFuIGFyaWEtaGlkZGVuPSJ0cnVlIj4mdGltZXM7PC9zcGFuPgogIDwvYnV0dG9uPgoKICA8ZmlndXJlIGNsYXNzPSJ2aWV3cG9ydCI+CiAgICB7IwogICAgPGltZyBzcmM9Int7IHBpY3R1cmVzWzBdLmZpbGVzLmxhcmdlIH19IiBhbHQ9Int7IHBpYy5kZXNjcmlwdGlvbiB9fSIvPgogICAgPGZpZ2NhcHRpb24+e3sgcGljdHVyZXNbMF0uZGVzY3JpcHRpb24gfX08L2ZpZ2NhcHRpb24+CiAgICAjfQogIDwvZmlndXJlPgo8L2Rpdj4K</script>
+
+      <script type="text/x-service-popover">
+      <div class="popover service-popover shadow-sm" role="dialog" aria-labelledby="my-popover-header" aria-describedby="my-popover-body">
+        <div class="arrow"></div>
+        <h3 class="popover-header" id="my-popover-header"></h3>
+        <div class="popover-body" id="my-popover-body"></div>
+
+        <div class="text-center">
+          <button type="button" class="btn btn-sm btn-primary py-0 mb-2">Sulje</button>
+        </div>
+      </div>
+    </script>
+
+
+   
+    <script class="libdir_widget" data-library="85159" data-lang="fi" src="js/yhteystiedot.js" type="text/javascript"></script>
+  
+    <!-- <script src="js/hakemisto.js"></script> -->
+
+
+</body></html>
