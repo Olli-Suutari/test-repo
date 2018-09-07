@@ -32,7 +32,7 @@ $(document).ready(function($) {
               '</div>' +
             '</div>' )*/
 
-            $('head').append($('<script>').attr('type', 'text/javascript').attr('src', '/hakemisto.js'));
+            $('head').append($('<script>').attr('type', 'text/javascript').attr('src', 'hakemisto.js'));
         });
     });
 });
