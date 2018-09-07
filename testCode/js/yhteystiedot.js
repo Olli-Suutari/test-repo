@@ -6,33 +6,35 @@ $(document).ready(function($) {
         var lang = widget.attr("data-lang");
         // Generic details
         var jsonp_url = "https://api.kirjastot.fi/v3/library/" + lib_id + "?lang=" + lang + "&with=mail_address";
-        console.log(jsonp_url);
-        $.getJSON(jsonp_url, function(data) { 
+        $.getJSON(jsonp_url, function(data) {
             console.log(data.address.zipcode)
             $( "#streetAddress" ).append( data.name  + '<br>' + data.address.street + '<br>' + data.address.zipcode + ' ' + data.address.city);
             $( "#postalAddress" ).append( data.name  + '<br>PL ' + data.mail_address.box_number + '<br>' + data.mail_address.zipcode + ' ' + data.mail_address.area);
             $( "#email" ).append( data.email );
-
-            $( ".map-view" ).attr( "data-map", "12.23846200,15.74279600" )
-            /*
-            $( ".map-container" ).append( '<div class="map-scroll-block" id="block-85159">' +
-            '<div class="ol-full-screen ol-unselectable ol-control ">' +
-            '</div>' +
-          '</div>' +
-          '<div class="map-view" data-map="62.23846200,25.74279600" data-scroll-block="block-85159"> ' +
-            '<div class="ol-viewport" data-view="5" style="position: relatic; overflow: hidden; width: 100%; height: 100%; touch-action: none;">' +
-            '<canvas class="ol-unselectable" width="350" height="208" style="width: 100%; height: 100%; display: block;">' +
-              '</canvas>' +
-              '<div class="ol-overlaycontainer"></div>' +
-              '<div class="ol-overlaycontainer-stopevent">' +
-              '<div class="ol-full-screen ol-unselectable ol-control ">' +
-                '<button class="ol-full-screen-false" type="button" title="Toggle full-screen">⤢</button>' +
-                  '</div>' +
-                '</div>' +
-              '</div>' +
-            '</div>' )*/
-
-            $('head').append($('<script>').attr('type', 'text/javascript').attr('src', '/hakemisto.js'));
+            //$( ".map-view" ).attr( "data-map", "12.23846200,15.74279600" )
         });
+        // Phone numbers.
+        var jsonp_url = "https://api.kirjastot.fi/v3/library/" + lib_id + "?lang=" + lang + "&with=phone_numbers";
+        $.getJSON(jsonp_url, function(data) {
+            for (var i=0; i<data.phone_numbers.length; i++) {
+                $( "#phoneNumbers" ).append( '<tr>' + 
+                '<td>' + data.phone_numbers[i].name + '</td>' +
+                '<td>' + data.phone_numbers[i].number + '</td>' +
+                '</tr>' );
+            }
+        });
+        // Staff list
+        var jsonp_url = "https://api.kirjastot.fi/v3/library/" + lib_id + "?lang=" + lang + "&with=persons";
+        $.getJSON(jsonp_url, function(data) {
+            for (var i=0; i<data.persons.length; i++) {
+                $( "#staffMembers" ).append( '<tr>' + 
+                '<td>' + data.persons[i].first_name + ' ' + data.persons[i].first_name + '</td>' +
+                '<td>' + data.persons[i].job_title + '</td>' +
+                '<td>' + data.persons[i].email + '</td>' +
+                '</tr>' );
+            }
+        });
+
+
     });
 });
