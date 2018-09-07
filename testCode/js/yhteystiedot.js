@@ -35,11 +35,5 @@ $(document).ready(function($) {
             }
         });
 
-
-<<<<<<< HEAD
-=======
-            $('head').append($('<script>').attr('type', 'text/javascript').attr('src', 'hakemisto.js'));
-        });
->>>>>>> aba89c5736c98e4948cbf94a505d086f828e9fe1
     });
 });
