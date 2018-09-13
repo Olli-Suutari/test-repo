@@ -1,371 +1,80 @@
 <!DOCTYPE html>
-<html lang="fi"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  
+<html lang="fi">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      
-      <style>
-      @import url("style.css");
-      @import url("https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700|Roboto:300,300i,400,700");
-    </style>
-      <script src="https://code.jquery.com/jquery-2.2.4.min.js"
-      integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-      crossorigin="anonymous"></script>
-  </head>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700|Roboto:300,300i,400,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="js/lib/jquery-2.2.4.min.js"></script>
+  <script class="libdir_widget" data-library="85159" data-lang="fi" src="js/palvelut.js" type="text/javascript"></script>
+</head>
 <body id="page--library-services">
-      
-    <main class="container main content">
-      
+  <main class="container main content">
   <div class="row">
     <div class="col-md-8">
       
       <header>
           <nav class="nav nav-pills nav-library-page">
                   <a class="nav-item nav-link index.html" href="index.html">Esittely</a>
-                  <a class="nav-item nav-link  yhteystiedot.html" href="yhteystiedot.html">Ota yhteyttä</a>
+                  <a class="nav-item nav-link  yhteystiedot.html" href="yhteystiedot.html">Yhteystiedot</a>
                   <a class="nav-item nav-link active palvelut.html" href="palvelut.html">Palvelut</a>
           </nav>
       </header>
-
     </div>
   </div>
-
-  
   <p>Palvelun lisätiedot avautuvat linkkiä klikkaamalla.</p>
-
   <section id="library-services">
-        <div class="group">
-      <h2>
-        Kokoelma
-        <span class="badge">
-                      1 palvelu                  </span>
-      </h2>
-
-      <ul class="cols">
-                                        
-          <li class="index-item">
-                          <a tabindex="0" href="https://hakemisto.kirjastot.fi/jyvaskyla/jyvaskyla_paakirjasto/services#s-maakuntakokoelma" id="s-maakuntakokoelma" data-toggle="popover" data-target="#sp-maakuntakokoelma" role="button" ,="" aria-expanded="false" aria-controls="sp-maakuntakokoelma" data-original-title="" title="">Maakuntakokoelma</a>
-
-              <div class="content-popup" data-content-popup="" id="sp-maakuntakokoelma">
-                                  <p>Keski-Suomea ja Jyväskylää käsittelevä erityiskokoelma.</p>
-                
-                
-                
-                
-                <ul>
-                  <li>
-                    <a href="https://hakemisto.kirjastot.fi/services/collection/maakuntakokoelma">Saatavuus muissa kirjastoissa</a>
-                  </li>
-
-                                  </ul>
-              </div>
-            
-
-                        </li>
-              </ul>
+    <!-- Collections -->
+    <div class="group" id="collection" style="display: none">
+        <h2 id="collectionsTitle">
+          Kokoelmat
+          <span class="badge" id="collectionBadge"></span>
+        </h2>
+        <ul class="cols" id="collectionItems"></ul>
     </div>
-        <div class="group">
-      <h2>
-        Laitteisto
-        <span class="badge">
-                      6 palvelua
-                  </span>
-      </h2>
-
-      <ul class="cols">
-                                        
-          <li class="index-item">
-                          <a tabindex="0" href="https://hakemisto.kirjastot.fi/jyvaskyla/jyvaskyla_paakirjasto/services#s-kannettava-tietokone" id="s-kannettava-tietokone" data-toggle="popover" data-target="#sp-kannettava-tietokone" role="button" ,="" aria-expanded="false" aria-controls="sp-kannettava-tietokone" data-original-title="" title="">Kannettava tietokone</a>
-
-              <div class="content-popup" data-content-popup="" id="sp-kannettava-tietokone">
-                                  <p>Kannettavaa tietokonetta voi lainata kirjastokäyttöön</p>
-                
-                
-                
-                
-                <ul>
-                  <li>
-                    <a href="https://hakemisto.kirjastot.fi/services/hardware/kannettava-tietokone">Saatavuus muissa kirjastoissa</a>
-                  </li>
-
-                                  </ul>
-              </div>
-            
-
-                        </li>
-                                        
-          <li class="index-item">
-                          <a id="s-kopiokone-vari">Kopiokoneet (mustavalko ja väri)</a>
-            
-
-                        </li>
-                                        
-          <li class="index-item">
-                          <a tabindex="0" href="https://hakemisto.kirjastot.fi/jyvaskyla/jyvaskyla_paakirjasto/services#s-pelikonsoli" id="s-pelikonsoli" data-toggle="popover" data-target="#sp-pelikonsoli" role="button" ,="" aria-expanded="false" aria-controls="sp-pelikonsoli" data-original-title="" title="">Pelikonsolit</a>
-
-              <div class="content-popup" data-content-popup="" id="sp-pelikonsoli">
-                                  <p>Lastenosaston Satuhuone Peukaloinen on myös pelitila jossa voi pelata konsolipelejä.</p>
-                
-                                  <div class="user-input">Kysy pelejä lastenosaston neuvonnasta</div>
-                
-                
-                                  <p>ilmainen</p>
-                
-                <ul>
-                  <li>
-                    <a href="https://hakemisto.kirjastot.fi/services/hardware/pelikonsoli">Saatavuus muissa kirjastoissa</a>
-                  </li>
-
-                                  </ul>
-              </div>
-            
-
-                            
-                                    </li>
-                                        
-          <li class="index-item">
-                          <a id="s-skanneri">Skanneri</a>
-            
-
-                        </li>
-                                        
-          <li class="index-item">
-                          <a tabindex="0" href="https://hakemisto.kirjastot.fi/jyvaskyla/jyvaskyla_paakirjasto/services#s-asiakastietokone" id="s-asiakastietokone" data-toggle="popover" data-target="#sp-asiakastietokone" role="button" ,="" aria-expanded="false" aria-controls="sp-asiakastietokone" data-original-title="" title="">Tietokoneet</a>
-
-              <div class="content-popup" data-content-popup="" id="sp-asiakastietokone">
-                                  <p>internet, Microsoft Office</p>
-                
-                
-                
-                
-                <ul>
-                  <li>
-                    <a href="https://hakemisto.kirjastot.fi/services/hardware/asiakastietokone">Saatavuus muissa kirjastoissa</a>
-                  </li>
-
-                                  </ul>
-              </div>
-            
-
-                        </li>
-                                        
-          <li class="index-item">
-                          <a tabindex="0" href="https://hakemisto.kirjastot.fi/jyvaskyla/jyvaskyla_paakirjasto/services#s-tulostin-vari" id="s-tulostin-vari" data-toggle="popover" data-target="#sp-tulostin-vari" role="button" ,="" aria-expanded="false" aria-controls="sp-tulostin-vari" data-original-title="" title="">Tulostimet (mustavalko ja väri)</a>
-
-              <div class="content-popup" data-content-popup="" id="sp-tulostin-vari">
-                                  <p>mv: 0,40 e/sivu, väri 0,60 e/sivu</p>
-                
-                
-                
-                
-                <ul>
-                  <li>
-                    <a href="https://hakemisto.kirjastot.fi/services/hardware/tulostin-vari">Saatavuus muissa kirjastoissa</a>
-                  </li>
-
-                                  </ul>
-              </div>
-            
-
-                        </li>
-              </ul>
+    <!-- Hardware -->
+    <div class="group" id="hardware" style="display: none">
+        <h2 id="hardwareTitle">
+          Laitteisto
+          <span class="badge" id="hardwareBadge"></span>
+        </h2>
+        <ul class="cols" id="hardwareItems"></ul>
     </div>
-        <div class="group">
-      <h2>
-        Tila
-        <span class="badge">
-                      4 palvelua
-                  </span>
-      </h2>
-
-      <ul class="cols">
-                                        
-          <li class="index-item">
-                          <a tabindex="0" href="https://hakemisto.kirjastot.fi/jyvaskyla/jyvaskyla_paakirjasto/services#s-sali" id="s-sali" data-toggle="popover" data-target="#sp-sali" role="button" ,="" aria-expanded="false" aria-controls="sp-sali" data-original-title="" title="">Minnansali</a>
-
-              <div class="content-popup" data-content-popup="" id="sp-sali">
-                                  <p>Iso luentosali Jyväskylän keskustassa. 155-190 istumapaikkaa.</p>
-                
-                                  <div class="user-input">Pääkirjaston 1. kerros, 155-190 istumapaikkaa. Wolmarinsali ja Unonsali yhdistettynä.</div>
-                
-                
-                                  <p>Hinnat: ks. Palvelun kotisivut</p>
-                
-                <ul>
-                  <li>
-                    <a href="https://hakemisto.kirjastot.fi/services/room/sali">Saatavuus muissa kirjastoissa</a>
-                  </li>
-
-                                      <li>
-                      <a href="http://www.jyvaskyla.fi/kirjasto/palvelut/tilat" class="external-link">Lisätiedot</a>
-                    </li>
-                                  </ul>
-              </div>
-            
-
-                            
-                                    </li>
-                                        
-          <li class="index-item">
-                          <a tabindex="0" href="https://hakemisto.kirjastot.fi/jyvaskyla/jyvaskyla_paakirjasto/services#s-sali-2" id="s-sali-2" data-toggle="popover" data-target="#sp-sali-2" role="button" ,="" aria-expanded="false" aria-controls="sp-sali-2" data-original-title="" title="">Wolmarinsali</a>
-
-              <div class="content-popup" data-content-popup="" id="sp-sali-2">
-                                  <p>Luentosali Jyväskylän keskustassa. 55 istumapaikkaa.</p>
-                
-                                  <div class="user-input">Pääkirjaston 1. kerros, Pöydät järjesteltävissä joko luento- tai ryhmätyökäyttöön. Kahvilapalveluja kokous- ja seminaaritiloihin voi tiedustella kahvila Novellista</div>
-                
-                                  <p>kirjasto.taloustoimisto@jkl.fi</p>
-                
-                                  <p>Hinnat: ks. Palvelun kotisivut</p>
-                
-                <ul>
-                  <li>
-                    <a href="https://hakemisto.kirjastot.fi/services/room/sali">Saatavuus muissa kirjastoissa</a>
-                  </li>
-
-                                      <li>
-                      <a href="http://www.jyvaskyla.fi/kirjasto/palvelut/tilat" class="external-link">Lisätiedot</a>
-                    </li>
-                                  </ul>
-              </div>
-            
-
-                            
-                                    </li>
-                                        
-          <li class="index-item">
-                          <a tabindex="0" href="https://hakemisto.kirjastot.fi/jyvaskyla/jyvaskyla_paakirjasto/services#s-sali-3" id="s-sali-3" data-toggle="popover" data-target="#sp-sali-3" role="button" ,="" aria-expanded="false" aria-controls="sp-sali-3" data-original-title="" title="">Unonsali</a>
-
-              <div class="content-popup" data-content-popup="" id="sp-sali-3">
-                                  <p>Luentosali Jyväskylän keskustassa. 100 istumapaikkaa.</p>
-                
-                                  <div class="user-input">Luentosali Jyväskylän keskustassa. 100 istumapaikkaa.</div>
-                
-                
-                                  <p>Hinnat: ks. Palvelun kotisivut</p>
-                
-                <ul>
-                  <li>
-                    <a href="https://hakemisto.kirjastot.fi/services/room/sali">Saatavuus muissa kirjastoissa</a>
-                  </li>
-
-                                      <li>
-                      <a href="https://www.jyvaskyla.fi/kirjasto/palvelut/tilat" class="external-link">Lisätiedot</a>
-                    </li>
-                                  </ul>
-              </div>
-            
-
-                            
-                                    </li>
-                                        
-          <li class="index-item">
-                          <a tabindex="0" href="https://hakemisto.kirjastot.fi/jyvaskyla/jyvaskyla_paakirjasto/services#s-soittohuone" id="s-soittohuone" data-toggle="popover" data-target="#sp-soittohuone" role="button" ,="" aria-expanded="false" aria-controls="sp-soittohuone" data-original-title="" title="">Soitonharjoitteluhuone</a>
-
-              <div class="content-popup" data-content-popup="" id="sp-soittohuone">
-                                  <p>Pääkirjaston 3. kerroksessa musiikkiosastolla on kaksi soitonharjoitteluhuonetta - pianolla ja sähköpianolla.</p>
-                
-                                  <div class="user-input">Tilat on äänieristetty ja tarkoitettu akustisen musiikin harjoitteluun. Isossa huoneessa on piano, pienessä sähköpiano (Roland HP-505). Omia akustisia soittimia voi myös soittaa. Varauksia otetaan enintään kahdeksi tunniksi/päivä ja korkeintaan kahden viikon päähän. Tilat voi varata vain yksityiseen harjoitteluun, ei maksulliseen opetuskäyttöön.</div>
-                
-                
-                                  <p>ilmainen</p>
-                
-                <ul>
-                  <li>
-                    <a href="https://hakemisto.kirjastot.fi/services/room/soittohuone">Saatavuus muissa kirjastoissa</a>
-                  </li>
-
-                                      <li>
-                      <a href="http://www.jyvaskyla.fi/paakirjasto/musiikki" class="external-link">Lisätiedot</a>
-                    </li>
-                                  </ul>
-              </div>
-            
-
-                            
-                                    </li>
-              </ul>
+    <!-- Rooms -->
+    <div class="group" id="room" style="display: none">
+        <h2 id="roomTitle">
+          Tilat
+          <span class="badge" id="roomBadge"></span>
+        </h2>
+        <ul class="cols" id="roomItems"></ul>
     </div>
-        <div class="group">
-      <h2>
-        Palvelu
-        <span class="badge">
-                      2 palvelua
-                  </span>
-      </h2>
-
-      <ul class="cols">
-                                        
-          <li class="index-item">
-                          <a tabindex="0" href="https://hakemisto.kirjastot.fi/jyvaskyla/jyvaskyla_paakirjasto/services#s-digitointimahdollisuus" id="s-digitointimahdollisuus" data-toggle="popover" data-target="#sp-digitointimahdollisuus" role="button" ,="" aria-expanded="false" aria-controls="sp-digitointimahdollisuus" data-original-title="" title="">Digitointitila</a>
-
-              <div class="content-popup" data-content-popup="" id="sp-digitointimahdollisuus">
-                                  <p>Pääkirjaston 3. kerroksessa musiikkiosastolla on asiakaskäyttöön tarkoitettu digitointitila.</p>
-                
-                                  <div class="user-input">Digitointitilassa voit
-* muuttaa LP-levyjä, C-kasetteja ja VHS-videoita digitaaliseen muotoon
-* muokata kuvia, ääntä ja musiikkia
-* skannata tekstiä, paperikuvia, dioja, negatiiveja ja negatiivifilmejä
-* polttaa työt CD-levyille (kuvat, teksti- ja äänitiedostot) tai DVD-levyille (videot) 
-* tallentaa työt muistitikulle tai omalle ulkoiselle siirrettävälle kovalevylle
-* 8 mm tai muiden kuin VHS-nauhojen digitointi videokameran/nauhurin ja LG-yhdistelmälaitteen avulla (HUOM! asiakkaalla on oltava oma kamera/nauhuri ja tarvittavat liitinjohdot)</div>
-                
-                
-                                  <p>ilmainen</p>
-                
-                <ul>
-                  <li>
-                    <a href="https://hakemisto.kirjastot.fi/services/service/digitointimahdollisuus">Saatavuus muissa kirjastoissa</a>
-                  </li>
-
-                                      <li>
-                      <a href="http://www.jyvaskyla.fi/kirjasto/palvelut/yleisomikrot/digitointistudio" class="external-link">Lisätiedot</a>
-                    </li>
-                                  </ul>
-              </div>
-            
-
-                            
-                                    </li>
-                                        
-          <li class="index-item">
-                          <a tabindex="0" href="https://hakemisto.kirjastot.fi/jyvaskyla/jyvaskyla_paakirjasto/services#s-langaton-verkko-wi-fi" id="s-langaton-verkko-wi-fi" data-toggle="popover" data-target="#sp-langaton-verkko-wi-fi" role="button" ,="" aria-expanded="false" aria-controls="sp-langaton-verkko-wi-fi" data-original-title="" title="">Langaton verkko (Wi-Fi)</a>
-
-              <div class="content-popup" data-content-popup="" id="sp-langaton-verkko-wi-fi">
-                                  <p>Vapaasti käytettävissä ilman kirjautumista.</p>
-                
-                
-                
-                
-                <ul>
-                  <li>
-                    <a href="https://hakemisto.kirjastot.fi/services/service/langaton-verkko-wi-fi">Saatavuus muissa kirjastoissa</a>
-                  </li>
-
-                                  </ul>
-              </div>
-            
-
-                        </li>
-              </ul>
+    <!-- Services -->
+    <div class="group" id="service" style="display: none">
+        <h2 id="serviceTitle">
+          Palvelut
+          <span class="badge" id="serviceBadge"></span>
+        </h2>
+        <ul class="cols" id="serviceItems"></ul>
     </div>
-      </section>
+  </section>
   </main>
-
-  <script type="text/x-twig" id="twig-gallery">PGRpdiBjbGFzcz0ibW9kYWwgZ2FsbGVyeSIgdGFiaW5kZXg9Ii0xIiByb2xlPSJkaWFsb2ciPgogIDx1bCBjbGFzcz0idGh1bWJuYWlscyI+CiAgICB7JSBmb3IgcGljIGluIHBpY3R1cmVzICV9CiAgICAgIDxsaSBjbGFzcz0idGh1bWIiPgogICAgICAgIDxhIGhyZWY9Int7IHBpYy5maWxlcy5sYXJnZSB9fSIgZGF0YS1waWN0dXJlPSJ7eyBsb29wLmluZGV4MCB9fSIgYXJpYS1sYWJlbD0ie3sgJ2dhbGxlcnkuc2hvd19waWN0dXJlJ3x0cmFucyB9fSI+CiAgICAgICAgICA8aW1nIHNyYz0ie3sgcGljLmZpbGVzLnNtYWxsIH19IiBhbHQ9IiIvPgogICAgICAgIDwvYT4KICAgICAgPC9saT4KICAgIHslIGVuZGZvciAlfQogIDwvdWw+CiAgCiAgPGJ1dHRvbiB0eXBlPSJidXR0b24iIGNsYXNzPSJjbG9zZSIgZGF0YS1kaXNtaXNzPSJtb2RhbCIgYXJpYS1sYWJlbD0ie3sgJ2dhbGxlcnkuY2xvc2UnfHRyYW5zIH19Ij4KICAgIDxzcGFuIGFyaWEtaGlkZGVuPSJ0cnVlIj4mdGltZXM7PC9zcGFuPgogIDwvYnV0dG9uPgoKICA8ZmlndXJlIGNsYXNzPSJ2aWV3cG9ydCI+CiAgICB7IwogICAgPGltZyBzcmM9Int7IHBpY3R1cmVzWzBdLmZpbGVzLmxhcmdlIH19IiBhbHQ9Int7IHBpYy5kZXNjcmlwdGlvbiB9fSIvPgogICAgPGZpZ2NhcHRpb24+e3sgcGljdHVyZXNbMF0uZGVzY3JpcHRpb24gfX08L2ZpZ2NhcHRpb24+CiAgICAjfQogIDwvZmlndXJlPgo8L2Rpdj4K</script>
-
-      <script type="text/x-service-popover">
-      <div class="popover service-popover shadow-sm" role="dialog" aria-labelledby="my-popover-header" aria-describedby="my-popover-body">
-        <div class="arrow"></div>
-        <h3 class="popover-header" id="my-popover-header"></h3>
-        <div class="popover-body" id="my-popover-body"></div>
-
-        <div class="text-center">
-          <button type="button" class="btn btn-sm btn-primary py-0 mb-2">Sulje</button>
-        </div>
+  <!-- Popover modal for displaying service details -->
+  <div class="popover service-popover shadow-sm fade bs-popover-bottom show" role="dialog" aria-labelledby="my-popover-header" aria-describedby="my-popover-body" id="infoPopup" x-placement="bottom" style="display: none">
+      <div class="arrow" style="left: 69px;"></div>
+      <h3 class="popover-header" id="my-popover-header"></h3>
+      <div class="popover-body" id="my-popover-body">
+          <p id="popover-content"></p>
+          <p id="link-to-info"></p>
       </div>
+      <div class="text-center">
+      <button onclick='toggleInfoBox()' type="button" class="btn btn-md btn-primary py-0 mb-3">Sulje</button>
+      </div>
+  </div>
+    <script>
+      function toggleInfoBox() {
+        $('#infoPopup').toggle(100);
+      }
     </script>
-
-    <script src="js/hakemisto.js"></script>
-  
-
-</body></html>
+</body>
+</html>

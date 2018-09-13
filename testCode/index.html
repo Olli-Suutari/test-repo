@@ -1,22 +1,17 @@
 <!DOCTYPE html>
 <html lang="fi">
-    <head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    </head>
-    <script
-    script
-    src="https://code.jquery.com/jquery-2.2.4.min.js"
-    integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-    crossorigin="anonymous"></script>
-    <script src="js/moment-with-locales.min.js"></script>
-    <script src="js/responsiveslides.js"></script>
-    <style>
-            @import url("style.css");
-            @import url("https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700|Roboto:300,300i,400,700");
-    </style>
-<body id="page--library-details">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700|Roboto:300,300i,400,700">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="js/lib/jquery-2.2.4.min.js"></script>
+  <script src="js/lib/moment-with-locales.min.js"></script>
+  <script src="js/lib/responsiveslides.js"></script>
+  <script class="libdir_widget" data-library="85159" data-lang="fi" src="js/index.js" type="text/javascript"></script>
+</head>
+<body>
     <div class="container">
     <main class="container main content">
     <div class="row">
@@ -25,11 +20,16 @@
         <header>
             <nav class="nav nav-pills nav-library-page">
                     <a class="nav-item nav-link active index.html" href="index.html">Esittely</a>
-                    <a class="nav-item nav-link  yhteystiedot.html" href="yhteystiedot.html">Ota yhteyttä</a>
+                    <a class="nav-item nav-link  yhteystiedot.html" href="yhteystiedot.html">Yhteystiedot</a>
                     <a class="nav-item nav-link  palvelut.html" href="palvelut.html">Palvelut</a>
             </nav>
         </header>
         <blockquote class="blockquote library-slogan"></blockquote>
+        <div class="details" id="introduction">
+            <a href="#introduction" class="details-toggle" data-toggle="details" role="button" aria-expanded="false" aria-controls="intro-content">Kirjaston esittely</a>
+            <div class="details-content" id="intro-content">
+            </div>
+        </div>
         <div id="libDetails"></div>
         <div class="details">
             <a href="#public-transport" class="details-toggle" data-toggle="details" role="button" aria-expanded="false" aria-controls="public-transport">Julkinen liikenne</a>
@@ -39,6 +39,12 @@
                     <p id="transit_directions"></p>
                     <h3>Pysäköinti</h3>
                     <p id="parking_instructions"></p>
+            </section>
+            <section class="accessibility-details">
+                    <h3>Saavutettavuus</h3>
+                    <div style="margin: 10px 0 10px 0" class="accessibility-images"></div>
+                    <div id="accessibility-list"></div>
+                    <div style="margin: 10px 0 10px 0" id="accessibility-details"></div>
             </section>
         </div>
     
@@ -50,61 +56,70 @@
         <!-- Some links -->
         <section class="some-links">
             <h3 class="sr-only">Social media</h3>
-            <a href="https://www.facebook.com/jyvaskylankaupunginkirjasto" title="">
-            <img src="images/icons/facebook.svg" alt="Jyväskylän kaupunginkirjasto"/>
-            </a>
-            <a href="https://www.instagram.com/jklkirjasto" title="">
-            <img src="images/icons/instagram.svg" alt="Kirjaston Instagram"/>
-            </a>
         </section>
         <!-- Scheludes -->
-        <section class="library-schedules schedules-weekly" data-paged-table="">
+        <section class="library-schedules">
             <h3 class="sr-only">Opening hours</h3>
-            <button type="button" class="btn btn-sm btn-light btn-back" data-previous-page="" aria-hidden="true" onclick="getWeekSchelude(-1)">
-            <span class="btn-arrow">❮</span>
-            </button>
-            <button type="button" class="btn btn-sm btn-light btn-next" data-next-page="" aria-hidden="true" onclick="getWeekSchelude(1)">
-            <span class="btn-arrow">❯</span>
-            </button>                                                                
+                                                     
             <table class="table table-sm">        
-                <tbody id="weekSchelude" data-current-page>
                     <tr class="thead-light">
-                        <th id="weekNumber" colspan="3"></th>
-                    </tr>                                                  
+                            <td>
+                                <button type="button" class="btn btn-sm btn-light btn-back" aria-hidden="true" onclick="getWeekSchelude(-1)">
+                                <span class="btn-arrow">❮</span>
+                                </button>
+                            </td>
+                            <td id="weekNumber"></td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-light btn-next" aria-hidden="true" onclick="getWeekSchelude(1)">
+                                <span class="btn-arrow">❯</span>
+                                </button>
+                            </td>
+                    </tr>
+                <tbody id="weekSchelude">                                             
                 </tbody>
             </table>
         </section>
-        <div id="sliderBox">
-        <section class="photo-gallery gallery-box"></section>
+        <section id="sliderBox">
             <ul class="rslides"></ul>
+
             <i onclick="toggleFullScreen()" class="fa fa-expand top-right" title="Toggle full-screen" style="font-size:1.8em;"></i>
+            <i class="top-left"><span id="currentSlide"></span></i>
         </section>
-    </div>
-
+        <section class="building-details" style="margin-top: 25px;">
+                <table class="table table-sm"> 
+                <tbody>
+                <tr class="thead-light" style="text-align: center">
+                        <th colspan="3">Rakennuksen tiedot</th>
+                </tr>
+                <tr>
+                    <td><strong>Osoite: </strong></td>
+                    <td id="lib_address"></td>
+                </tr>
+                <tr>
+                    <td><strong>Perustamisvuosi: </strong></td>
+                    <td id="founded"></td>
+                </tr>
+                <tr>
+                    <td><strong>Rakennus: </strong></td>
+                    <td id="building_name"></td>
+                </tr>
+                <tr>
+                    <td><strong>Rakennettu: </strong></td>
+                    <td id="construction_year"></td>
+                </tr>
+                <tr>
+                    <td><strong>Arkkitehti: </strong></td>
+                    <td id="building_architect"></td>
+                </tr>
+                <tr>
+                    <td><strong>Sisustus: </strong></td>
+                    <td id="interior_designer"></td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
     </main>  
-    <div class="row">
-            <div class="col-lg-12">
-                <section class="building-details">
-                <h3 class="sr-only">Rakennuksen tiedot</h3>
-                <dl>
-                    <dt>Perustamisvuosi</dt>
-                    <dd id="founded"></dd>
-                    <dt>Rakennus</dt>
-                    <dd id="building_name"></dd>
-                    <dt>Rakennettu</dt>
-                    <dd id="construction_year"></dd>
-                    <dt>Arkkitehti</dt>
-                    <dd id="building_architect"></dd>
-                    <dt>Sisustus</dt>
-                    <dd id="interior_designer"></dd>
-                    </dl>
-                </section>
-            </div>
-        </div><!-- row -->
     </div>
-
-    <script class="libdir_widget" data-library="85159" data-lang="fi" src="js/index.js" type="text/javascript"></script>
-    <script src="js/hakemisto.js"></script>
 </body>
 
 </html>

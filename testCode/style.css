@@ -3,6 +3,7 @@
   list-style: none;
   overflow: hidden;
   width: 100%;
+  height: auto;
   padding: 0;
   margin: 0;
   }
@@ -36,31 +37,150 @@
   z-index: 99;
 }
 
+
+#map-container {
+  width: 100%;
+  height: 100%;
+  z-index: 99;
+}
+
 /* Top right text */
 .top-right {
   position: absolute;
-  top: 5%;
-  right: 5%;
+  top: 8%;
+  right: 20px;
   z-index: 98;
+  padding-top: 6px;
+  padding-bottom: 6px;
 }
 
+.top-left {
+  position: absolute;
+  top: 8%;
+  left: 20px;
+  z-index: 91;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+
+/* Note: centered left and right are 15 px too much to the left by default. */
 .centered-left {
   position: absolute;
   top: 50%;
-  left: 5%;
+  left: 25px;
   transform: translate(-50%, -50%);
   z-index: 97;
-  font-size: 2.5em;
 }
 
 .centered-right {
   position: absolute;
   top: 50%;
-  right: 5%;
+  right: -5px;
   transform: translate(-50%, -50%);
   z-index: 96;
+}
+
+.top-right, .top-left, .centered-left, .centered-right {
+  /*  Fallback bg */
+  background-color: rgb(99, 99, 99);
+  /* RGBa with 0.4 opacity */
+  background-color: rgba(99, 99, 99, 0.4);
+  padding-left: 7px;
+  padding-right: 7px;
+  color: #fdfdfd;
+}
+
+.centered-left, .centered-right {
   font-size: 2.5em;
 }
+
+.top-right:hover, .centered-left:hover, .centered-right:hover, .btn-arrow:hover  {
+  color: skyblue;
+}
+
+.thead-light {
+  background: #EDF1F5;
+}
+
+.week-number, .btn-arrow {
+  font-weight: 400;
+  font-size: 1.2em;
+}
+
+
+
+.schedules-weekly {
+  position: relative;
+  margin-top: 0.5rem; }
+  .schedules-weekly th:not([scope="row"]), .schedules-weekly .btn, .schedules-weekly .details .details-toggle, .details .schedules-weekly .details-toggle {
+    line-height: 1.5;
+    padding: 0.3rem 0.75rem;
+    font-size: 1.25rem; }
+  .schedules-weekly .btn, .schedules-weekly .details .details-toggle, .details .schedules-weekly .details-toggle {
+    width: 3rem;
+    height: calc(1px + 2.61rem);
+    position: absolute;
+    z-index: 1;
+    border: 1px solid #dee2e6; }
+  .schedules-weekly .btn-arrow {
+    font-size: 1.25rem;
+    font-weight: bold; }
+  .schedules-weekly .btn[data-next-page], .schedules-weekly .details .details-toggle[data-next-page], .details .schedules-weekly .details-toggle[data-next-page] {
+    right: 0; }
+  .schedules-weekly th[scope="row"] {
+    width: 3rem; }
+  .schedules-weekly td:last-child {
+    white-space: nowrap; }
+  .schedules-weekly tr.time.status-closed, .schedules-weekly tr.status-closed.time-open, .schedules-weekly tr.status-closed.time-closed, .schedules-weekly tr.status-closed.time-self-service {
+    background-color: #f5dbd6; }
+  .schedules-weekly tr.time.status-open, .schedules-weekly tr.status-open.time-open, .schedules-weekly tr.status-open.time-closed, .schedules-weekly tr.status-open.time-self-service {
+    background-color: #d7f5cd; }
+  .schedules-weekly tr.time.status-self-service, .schedules-weekly tr.status-self-service.time-open, .schedules-weekly tr.status-self-service.time-closed, .schedules-weekly tr.status-self-service.time-self-service {
+    background-color: #e1f7fa; }
+  .schedules-weekly tr.time--sub {
+    font-size: small;
+    font-weight: 300; }
+    .schedules-weekly tr.time--sub td {
+      border-width: 0;
+      padding-top: 0; }
+  .schedules-weekly tr.time--sub.time--closed {
+    color: #b3341b; }
+    .schedules-weekly tr.time--sub.time--closed td:first-child:before {
+      font-family: FontAwesome;
+      content: "\F071"; }
+  .schedules-weekly th:last-child,
+  .schedules-weekly td:last-child {
+    text-align: center; }
+  .schedules-weekly .opentime-additional-info {
+    font-size: 1rem;
+    display: block; }
+
+.schedules-weekly[data-paged-table] tbody {
+  width: 1px;
+  height: 1px;
+  clip: rect(0, 0, 0, 0);
+  position: absolute;
+  overflow: hidden; }
+
+.schedules-weekly[data-paged-table] tbody[data-current-page] {
+  display: table-row-group;
+  position: static;
+  width: auto;
+  height: auto;
+  clip: auto; }
+
+.schedules-weekly[data-paged-table] tbody + tbody {
+  border-top-width: 0 !important; }
+
+.schedules-weekly[data-paged-table] tbody > tr:first-child > th {
+  height: 2.61rem;
+  vertical-align: middle; }
+
+.schedules-weekly[data-paged-table] .time--sub td:first-child:before {
+  content: "\27A5"; }
+
+
 
 /*!
 Chosen, a Select Box Enhancer for jQuery and Prototype

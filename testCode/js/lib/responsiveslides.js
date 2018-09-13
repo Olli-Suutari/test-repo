@@ -8,21 +8,34 @@
 
 /*jslint browser: true, sloppy: true, vars: true, plusplus: true, indent: 2 */
 
+/* Modifications by Olli Suutari 
+- Custom styling for prev/next buttons.
+- Current slide is displayed in top left corner
+- Modified default settings:
+  - speed: 1000
+  - timeout: 6000
+  - nav: true
+  - pause: true
+  - prevText: <
+  - nextText: >
+*/
+
+
 (function ($, window, i) {
   $.fn.responsiveSlides = function (options) {
 
     // Default settings
     var settings = $.extend({
       "auto": true,             // Boolean: Animate automatically, true or false
-      "speed": 500,             // Integer: Speed of the transition, in milliseconds
-      "timeout": 4000,          // Integer: Time between slide transitions, in milliseconds
+      "speed": 1000,             // Integer: Speed of the transition, in milliseconds
+      "timeout": 6000,          // Integer: Time between slide transitions, in milliseconds
       "pager": false,           // Boolean: Show pager, true or false
-      "nav": false,             // Boolean: Show navigation, true or false
+      "nav": true,              // Boolean: Show navigation, true or false
       "random": false,          // Boolean: Randomize the order of the slides, true or false
-      "pause": false,           // Boolean: Pause on hover, true or false
+      "pause": true,            // Boolean: Pause on hover, true or false
       "pauseControls": true,    // Boolean: Pause when hovering controls, true or false
-      "prevText": "Previous",   // String: Text for the "previous" button
-      "nextText": "Next",       // String: Text for the "next" button
+      "prevText": "<",          // String: Text for the "previous" button
+      "nextText": ">",          // String: Text for the "next" button
       "maxwidth": "",           // Integer: Max-width of the slideshow, in pixels
       "navContainer": "",       // Selector: Where auto generated controls should be appended to, default is after the <ul>
       "manualControls": "",     // Selector: Declare custom pager navigation
@@ -240,8 +253,8 @@
               if (settings.pager || settings.manualControls) {
                 selectTab(idx);
               }
-
               slideTo(idx);
+              $('#currentSlide').html(idx + 1)
             }, waitTime);
           };
 
@@ -347,7 +360,21 @@
               nextIdx = idx + 1 < length ? index + 1 : 0;
 
             // Go to slide
-            slideTo($(this)[0] === $prev[0] ? prevIdx : nextIdx);
+            if ($(this)[0] === $prev[0]) {
+              slideTo(prevIdx);
+              if(prevIdx == -1) {
+                // If we move from 0 to previous (last slide), ui text would be -1.
+                // $slide.length is the amount of slides.
+                $('#currentSlide').html($slide.length)
+              }
+              else {
+                $('#currentSlide').html(prevIdx + 1)
+              }
+            }
+            else {
+              slideTo(nextIdx);
+              $('#currentSlide').html(nextIdx + 1)
+            }
             if (settings.pager || settings.manualControls) {
               selectTab($(this)[0] === $prev[0] ? prevIdx : nextIdx);
             }
