@@ -31,10 +31,6 @@ function addItem(item, listElement) {
     }
 }
 
-// Togles the visibility of the popover modal.
-function toggleInfoBox() {
-    $('#infoPopup').toggle(100);
-}
 
 $(document).ready(function($) {
     var widgets = $('.libdir_widget');
@@ -90,7 +86,11 @@ $(document).ready(function($) {
             }
             
             // When item link is clicked.
-            $( ".index-item" ).on('click', function () {      
+            $( ".index-item" ).on('click', function () {
+                // If infobox already visible, hide it instantly to avoid wonky animations.
+                if(isInfoBoxVisible) {
+                    toggleInfoBox(0);
+                }
                 // Get element position
                 var posX = $(this).offset().left,
                 // Set top to be slightly under the element
@@ -105,7 +105,7 @@ $(document).ready(function($) {
                 } else {
                     $( "#link-to-info" ).html( '<p id="link-to-info"></p>');
                 }
-                toggleInfoBox();
+                toggleInfoBox(100);
              });
         });
     });

@@ -40,7 +40,6 @@ $(document).ready(function($) {
         // Generic details
         var jsonp_url = "https://api.kirjastot.fi/v3/library/" + lib_id + "?lang=" + lang + "&with=mail_address";
         $.getJSON(jsonp_url, function(data) {
-            console.log(data.address.zipcode)
             $( "#streetAddress" ).append( data.name  + '<br>' + data.address.street + '<br>' + data.address.zipcode + ' ' + data.address.city);
             $( "#postalAddress" ).append( data.name  + '<br>PL ' + data.mail_address.box_number + '<br>' + data.mail_address.zipcode + ' ' + data.mail_address.area);
             $( "#email" ).append( data.email );

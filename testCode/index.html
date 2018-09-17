@@ -34,13 +34,10 @@
         <div class="details">
             <a href="#public-transport" class="details-toggle" data-toggle="details" role="button" aria-expanded="false" aria-controls="public-transport">Julkinen liikenne</a>
             <div class="details-content" id="public-transport">
-            <section class="transit-details">
+            <section class="transit-details" style="display: none;">
                     <h3>Liikenneyhteydet</h3>
-                    <p id="transit_directions"></p>
-                    <h3>Pysäköinti</h3>
-                    <p id="parking_instructions"></p>
             </section>
-            <section class="accessibility-details">
+            <section class="accessibility-details" style="display: none">
                     <h3>Saavutettavuus</h3>
                     <div style="margin: 10px 0 10px 0" class="accessibility-images"></div>
                     <div id="accessibility-list"></div>
@@ -50,70 +47,41 @@
     
         </div><!-- col-lg-8 -->
     </article>
-
     </div><!-- col-lg-8 -->
     <div class="col-lg-5 col-xl-4 order-2 sidebar">
         <!-- Some links -->
         <section class="some-links">
-            <h3 class="sr-only">Social media</h3>
+            <h3 class="sr-only">Sosiaalinen media</h3>
         </section>
         <!-- Scheludes -->
         <section class="library-schedules">
-            <h3 class="sr-only">Opening hours</h3>
-                                                     
-            <table class="table table-sm">        
-                    <tr class="thead-light">
-                            <td>
-                                <button type="button" class="btn btn-sm btn-light btn-back" aria-hidden="true" onclick="getWeekSchelude(-1)">
-                                <span class="btn-arrow">❮</span>
-                                </button>
-                            </td>
-                            <td id="weekNumber"></td>
-                            <td>
-                                <button type="button" class="btn btn-sm btn-light btn-next" aria-hidden="true" onclick="getWeekSchelude(1)">
-                                <span class="btn-arrow">❯</span>
-                                </button>
-                            </td>
-                    </tr>
-                <tbody id="weekSchelude">                                             
+            <h3 class="sr-only">Aukioloajat</h3>                                 
+            <table class="table table-sm">  
+                <thead class="thead-light">
+                    <td colspan="3">
+                    <button type="button" class="btn btn-sm btn-light btn-back btn-arrow" aria-hidden="true" onclick="getWeekSchelude(-1)">
+                            ❮
+                    </button>
+                    <span id="weekNumber"></span>
+                    <button type="button" class="btn btn-sm btn-light btn-next btn-arrow" aria-hidden="true" onclick="getWeekSchelude(1)">
+                            ❯
+                    </button>
+                    </td>
+                </thead>
+                <tbody id="weekSchelude" class="schedules-weekly">                                      
                 </tbody>
             </table>
         </section>
         <section id="sliderBox">
             <ul class="rslides"></ul>
-
-            <i onclick="toggleFullScreen()" class="fa fa-expand top-right" title="Toggle full-screen" style="font-size:1.8em;"></i>
+            <i onclick="toggleFullScreen()" class="fa fa-expand top-right" title="Toggle full-screen"></i>
             <i class="top-left"><span id="currentSlide"></span></i>
         </section>
         <section class="building-details" style="margin-top: 25px;">
                 <table class="table table-sm"> 
-                <tbody>
+                <tbody id="buildingDetails">
                 <tr class="thead-light" style="text-align: center">
-                        <th colspan="3">Rakennuksen tiedot</th>
-                </tr>
-                <tr>
-                    <td><strong>Osoite: </strong></td>
-                    <td id="lib_address"></td>
-                </tr>
-                <tr>
-                    <td><strong>Perustamisvuosi: </strong></td>
-                    <td id="founded"></td>
-                </tr>
-                <tr>
-                    <td><strong>Rakennus: </strong></td>
-                    <td id="building_name"></td>
-                </tr>
-                <tr>
-                    <td><strong>Rakennettu: </strong></td>
-                    <td id="construction_year"></td>
-                </tr>
-                <tr>
-                    <td><strong>Arkkitehti: </strong></td>
-                    <td id="building_architect"></td>
-                </tr>
-                <tr>
-                    <td><strong>Sisustus: </strong></td>
-                    <td id="interior_designer"></td>
+                        <th colspan="3">Tietoa kirjastosta</th>
                 </tr>
                 </tbody>
             </table>
@@ -121,5 +89,4 @@
     </main>  
     </div>
 </body>
-
 </html>

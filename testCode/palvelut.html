@@ -68,13 +68,21 @@
           <p id="link-to-info"></p>
       </div>
       <div class="text-center">
-      <button onclick='toggleInfoBox()' type="button" class="btn btn-md btn-primary py-0 mb-3">Sulje</button>
+      <button onclick='toggleInfoBox(200)' type="button" class="btn btn-md btn-primary py-0 mb-3">Sulje</button>
       </div>
   </div>
     <script>
-      function toggleInfoBox() {
-        $('#infoPopup').toggle(100);
-      }
+    // Togles the visibility of the popover modal.
+    var isInfoBoxVisible = false;
+    function toggleInfoBox(delay) {
+        if(isInfoBoxVisible) {
+            isInfoBoxVisible = false;
+        }
+        else {
+            isInfoBoxVisible = true;
+        }
+        $('#infoPopup').toggle(delay);
+    }
     </script>
 </body>
 </html>
