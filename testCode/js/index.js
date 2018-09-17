@@ -468,7 +468,8 @@ $(document).ready(function($) {
                 $( "#popover-content" ).html( '<p id="popover-content">' + $(this).data('message') + '</p>');
                 // If website is not null and contains stuff. Sometimes empty website is shown unless lenght is checked.
                 if ($(this).data('website') != null && $(this).data('website').length > 5) {
-                    $( "#link-to-info" ).html( '<p id="link-to-info"><a href="' + $(this).data('website') + 
+                    // Use _blank, because iframes don't like moving to new pages.
+                    $( "#link-to-info" ).html( '<p id="link-to-info"><a target="_blank" href="' + $(this).data('website') + 
                     '" class="external-link">Lisätietoja</a></p>');
                 } else {
                     $( "#link-to-info" ).html( '<p id="link-to-info"></p>');
