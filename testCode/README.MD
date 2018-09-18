@@ -1,3 +1,9 @@
+**About **
+
+This repository contains pages (published as github pages) to be implemented as iframes for libraries of Jyvaskyla on jyvaskyla.fi/kirjasto
+
+Library data is pulled from the kirkanta-api: https://github.com/libraries-fi/kirkanta-api and the UI is heavily inspired by kirjastohakemisto.fi https://github.com/libraries-fi/kirjastohakemisto
+
 
 
 **Library list**
@@ -22,3 +28,20 @@
 | 85573 | Vaajakosken aluekirjasto | https://hakemisto.kirjastot.fi/jyvaskyla/vaajakoski |  |
 | 85306 | Vesangan lähikirjasto | https://hakemisto.kirjastot.fi/jyvaskyla/vesanka |  |
 
+
+
+**Limitations:**  
+
+- Iframes must open links in new tab
+- No JS is allowed on jyvaskyla.fi, thus dynamically resizing the frames becomes a bit difficult (eg. https://www.willmaster.com/library/tutorials/auto-resize-iframe-when-content-size-changes.php)
+
+
+
+**TO DO**
+
+- Improve the image slider
+- Adjust font sizes/fonts to match jyvaskyla.fi
+- Hide the contact details faster
+- Cleanup css
+- Naming conventions, code standards
+- Other improvments
