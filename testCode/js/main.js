@@ -272,6 +272,14 @@ $(document).ready(function($) {
                 // Turn bolded Ajankohtaista/Tervetuloa to <h2>
                 description = description.replace("<strong>Ajankohtaista</strong>", "<h2>Ajankohtaista</h2>");
                 description = description.replace("<strong>Tervetuloa kirjastoon!</strong>", "<h2>Tervetuloa kirjastoon!</h2>");
+                // Remove <br> if after new <p>, remove double br.
+                description = description.replace(/(<p><br \/>)+/g, "<p>");
+                description = description.replace(/(<br \/>(\n)<br \/>)+/g, "<p>");
+                // Match <br> or h2 after new line, this does not apparently work.
+                description = description.replace(/(<br \/><br \/>)+/g, "<p>");
+                description = description.replace(/(<br \/>(\n)<h2>)+/g, "<h2>");
+                //console.log(description);
+
                 $( "#intro-content" ).append( description );
             }
             if (data.extra.transit.transit_directions != null) {
@@ -334,7 +342,7 @@ $(document).ready(function($) {
                         else if (value == "Hissi") {
                             $( ".accessibility-images" ).append( ' <img alt="Hissi" src="../../images/accessibility/Esteetön_hissi.png" /> ');
                         }
-                        else if (value == "Ramppi") {
+                        else if (value == "Pyörätuoliluiska") {
                             $( ".accessibility-images" ).append( ' <img alt="Ramppi" src="../../images/accessibility/Esteetön_ramppi.png" /> ');
                         }
                         else if (value == "Induktiosilmukka") {
