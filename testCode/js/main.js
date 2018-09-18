@@ -31,6 +31,9 @@ function toggleFullScreen(target) {
         document.msExitFullscreen();
       }
     } else {
+        if(target === "#sliderBox") {
+            $('.rslides img').css("width", "");
+        }
       element = $( target ).get(0);
       if (element.requestFullscreen) {
         element.requestFullscreen();
@@ -185,7 +188,7 @@ function getWeekSchelude(direction) {
 
                 }
                 // Magazines dep
-                if(data.schedules[i].sections.magazines.times[0] != null) {
+                if(data.schedules[i].sections.magazines != null) {
                    // Get scheludes and check if starts before staff is present.
                     magazinesStart = data.schedules[i].sections.magazines.times[0].opens;
                     magazinesEnd = data.schedules[i].sections.magazines.times[0].closes;
@@ -232,7 +235,7 @@ function getWeekSchelude(direction) {
                 }
                 if (isClosed) {
                     scheludeRow = '<tr class="time ' + isTodayClass + '">' +
-                    '<th scope="row" rowspan="2">' +
+                    '<th scope="row">' +
                         '<time datetime="' + begin.format('YYYY-MM-DD') + '">' + begin.format('D.M.') + '</time>' +
                     '</th>' +
                         '<td>' + dayName + '</td>' +
@@ -274,9 +277,12 @@ $(document).ready(function($) {
             if (data.extra.transit.transit_directions != null) {
                 $('.transit-details').css('display', 'block');
                 $('.transit-details').append('<h4>Julkinen liikenne</h4><p>' + data.extra.transit.transit_directions + '</p>')
+                if(data.extra.transit.buses != null && data.extra.transit.buses !== "") {
+                    $('.transit-details').append('<h5>Linjautot</h5><p>' + data.extra.transit.buses + '</p>')
+                }
             }
             // Replace row splits with <br>
-            if (data.extra.transit.parking_instructions != null){
+            if (data.extra.transit.parking_instructions != null && data.extra.transit.parking_instructions !== ""){
                 var parking_instructions = data.extra.transit.parking_instructions.replace(/\r\n/g, "<br>");
                 $('.transit-details').css('display', 'block');
                 $('.transit-details').append('<h4>Pysäköinti</h4><p>' + parking_instructions + '</p>')
@@ -317,10 +323,22 @@ $(document).ready(function($) {
                     var splittedValues = element.value.split("\r\n");
                     $.each(splittedValues, function(index, value) { 
                         if (value == "Esteetön sisäänpääsy") {
-                            $( ".accessibility-images" ).append( ' <img alt="Esteetön sisäänpääsy" src="images/accessibility/Esteetön_kulku_saavutettavuus.png" /> ');
+                            $( ".accessibility-images" ).append( ' <img alt="Esteetön sisäänpääsy" src="../../images/accessibility/Esteetön_kulku_saavutettavuus.png" /> ');
                         }
                         else if (value == "Invapysäköinti") {
-                            $( ".accessibility-images" ).append( ' <img alt="Invapysäköinti" src="images/accessibility/Esteetön_pysakointi_saavutettavuus.png" /> ');
+                            $( ".accessibility-images" ).append( ' <img alt="Invapysäköinti" src="../../images/accessibility/Esteetön_parkki.png" /> ');
+                        }
+                        else if (value == "Esteetön wc") {
+                            $( ".accessibility-images" ).append( ' <img alt="Esteetön wc" src="../../images/accessibility/Esteetön_wc.png" /> ');
+                        }
+                        else if (value == "Hissi") {
+                            $( ".accessibility-images" ).append( ' <img alt="Hissi" src="../../images/accessibility/Esteetön_hissi.png" /> ');
+                        }
+                        else if (value == "Ramppi") {
+                            $( ".accessibility-images" ).append( ' <img alt="Ramppi" src="../../images/accessibility/Esteetön_ramppi.png" /> ');
+                        }
+                        else if (value == "Induktiosilmukka") {
+                            $( ".accessibility-images" ).append( ' <img alt="Induktiosilmukka" src="../../images/accessibility/Esteetön_induktiosilmukka.png" /> ');
                         }
                         $( "#accessibility-list" ).append( '<li>' + value + '</li>');
                       });
@@ -348,12 +366,12 @@ $(document).ready(function($) {
                 var url = element.url;
                 if (url.indexOf("facebook") !== -1) {
                     $( ".some-links" ).append('<a target="_blank" ' + 
-                    'href="' + url +'" title="' + element.name + '"> <img src="images/icons/facebook.svg" alt="Kirjaston Facebook"/>' +
+                    'href="' + url +'" title="' + element.name + '"> <img src="../../images/icons/facebook.svg" alt="Kirjaston Facebook"/>' +
                     '</a>');
                 }
                 else if (url.indexOf("instagram") !== -1) {
                     $( ".some-links" ).append('<a target="_blank" ' + 
-                    'href="' + url +'" title="' + element.name + '"> <img src="images/icons/instagram.svg" alt="Kirjaston Instagram"/>' +
+                    'href="' + url +'" title="' + element.name + '"> <img src="../../images/icons/instagram.svg" alt="Kirjaston Instagram"/>' +
                     '</a>');
                 }
               });
@@ -366,7 +384,14 @@ $(document).ready(function($) {
         // Generic details
         $.getJSON(jsonp_url + "&with=mail_address", function(data) {
             $( "#streetAddress" ).append( data.name  + '<br>' + data.address.street + '<br>' + data.address.zipcode + ' ' + data.address.city);
-            $( "#postalAddress" ).append( data.name  + '<br>PL ' + data.mail_address.box_number + '<br>' + data.mail_address.zipcode + ' ' + data.mail_address.area);
+            if (data.mail_address.zipcode != null){
+                var boxNumber = '';
+                if(data.mail_address.box_number != null) {
+                    boxNumber = 'PL ' + data.mail_address.box_number + '<br>';
+                }
+                $( "#postalAddress" ).append( data.name  + '<br>' + boxNumber + data.mail_address.zipcode + ' ' + data.mail_address.area);
+            }
+
             $( "#email" ).append( data.email );
 
             // Map coordinates (marker)
