@@ -610,8 +610,8 @@ $(document).ready(function() {
                 swipe_det.sX = 0; swipe_det.sY = 0; swipe_det.eX = 0; swipe_det.eY = 0;
                 var min_x = 30;  //min x swipe for horizontal swipe
                 var max_x = 30;  //max x difference for vertical swipe
-                var min_y = 50;  //min y swipe for vertical swipe
-                var max_y = 60;  //max y difference for horizontal swipe
+                var min_y = 80;  //min y swipe for vertical swipe
+                var max_y = 90;  //max y difference for horizontal swipe
                 var direc = "";
                 ele = document.getElementById(el);
                 ele.addEventListener('touchstart',function(e){
@@ -647,7 +647,7 @@ $(document).ready(function() {
             }
 
             function myfunction(el,d) {
-                alert("Thou hast swiped on element with id '"+el+"' to "+d+" direction");
+                alert("Thou swiped on element with id '"+el+"' to "+d+" direction");
                 if (el === "schedules") {
                     if(d === "r") {
                         $("#lastWeek").focus();
@@ -670,7 +670,7 @@ $(document).ready(function() {
 
             }
 
-            detectswipe("schedules", myfunction);
+            detectswipe("sliderBox", myfunction);
             detectswipe("sliderBox", myfunction);
 
         }
