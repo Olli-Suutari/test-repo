@@ -631,12 +631,7 @@ $(document).ready(function() {
                         if(swipe_det.eX > swipe_det.sX) direc = "r";
                         else direc = "l";
                     }
-                    //vertical detection
-                    else if ((((swipe_det.eY - min_y > swipe_det.sY) || (swipe_det.eY + min_y < swipe_det.sY)) && ((swipe_det.eX < swipe_det.sX + max_x) && (swipe_det.sX > swipe_det.eX - max_x) && (swipe_det.eY > 0)))) {
-                        return;
-                        //if(swipe_det.eY > swipe_det.sY) direc = "d";
-                        //else direc = "u";
-                    }
+
 
                     if (direc != "") {
         
