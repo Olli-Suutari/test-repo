@@ -596,7 +596,6 @@ $(document).ready(function() {
                     $("#navigateForward").focus();
                     // If we blur instantly, arrow navigation won't work unless something has been clicked in the document.
                     setTimeout(function(){ $("#navigateForward").blur(); }, 5);
-                    //$("#navigateForward").blur();
                 }
             });
             $( "#sliderBox" ).mouseleave(function() {
@@ -649,8 +648,14 @@ $(document).ready(function() {
 
             function myfunction(el,d) {
                 alert("You swiped on element with id '"+el+"' to "+d+" direction");
-                $("#navigateBack").focus();
-                $("#navigateBack").click();
+                if(d === "r") {
+                    $("#navigateBack").focus();
+                    $("#navigateBack").click();
+                } else {
+                    $("#navigateForward").focus();
+                    $("#navigateForward").click(); 
+                }
+
             }
 
             detectswipe("sliderBox", myfunction);
