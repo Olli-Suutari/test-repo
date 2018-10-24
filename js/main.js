@@ -648,7 +648,7 @@ $(document).ready(function() {
 
             function myfunction(el,d) {
                 if (el === "schedules") {
-                    alert("Thou swiped on element with id '"+el+"' to "+d+" direction");
+                    alert("Thou have swiped on element with id '"+el+"' to "+d+" direction");
                     if(d === "r") {
                         $("#lastWeek").focus();
                         $("#lastWeek").click();
@@ -670,7 +670,7 @@ $(document).ready(function() {
 
             }
 
-            detectswipe("sliderBox", myfunction);
+            detectswipe("schedules", myfunction);
             detectswipe("sliderBox", myfunction);
 
         }
