@@ -638,7 +638,7 @@ $(document).ready(function() {
                     }
 
                     if (direc != "") {
-                        console.log("DO IT!");
+        
                         if(typeof func == 'function') func(el,direc);
                     }
                     direc = "";
@@ -647,17 +647,30 @@ $(document).ready(function() {
             }
 
             function myfunction(el,d) {
-                alert("Thou swiped on element with id '"+el+"' to "+d+" direction");
-                if(d === "r") {
-                    $("#navigateBack").focus();
-                    $("#navigateBack").click();
-                } else if (d === "l") {
-                    $("#navigateForward").focus();
-                    $("#navigateForward").click(); 
+                alert("Thou hast swiped on element with id '"+el+"' to "+d+" direction");
+                if (el === "schedules") {
+                    if(d === "r") {
+                        $("#lastWeek").focus();
+                        $("#lastWeek").click();
+                    } else if (d === "l") {
+                        $("#nextWeek").focus();
+                        $("#nextWeek").click();
+                    }
                 }
+                else if(el === "sliderBox") {
+                    if(d === "r") {
+                        $("#navigateBack").focus();
+                        $("#navigateBack").click();
+                    } else if (d === "l") {
+                        $("#navigateForward").focus();
+                        $("#navigateForward").click(); 
+                    }
+                }
+
 
             }
 
+            detectswipe("schedules", myfunction);
             detectswipe("sliderBox", myfunction);
 
         }
