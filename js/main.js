@@ -647,11 +647,11 @@ $(document).ready(function() {
             }
 
             function myfunction(el,d) {
-                alert("You swiped on element with id '"+el+"' to "+d+" direction");
+                alert("Thou swiped on element with id '"+el+"' to "+d+" direction");
                 if(d === "r") {
                     $("#navigateBack").focus();
                     $("#navigateBack").click();
-                } else {
+                } else if (d === "l") {
                     $("#navigateForward").focus();
                     $("#navigateForward").click(); 
                 }
