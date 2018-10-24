@@ -35,7 +35,7 @@ function rebindClickPreventation() {
 
     // Default settings
     var settings = $.extend({
-      "auto": true,             // Boolean: Animate automatically, true or false
+      "auto": false,             // Boolean: Animate automatically, true or false
       "speed": 0,             // Integer: Speed of the transition, in milliseconds
       "timeout": 6000,          // Integer: Time between slide transitions, in milliseconds
       "pager": false,           // Boolean: Show pager, true or false

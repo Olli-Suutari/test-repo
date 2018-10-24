@@ -648,7 +648,7 @@ $(document).ready(function() {
             }
 
             function myfunction(el,d) {
-                alert("you swiped on element with id '"+el+"' to "+d+" direction");
+                alert("You swiped on element with id '"+el+"' to "+d+" direction");
                 $("#navigateBack").focus();
                 $("#navigateBack").click();
             }
