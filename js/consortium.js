@@ -24,7 +24,7 @@ $(document).ready(function() {
     ? document.referrer
     : document.location.href;
     console.log("URL: " + url);
-    if(url.indexOf("#kuokkala") > -1) {
+    if(url.indexOf("?kuokkala") > -1) {
         library = 86583;
      }
 
