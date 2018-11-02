@@ -46,6 +46,13 @@ $(document).ready(function() {
         }, 50);
     }
 
+
+    var url = (window.location != window.parent.location)
+    ? document.referrer
+    : document.location.href;
+    console.log("URL: " + url);
+
+
     // Fetch libraries of city, that belong to the same consortium
     if(consortium !== undefined && city !== undefined) {
         $.getJSON("https://api.kirjastot.fi/v3/organisation?lang=" + lang + "&city.name=" + city, function(data) {
@@ -83,7 +90,6 @@ $(document).ready(function() {
             }
         });
     }
-
 
     $("#librarySelector").change(function(){
         $("#pageContainer").replaceWith(divClone.clone()); // Restore main with a copy of divClone
