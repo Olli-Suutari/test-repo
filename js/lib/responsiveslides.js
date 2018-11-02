@@ -13,6 +13,7 @@
 - Current slide is displayed in top left corner
 - Added clickevent preventation for selected image (close fullscreen when clicking background)
 - Added right/left navigation events for slider in fullscreen
+- Navigation now always resets the slider timeout/automatic advancing.
 - Modified default settings:
   - speed: 0
   - timeout: 6000
@@ -30,14 +31,16 @@ function rebindClickPreventation() {
     });
 }
 
+// Global variable, this will be set to true when changing the selected library.
+var sliderNeedsToRestart = false;
 (function ($, window, i) {
   $.fn.responsiveSlides = function (options) {
 
     // Default settings
     var settings = $.extend({
-      "auto": false,             // Boolean: Animate automatically, true or false
-      "speed": 0,             // Integer: Speed of the transition, in milliseconds
-      "timeout": 6000,          // Integer: Time between slide transitions, in milliseconds
+      "auto": true,             // Boolean: Animate automatically, true or false
+      "speed": 0,               // Integer: Speed of the transition, in milliseconds
+      "timeout": 6500,          // Integer: Time between slide transitions, in milliseconds
       "pager": false,           // Boolean: Show pager, true or false
       "nav": true,              // Boolean: Show navigation, true or false
       "random": false,          // Boolean: Randomize the order of the slides, true or false
@@ -249,28 +252,33 @@ function rebindClickPreventation() {
 
         // Auto cycle
         if (settings.auto) {
-
-                startCycle = function () {
-                    rotate = setInterval(function () {
-
+          startCycle = function () {
+            rotate = setInterval(function () {
               // Clear the event queue
               $slide.stop(true, true);
-
               var idx = index + 1 < length ? index + 1 : 0;
-
+              // Check if library has changed & if there is more than one image.
+              if(sliderNeedsToRestart && $('.rslides li').length >= 2) {
+                // Clean the interval in order to avoid duplicate calls.
+                clearInterval(rotate);
+                sliderNeedsToRestart = false;
+                return;
+              }
               // Remove active state and set new if pager is set
               if (settings.pager || settings.manualControls) {
                 selectTab(idx);
               }
-              $(".rslides1_on").off("click");
-              slideTo(idx);
-              $('#currentSlide').html(idx + 1);
-              rebindClickPreventation();
+              if($('.rslides li').length >= 2) {
+                $(".rslides1_on").off("click");
+                slideTo(idx);
+                $('#currentSlide').html(idx + 1);
+                rebindClickPreventation();
+              }
             }, waitTime);
           };
 
           // Init cycle
-          startCycle();
+            startCycle();
         }
 
         // Restarting cycle
@@ -332,8 +340,8 @@ function rebindClickPreventation() {
         // Navigation
         if (settings.nav) {
           var navMarkup =
-            "<a href='#'id='navigateBack' class='centered-left " + navClass + " prev'>" + settings.prevText + "</a>" +
-            "<a href='#' id='navigateForward' class='centered-right " + navClass + " next'>" + settings.nextText + "</a>";
+            "<a href='#'id='sliderPrevious' class='centered-left " + navClass + " prev'>" + settings.prevText + "</a>" +
+            "<a href='#' id='sliderForward' class='centered-right " + navClass + " next'>" + settings.nextText + "</a>";
 
           // Inject navigation
           if (options.navContainer) {
@@ -398,6 +406,11 @@ function rebindClickPreventation() {
             if (!settings.pauseControls) {
               restartCycle();
             }
+            // Restart the timer.
+            // Stop
+            clearInterval(rotate);
+            // Restart
+            startCycle();
           });
 
           // Pause when hovering navigation
