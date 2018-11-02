@@ -19,6 +19,15 @@ consortium = getParamValue('consortium');
 lang = getParamValue('lang');
 
 $(document).ready(function() {
+
+    var url = (window.location != window.parent.location)
+    ? document.referrer
+    : document.location.href;
+    console.log("URL: " + url);
+    if(url.indexOf("#kuokkala") > -1) {
+        library = 86583;
+     }
+
     var libraryList = [];
     function finalizeSelect() {
         // Sort alphabetically. https://stackoverflow.com/questions/6712034/sort-array-by-firstname-alphabetically-in-javascript
@@ -45,13 +54,6 @@ $(document).ready(function() {
             $('#librarySelectorContainer').addClass("always-visible");
         }, 50);
     }
-
-
-    var url = (window.location != window.parent.location)
-    ? document.referrer
-    : document.location.href;
-    console.log("URL: " + url);
-
 
     // Fetch libraries of city, that belong to the same consortium
     if(consortium !== undefined && city !== undefined) {
