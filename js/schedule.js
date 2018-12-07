@@ -121,11 +121,9 @@ function getWeekSchelude(direction, lib) {
                         increaseRowCount();
                     }
                     // Info row for main schedules..
-                    alert("HEY opr!");
+                    //alert("HEY opr!");
 
                     if (data.schedules[i].info != null && data.schedules[i].info.length != 0) {
-                        alert("HEY 0!");
-                        if(!JSON.stringify(data.schedules[i].info).includes("null")) {
                             alert("HEY!");
                             // Split long info strings in half, ignore longer than 60/80 chars.
                             var infoText = data.schedules[i].info;
@@ -153,7 +151,7 @@ function getWeekSchelude(direction, lib) {
                             increaseRowCount(true);
                             alert("HEY2!");
 
-                        }
+                    
                     }
                     // Self service times.
                     if(data.schedules[i].sections.selfservice != null) {
