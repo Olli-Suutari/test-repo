@@ -399,7 +399,7 @@ function getWeekSchelude(direction, lib) {
                     '<td class="day-name">' + dayName + '</td>' +
                     '<td class="main-schedule"><time datetime="' + dayStart + '">' + dayStart.replace(/:/g, ".") + '</time> – <time datetime="' + dayEnd + '">'
                     + dayEnd.replace(/:/g, ".") + '</time></td></tr>' + selfServiceBefore + magazinesBefore + staffToday +
-                    selfServiceAfter + magazinesAfter + dayInfo + selfServiceInfo + magazineInfo;
+                    selfServiceAfter + magazinesAfter;
             }
             totalRows = totalRows + rowspanCount;
             str += scheludeRow;
@@ -422,6 +422,7 @@ function getWeekSchelude(direction, lib) {
             else if(totalRows > 28) {
                 $(".library-schedules").addClass('m-font');
             }
+            alert("TEST");
         }
         // If document has no title, set it to Library name.
         if(document.title === '') {
