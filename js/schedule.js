@@ -123,6 +123,7 @@ function getWeekSchelude(direction, lib) {
                     // Info row for main schedules..
                     if (data.schedules[i].info != null && data.schedules[i].info.length != 0) {
                         if(!JSON.stringify(data.schedules[i].info).includes("null")) {
+                            alert("HEY!");
                             // Split long info strings in half, ignore longer than 60/80 chars.
                             var infoText = data.schedules[i].info;
                             if(largeSchedules) {
@@ -147,6 +148,8 @@ function getWeekSchelude(direction, lib) {
                                 '<td colspan="2"><i style="float: left" class="fa fa-info-circle" > </i><span class="info-text">' + infoText + '</span></td>' +
                                 '</tr>';
                             increaseRowCount(true);
+                            alert("HEY2!");
+
                         }
                     }
                     // Self service times.
@@ -422,7 +425,7 @@ function getWeekSchelude(direction, lib) {
             else if(totalRows > 28) {
                 $(".library-schedules").addClass('m-font');
             }
-            alert("TEST");
+            alert("TEST2");
         }
         // If document has no title, set it to Library name.
         if(document.title === '') {
