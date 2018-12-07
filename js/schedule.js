@@ -423,7 +423,6 @@ function getWeekSchelude(direction, lib) {
                 $(".library-schedules").addClass('m-font');
             }
         }
-        alert("test");
         // If document has no title, set it to Library name.
         if(document.title === '') {
             if(data.name != null) {
