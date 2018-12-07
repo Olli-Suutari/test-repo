@@ -35,6 +35,7 @@ function splitString(s) {
     }
     var s1 = s.substr(0, middle);
     var s2 = s.substr(middle + 1);
+    alert("DO THE SPLITR");
     return s1 + '<br>' + s2;
 }
 
