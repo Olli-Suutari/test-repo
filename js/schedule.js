@@ -145,8 +145,8 @@ function getWeekSchelude(direction, lib) {
                                 }
                             }
                             dayInfo = '<tr class="info-row time--sub isTodayClass">' +
-                                '<td colspan="2"><i style="float: left" class="fa fa-info-circle" > </i><span class="info-text">' + infoText + '</span></td>' +
-                                '</tr>';
+                            '<td colspan="2"><span style="float: left" class="fa fa-info-circle" > </span><span class="info-text">' + infoText + '</span></td>' +
+                            '</tr>';
                             increaseRowCount(true);
                         }
                     }
