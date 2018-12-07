@@ -5,16 +5,20 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" href="../style/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../style/style.css">
   <link rel="stylesheet" href="../style/nice-select.css">
+  <link rel="stylesheet" href="../style/leaflet.css"/>
   <script src="../js/lib/jquery-3.3.1.min.js"></script>
   <script src="../js/lib/jquery.translate.js"></script>
   <script src="../js/translations.js"></script>
+  <script src="../js/getParameters.js"></script>
   <script src="../js/lib/moment.min.js"></script>
   <script src="../js/lib/moment-fi.js"></script>
   <script src="../js/lib/responsiveslides.js"></script>
   <script src="../js/lib/jquery.nice-select.min.js"></script>
+  <script src="../js/lib/leaflet.js"></script>
+  <script src="../js/lib/leaflet-providers.min.js"></script>
   <script src="../js/schedule.js" type="text/javascript"></script>
   <script src="../js/consortium.js" type="text/javascript"></script>
   <script src="../js/main.js" type="text/javascript"></script>
@@ -78,6 +82,7 @@
         <section id="schedules" class="library-schedules">
           <h3 class="sr-only" id="scheludesSr"></h3>
           <table class="table table-sm">
+            <tr>
             <thead class="thead-light">
             <td colspan="3">
               <button type="button" id="lastWeek" class="btn btn-sm btn-light btn-back btn-arrow" aria-hidden="true" onclick="getWeekSchelude(-1)">
@@ -89,6 +94,7 @@
               </button>
             </td>
             </thead>
+            </tr>
             <tbody id="weekSchelude" class="schedules-weekly">
             </tbody>
           </table>
@@ -134,8 +140,8 @@
             </div>
             <!-- Map -->
             <div id="contactsMapCol" class="col-md-4">
-              <div id="mapContainer">
-                <i id="expandMap" onclick="toggleFullScreen('#mapContainer')" class="fa fa-expand top-right" title=""></i>
+              <div id="mapContainer" class="map-borders">
+                <i id="expandMap" onclick="toggleFullScreen('#mapContainer')" class="fa fa-expand top-right" title="Toggle full-screen"></i>
               </div>
             </div>
           </div>
