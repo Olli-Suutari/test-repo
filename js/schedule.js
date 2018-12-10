@@ -144,7 +144,7 @@ function getWeekSchelude(direction, lib) {
                             }
                         }
                         dayInfo = '<tr class="info-row time--sub isTodayClass">' +
-                            '<td colspan="2"><span class="info-text"><i class="fa fa-info-circle" > </i>' + infoText + '</span></td>' +
+                            '<td colspan="2"><span class="info-text"><i class="fa fa-info-circle" > </i> ' + infoText + '</span></td>' +
                             '</tr>';
                         increaseRowCount(true);
                     }
@@ -246,7 +246,7 @@ function getWeekSchelude(direction, lib) {
                             // Apparently the API has started returning {"fi":null} in JSON if no English info is found...
                             if(JSON.stringify(data.schedules[i].sections.magazines.info).indexOf("null") === -1) {
                                 magazineInfo = '<tr class="info-row time--sub isTodayClass">' +
-                                    '<td colspan="2"><span class="info-text"><i class="fa fa-info-circle"> </i>' +
+                                    '<td colspan="2"><span class="info-text"><i class="fa fa-info-circle" > </i> ' +
                                     data.schedules[i].sections.magazines.info + '</span></td>' +
                                     '</tr>';
                                 increaseRowCount(true);
