@@ -481,8 +481,11 @@ function getWeekSchelude(direction, lib) {
                     genericDescription = splitString(genericDescription);
                     totalRows = totalRows +3;
                 }
-                else {
+                else if(genericDescription.length > 130 && genericDescription.length < 170) {
                     totalRows = totalRows +4;
+                }
+                else {
+                    totalRows = totalRows +5;
                 }
             }
             else {
@@ -496,14 +499,17 @@ function getWeekSchelude(direction, lib) {
                 // If less than 16 rows, apply the xxl font.
                 if(totalRows < 16) {
                     $(".library-schedules").addClass('xxl-font');
+                    $("#scheduleInfo").addClass('xxl-font');
                 }
                 // If 24 rows or less, apply the xl font.
                 else if(totalRows <= 24) {
                     $(".library-schedules").addClass('xl-font');
+                    $("#scheduleInfo").addClass('xl-font');
                 }
                 // If more than 28 rows, change to 'medium' font.
                 else if(totalRows > 28) {
                     $(".library-schedules").addClass('m-font');
+                    $("#scheduleInfo").addClass('m-font');
                 }
             }
         }, 50);
