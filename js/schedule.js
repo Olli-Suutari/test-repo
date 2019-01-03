@@ -500,7 +500,6 @@ function getWeekSchelude(direction, lib) {
                 $(".library-schedules").removeClass('col-lg-4 col-xl-3 schedules-widget xxl-font xl-font m-font');
                 $('#schedules').addClass("large-schedules col-md-12");
                 $('#scheduleInfo').addClass("large-schedules col-md-12");
-                console.log(totalRows);
                 // If less than 18 rows, apply the xxl font.
                 if(totalRows < 18) {
                     $(".library-schedules").addClass('xxl-font');

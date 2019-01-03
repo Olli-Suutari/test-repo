@@ -302,7 +302,7 @@ a[target=_blank]:not([href*="instagram"]):not([href*="facebook"]):after{
 }
 
 #scheduleInfo {
-    margin-bottom: 0.7em;
+    margin-bottom: 0.55em;
 }
 
 #weekNumber, .btn-arrow {
@@ -591,6 +591,7 @@ a[target=_blank]:not([href*="instagram"]):not([href*="facebook"]):after{
 
 .large-schedules #scheduleInfo {
     padding-left: 1.5em;
+    margin-top: -10px;
 }
 
 /* medium-font, used if schedule contains so many rows L-font would not fit well. */
