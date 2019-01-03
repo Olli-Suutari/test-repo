@@ -302,7 +302,7 @@ a[target=_blank]:not([href*="instagram"]):not([href*="facebook"]):after{
 }
 
 #scheduleInfo {
-    margin-bottom: 0.5em;
+    margin-bottom: 0.7em;
 }
 
 #weekNumber, .btn-arrow {
