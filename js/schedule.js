@@ -501,17 +501,17 @@ function getWeekSchelude(direction, lib) {
                 $('#schedules').addClass("large-schedules col-md-12");
                 $('#scheduleInfo').addClass("large-schedules col-md-12");
                 // If less than 17 rows, apply the xxl font.
-                if(totalRows <= 16) {
+                if(totalRows < 18) {
                     $(".library-schedules").addClass('xxl-font');
                     $("#scheduleInfo").addClass('xxl-font');
                 }
                 // If 25 rows or less, apply the xl font.
-                else if(totalRows <= 25) {
+                else if(totalRows < 26) {
                     $(".library-schedules").addClass('xl-font');
                     $("#scheduleInfo").addClass('xl-font');
                 }
                 // If more than 26 rows, change to 'medium' font.
-                else if(totalRows => 26) {
+                else if(totalRows > 26) {
                     $(".library-schedules").addClass('m-font');
                     $("#scheduleInfo").addClass('m-font');
                 }
