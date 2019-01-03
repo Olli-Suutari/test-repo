@@ -1,4 +1,76 @@
 @charset "UTF-8";
+
+h3 {
+    font-size: 1.35em!important;
+}
+
+h4 {
+    font-size: 1.2em!important;
+}
+
+i {
+    font-size: 1em!important;
+}
+
+.cols li {
+    word-break: break-all!important;
+    padding-bottom: 5px;
+}
+
+a[target=_blank]:not([href*="instagram"]):not([href*="facebook"]):after{
+    font-family: FontAwesome;
+    content: "\f08e";
+    font-size: 0.85em;
+    color: #026FCF;
+    padding-left: 5px;
+}
+
+.cols {
+    padding-left: 10px;
+    list-style-type: none;
+}
+
+#accessibilityList {
+    padding-left: 18px;
+}
+
+.accessibility-details {
+    padding-left: 10px;
+}
+
+#librarySelectorTitle {
+    text-align: center;
+}
+
+#librarySelectorContainer {
+    margin-bottom: 0.8em;
+    display: flex;
+    align-items: center!important;
+    justify-content: center!important;
+}
+
+.select-container {
+    padding: auto!important;
+    margin: auto!important;
+    text-align: center!important;
+}
+
+.select2-container {
+    text-align: center!important;
+    align-content: center!important;
+    width: 65%!important;
+}
+
+/* Scale down the navigation on smaller screens to fit one row */
+@media screen and (max-width: 740px) {
+    .select2-container {
+        width: 90%!important;
+    }
+}
+/* If we wanted to style the placeholder of select2...
+:placeholder-shown {
+}*/
+
 .rslides {
     position: relative;
     list-style: none;
@@ -78,6 +150,25 @@
     }
 }
 
+#contactsFirstCol {
+    padding-top: 1em;
+}
+
+#contactsMapCol {
+    height: auto;
+    min-height: 260px;
+}
+
+.map-library-changer {
+    margin-top: 1em;
+}
+
+.transit-details {
+    margin-top: -0.8em;
+    padding-left: 0.6em;
+    padding-right: 0.9em;
+}
+
 /* Optimize slider/map sizes for mobile & tablets. */
 @media screen and (min-width: 590px) and (max-width: 768px) {
     .small-slider {
@@ -110,6 +201,32 @@
 /* Map borders, if not in fullscreen mode */
 .map-borders {
     border: 1px solid #026fcf;
+}
+
+.title-and-social-links {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 0.35em;
+}
+
+#locationTitle i {
+    margin-right: 10px;
+}
+
+#contactsTitle {
+    margin-top: 1em;
+}
+
+/* This splits the title evenly on mobile instead of starting 2nd row at the icon */
+#contactsTitle span {
+    margin-left: 48px;
+    margin-top: -23px!important;
+    display: block;
+}
+
+.some-links a img{
+    margin-top: 10px; /* Using em would not add margin on mobile, where rows are splitted */
 }
 
 /* Top right (full screen toggler) */
@@ -184,6 +301,10 @@
     text-align: center;
 }
 
+#scheduleInfo {
+    margin-bottom: 0.5em;
+}
+
 #weekNumber, .btn-arrow {
     font-weight: 600;
     font-size: 1.2em;
@@ -222,10 +343,6 @@
 
 .no-js-notification {
     color: red;
-}
-
-#servicesInfo {
-    margin: 15px;
 }
 
 .nav-pills {
@@ -292,14 +409,6 @@
     background:rgba(0,0,0,0)!important;
     zoom: 0.87;
     -moz-transform: scale(0.87);
-}
-
-#librarySelectorTitle {
-    text-align: center;
-}
-
-#librarySelectorContainer {
-    margin-bottom: 2.9em;
 }
 
 .schedules-weekly {
@@ -412,13 +521,14 @@
 }
 
 .fa-info-circle {
-    margin-top: 0.12em!important;
+    margin-top: 0.27em!important;
+    margin-right: 0.45em!important;
 }
-
+/*
 .large-schedules .fa-info-circle {
     margin-top: 0.25em!important;
 }
-
+*/
 /* Large schedules are used for iDiD info screens */
 .large-schedules .info-row td {
     padding-top: 0.05em!important;
@@ -3337,33 +3447,20 @@ body {
     flex-grow: 1
 }
 
-@media (max-width:575.98px) {
+@media (max-width: 767px) {
     .cols {
         -webkit-column-count: 1;
         column-count: 1
     }
 }
 
-@media (min-width:576px) and (max-width:767.98px) {
+@media (min-width: 768px) {
     .cols {
         -webkit-column-count: 2;
         column-count: 2
     }
 }
 
-@media (min-width:768px) and (max-width:991.98px) {
-    .cols {
-        -webkit-column-count: 3;
-        column-count: 3
-    }
-}
-
-@media (min-width:992px) {
-    .cols {
-        -webkit-column-count: 4;
-        column-count: 4
-    }
-}
 
 ul.cols {
     list-style-type: none
