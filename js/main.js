@@ -251,7 +251,6 @@ function fetchInformation(language, lib) {
                 transitIsEmpty = false;
                 $('.transit-details').css('display', 'block');
                 $('#navYhteystiedot').css('display', 'block');
-
                 $('#genericTransit').append('<h4>' + i18n.get("Ohjeita liikenteeseen") + '</h4><p>' + data.extra.transit.transit_directions.replace(/(<a )+/g, '<a target="_blank" ') + '</p>')
             }
             if (data.extra.transit.buses != null && data.extra.transit.buses !== "") {
@@ -364,7 +363,6 @@ function fetchInformation(language, lib) {
                         // If no postal address, hide header & increase map size.
                         $("#contactsFirstCol").addClass( "col-md-5");
                         $("#contactsFirstCol").removeClass( "col-md-7" );
-
                         $("#contactsMapCol").addClass( "col-md-7");
                         $("#contactsMapCol").removeClass( "col-md-5" );
                         $("#postalTh").css('display', 'none');
@@ -801,17 +799,15 @@ function loadMapWithLibraries() {
             if(libraryList[i].id == library) {
                 text = '<strong>' + libraryList[i].text + '</strong><br>' +
                     libraryList[i].street + ', <br>' + libraryList[i].zipcode + ', ' + libraryList[i].city;
+                // Add a notification text about missing coordinates for map.
                 if(libraryList[i].coordinates === null) {
-
-                    console.log(libraryList[i].text);
-                    var taat = libraryList[i].text.toString();
-                    $('#contactsMapCol').prepend('<div style="margin-top: 20px" id="toot">' + i18n.get("Huom") + '! ' + libraryList[i].text.toString() + i18n.get("Ei koordinaatteja") + '</div>');
+                    $('#contactsMapCol').prepend('<div id="noCoordinates">' + i18n.get("Huom") + '! ' + libraryList[i].text.toString() + i18n.get("Ei koordinaatteja") + '</div>');
                     var container = document.getElementById('contactsMapCol');
                     container.style.height = (container.offsetHeight + 70) + "px";
+                    var noCoordinatesHeight = $('#noCoordinates').height();
+                    noCoordinatesHeight = noCoordinatesHeight + 20; // Add margin.
                     var mapContainer = document.getElementById('mapContainer');
-                    mapContainer.style.height = (mapContainer.offsetHeight + -70) + "px";
-
-
+                    mapContainer.style.height = (mapContainer.offsetHeight + -noCoordinatesHeight) + "px";
                 }
             }
             if (libraryList[i].coordinates != null) {
@@ -867,6 +863,7 @@ function bindActions() {
             toggleInfoBox();
         }
         activeTab = 0;
+        adjustParentHeight();
     }
 
     $( "#navEsittely" ).on('click', function () {
@@ -893,6 +890,7 @@ function bindActions() {
             }, 750);
             mapLoaded = true;
         }
+        adjustParentHeight();
     });
     // Activate arrow navigation when hovering over the navigation.
     $(".nav-pills").mouseenter(function () {
@@ -924,6 +922,7 @@ function bindActions() {
         if(isInfoBoxVisible) {
             toggleInfoBox();
         }
+        adjustParentHeight();
     }
 
     if(activeTab === 1) {
@@ -951,8 +950,22 @@ function bindActions() {
                 navigateToDefault();
             }
         }, 100);
+        adjustParentHeight();
     }
 }
+
+function adjustParentHeight() {
+    setTimeout(function(){
+        try {
+            var height = document.getElementById("mainContainer").scrollHeight;
+            parent.AdjustIframeHeight(height);
+        }
+        catch (e) {
+            console.log("ifram size adjustment failed: " + e);
+        }
+    }, 700);
+}
+
 
 $(document).ready(function() {
     bindActions();
@@ -1016,5 +1029,7 @@ $(document).ready(function() {
     // Fetch details.
     fetchInformation(lang);
     fetchImagesAndSocialMedia(library);
+    adjustParentHeight();
+
 
 }); // OnReady

@@ -6,6 +6,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 <body>
-<iframe allowfullscreen="" frameborder="0" height="3000px" src="library.html?city=jyväskylä&lib=85909&consortium=2113&lang=fi" width="100%"></iframe>
+<iframe id="form-iframe" allowfullscreen="" frameborder="0" height="3000px" src="library.html?city=jyväskylä&lib=85909&consortium=2113&lang=fi" width="100%"></iframe>
 </body>
 </html>
+
+
+
+<!-- https://www.willmaster.com/library/tutorials/auto-resize-iframe-when-content-size-changes.php -->
+<script type="text/javascript">
+  function AdjustIframeHeightOnLoad() {
+    document.getElementById("form-iframe").style.height = document.getElementById("form-iframe").contentWindow.document.body.scrollHeight + "px";
+  }
+  function AdjustIframeHeight(i) {
+    console.log("HEY!: " + i);
+    document.getElementById("form-iframe").style.height = parseInt(i) + "px";
+  }
+</script>
