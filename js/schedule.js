@@ -339,7 +339,7 @@ function getWeekSchelude(direction, lib) {
                     openingTimeA = moment(staffPresentStart, HHmmFormat),
                     closingTimeA = moment(staffPresentEnd, HHmmFormat);
                 
-                alert("CHECKT " + time + " | " + openingTime + " -  " + closingTime);
+                alert("CHECKTA " + timeA + " | " + openingTimeA + " -  " + closingTimeA);
 
                 // Check if staff is present.
                 if (moment(timeA).isBetween(openingTimeA, closingTimeA)) {
