@@ -332,15 +332,16 @@ function getWeekSchelude(direction, lib) {
             }
             // If today, apply 'today' -class.
             if(moment(begin).isSame(moment(), 'day')) {
-                alert("IS TODAY");
+                console.log("IS TODAY");
                 isTodayClass =  "is-closed";
                 // var time = moment() gives you current time. no format required.
                 var timeA = moment(moment(), HHmmFormat),
                     openingTimeA = moment(staffPresentStart, HHmmFormat),
                     closingTimeA = moment(staffPresentEnd, HHmmFormat);
                 
-                alert("CHECKTA " + timeA + " | " + openingTimeA + " -  " + closingTimeA);
+                console.log("CHECK " + timeA + " | " + openingTimeA + " -  " + closingTimeA);
 
+                console.log("1546 589 334211 | 1546 588 800000 -  1546 610 400000");
                 // Check if staff is present.
                 if (moment(timeA).isBetween(openingTimeA, closingTimeA)) {
                     isTodayClass = "is-open";
