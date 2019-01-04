@@ -339,7 +339,7 @@ function getWeekSchelude(direction, lib) {
                     openingTimeA = moment(staffPresentStart, HHmmFormat),
                     closingTimeA = moment(staffPresentEnd, HHmmFormat);
                 
-                console.log("CHECK " + timeA + " | " + openingTimeA + " -  " + closingTimeA);
+                alert("CHECK " + timeA + " | " + openingTimeA + " -  " + closingTimeA);
 
                 console.log("1546 589 334211 | 1546 588 800000 -  1546 610 400000");
                 // Check if staff is present.
