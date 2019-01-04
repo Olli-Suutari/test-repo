@@ -339,7 +339,7 @@ function getWeekSchelude(direction, lib) {
                     openingTime = moment(staffPresentStart, HHmmFormat),
                     closingTime = moment(staffPresentEnd, HHmmFormat);
                 // Check if staff is present.
-                if (time.isBetween(openingTime, closingTime)) {
+                if (moment(time).isBetween(openingTime, closingTime)) {
                     isTodayClass = "is-open";
                 }
                 // If not, check if self service time.
