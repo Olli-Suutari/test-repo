@@ -494,26 +494,27 @@ function getWeekSchelude(direction, lib) {
             else {
                 $('#scheduleInfo').replaceWith('<span id="scheduleInfo" style="display: none" class="info-text"><i class="fa fa-info-circle" > </i></span>');
             }
-
             /* Large schedules are used in iDiD info screens. */
             if(largeSchedules) {
                 $(".library-schedules").removeClass('col-lg-4 col-xl-3 schedules-widget xxl-font xl-font m-font');
                 $('#schedules').addClass("large-schedules col-md-12");
                 $('#scheduleInfo').addClass("large-schedules col-md-12");
                 // If less than 18 rows, apply the xxl font.
+                //console.log(totalRows + " rows ");
                 if(totalRows < 18) {
+                    //console.log("Use XXL-Font");
                     $(".library-schedules").addClass('xxl-font');
                     $("#scheduleInfo").addClass('xxl-font');
                 }
-                // If 25 rows or less, apply the xl font.
-                else if(totalRows < 26) {
+                // If 26 rows or less, apply the xl font.
+                else if(totalRows < 27) {
+                    //console.log("Use XL-Font");
                     $(".library-schedules").addClass('xl-font');
                     $("#scheduleInfo").addClass('xl-font');
                 }
-                // If more than 25 rows, change to 'medium' font.
-                else if(totalRows > 25) {
-                    console.log("HEY!")
-
+                // If more than 26 rows, change to 'medium' font.
+                else if(totalRows > 26) {
+                    //console.log("Use M-Font");
                     $(".library-schedules").addClass('m-font');
                     $("#scheduleInfo").addClass('m-font');
                 }

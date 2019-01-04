@@ -596,23 +596,23 @@ a[target=_blank]:not([href*="instagram"]):not([href*="facebook"]):after{
 
 /* medium-font, used if schedule contains so many rows L-font would not fit well. */
 .m-font td, .m-font th{
-    font-size: 1.8em;
-}
-
-.m-font .date-container, .m-font .day-name {
     font-size: 1.9em;
 }
 
+.m-font .date-container, .m-font .day-name {
+    font-size: 2em;
+}
+
 .m-font .main-schedule {
-    font-size: 1.7em;
+    font-size: 1.8em;
 }
 
 .m-font #scheduleInfo{
-    font-size: 1.65em;
+    font-size: 1.75em;
 }
 
 .m-font #scheduleInfo {
-    font-size: 1.6em;
+    font-size: 1.7em;
 }
 
 /* XL-font */
