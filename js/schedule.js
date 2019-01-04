@@ -338,18 +338,20 @@ function getWeekSchelude(direction, lib) {
                 var time = moment(moment(), HHmmFormat),
                     openingTime = moment(staffPresentStart, HHmmFormat),
                     closingTime = moment(staffPresentEnd, HHmmFormat);
+                
+                alert("CHECKT " + time + " | " + openingTime + " -  " + closingTime);
+
                 // Check if staff is present.
                 if (moment(time).isBetween(openingTime, closingTime)) {
                     isTodayClass = "is-open";
+                    alert("CHECK SUCCESS");
                 }
                 // If not, check if self service time.
                 else {
                     time = moment(moment(), HHmmFormat),
                         openingTime = moment(dayStart, HHmmFormat),
                         closingTime = moment(dayEnd, HHmmFormat);
-                        alert("CHECK " + time + " | " + openingTime + " -  " + closingTime);
                     if (moment(time).isBetween(openingTime, closingTime)) {
-                        alert("CHECK SUCCESS");
                         isTodayClass = "is-self-service";
                     }
                 }
