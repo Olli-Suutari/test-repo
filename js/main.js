@@ -957,13 +957,21 @@ function bindActions() {
 function adjustParentHeight() {
     setTimeout(function(){
         try {
-            var height = document.getElementById("mainContainer").scrollHeight;
-            parent.AdjustIframeHeight(height);
+            var height = 0;
+            if(activeTab = 0) {
+                height = document.getElementById("mainContainer").scrollHeight;
+            }
+            else {
+                height = document.getElementById("mainContainer").scrollHeight;
+
+            }
+            console.log("HE: " + height);
+            parent.postMessage(height, '*');
         }
         catch (e) {
             console.log("ifram size adjustment failed: " + e);
         }
-    }, 700);
+    }, 100);
 }
 
 
