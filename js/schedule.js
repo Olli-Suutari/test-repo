@@ -335,23 +335,23 @@ function getWeekSchelude(direction, lib) {
                 alert("IS TODAY");
                 isTodayClass =  "is-closed";
                 // var time = moment() gives you current time. no format required.
-                var time = moment(moment(), HHmmFormat),
-                    openingTime = moment(staffPresentStart, HHmmFormat),
-                    closingTime = moment(staffPresentEnd, HHmmFormat);
+                var timeA = moment(moment(), HHmmFormat),
+                    openingTimeA = moment(staffPresentStart, HHmmFormat),
+                    closingTimeA = moment(staffPresentEnd, HHmmFormat);
                 
                 alert("CHECKT " + time + " | " + openingTime + " -  " + closingTime);
 
                 // Check if staff is present.
-                if (moment(time).isBetween(openingTime, closingTime)) {
+                if (moment(timeA).isBetween(openingTimeA, closingTimeA)) {
                     isTodayClass = "is-open";
                     alert("CHECK SUCCESS");
                 }
                 // If not, check if self service time.
                 else {
-                    time = moment(moment(), HHmmFormat),
-                        openingTime = moment(dayStart, HHmmFormat),
-                        closingTime = moment(dayEnd, HHmmFormat);
-                    if (moment(time).isBetween(openingTime, closingTime)) {
+                    timeB = moment(moment(), HHmmFormat),
+                        openingTimeB = moment(dayStart, HHmmFormat),
+                        closingTimeB = moment(dayEnd, HHmmFormat);
+                    if (moment(timeB).isBetween(openingTimeB, closingTimeB)) {
                         isTodayClass = "is-self-service";
                     }
                 }
