@@ -350,6 +350,7 @@ function getWeekSchelude(direction, lib) {
                         isTodayClass = "is-self-service";
                     }
                 }
+                alert(isTodayClass);
                 // Apply the class to the sections.
                 selfServiceBefore = selfServiceBefore.replace("isTodayClass", isTodayClass);
                 magazinesBefore = magazinesBefore.replace("isTodayClass", isTodayClass);
