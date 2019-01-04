@@ -332,6 +332,7 @@ function getWeekSchelude(direction, lib) {
             }
             // If today, apply 'today' -class.
             if(moment(begin).isSame(moment(), 'day')) {
+                alert("IS TODAY");
                 isTodayClass =  "is-closed";
                 // var time = moment() gives you current time. no format required.
                 var time = moment(moment(), HHmmFormat),
@@ -343,11 +344,11 @@ function getWeekSchelude(direction, lib) {
                 }
                 // If not, check if self service time.
                 else {
-                    alert("CHECK");
                     time = moment(moment(), HHmmFormat),
                         openingTime = moment(dayStart, HHmmFormat),
                         closingTime = moment(dayEnd, HHmmFormat);
-                    if (moment(time).isBetween(openingTime, closingTime)) {
+                        alert("CHECK " + moment(), HHmmFormat + " | " + openingTime + " -  " + closingTime);
+                    if (moment(moment(), HHmmFormat).isBetween(openingTime, closingTime)) {
                         alert("CHECK SUCCESS");
                         isTodayClass = "is-self-service";
                     }
