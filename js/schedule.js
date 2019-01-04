@@ -347,8 +347,8 @@ function getWeekSchelude(direction, lib) {
                     time = moment(moment(), HHmmFormat),
                         openingTime = moment(dayStart, HHmmFormat),
                         closingTime = moment(dayEnd, HHmmFormat);
-                        alert("CHECK " + moment(), HHmmFormat + " | " + openingTime + " -  " + closingTime);
-                    if (moment(moment(), HHmmFormat).isBetween(openingTime, closingTime)) {
+                        alert("CHECK " + time + " | " + openingTime + " -  " + closingTime);
+                    if (moment(time).isBetween(openingTime, closingTime)) {
                         alert("CHECK SUCCESS");
                         isTodayClass = "is-self-service";
                     }
