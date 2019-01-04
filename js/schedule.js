@@ -343,10 +343,12 @@ function getWeekSchelude(direction, lib) {
                 }
                 // If not, check if self service time.
                 else {
+                    alert("CHECK");
                     time = moment(moment(), HHmmFormat),
                         openingTime = moment(dayStart, HHmmFormat),
                         closingTime = moment(dayEnd, HHmmFormat);
                     if (moment(time).isBetween(openingTime, closingTime)) {
+                        alert("CHECK SUCCESS");
                         isTodayClass = "is-self-service";
                     }
                 }
