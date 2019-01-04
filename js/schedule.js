@@ -332,6 +332,25 @@ function getWeekSchelude(direction, lib) {
             }
             // If today, apply 'today' -class.
             if(moment(begin).isSame(moment(), 'day')) {
+
+                    function checkTime(i) {
+                        return (i < 10) ? "0" + i : i;
+                    }
+                
+                    function startTime() {
+                        var today = new Date(),
+                            h = checkTime(today.getHours()),
+                            m = checkTime(today.getMinutes()),
+                            s = checkTime(today.getSeconds());
+                        alert(h + ":" + m + ":" + s);
+                        t = setTimeout(function () {
+                            //startTime()
+                        }, 500);
+                    }
+
+                    startTime();
+
+
                 console.log("IS TODAY");
                 isTodayClass =  "is-closed";
                 // var time = moment() gives you current time. no format required.
@@ -344,6 +363,9 @@ function getWeekSchelude(direction, lib) {
                 console.log("1546 589 334211 | 1546 588 800000 -  1546 610 400000");
 
                 //1546 598 948 5308 | 1546 596 000 000 | 1546 617 6000
+
+
+                //1546 589 891 053 | 1546 596 000 000 | 1546 617 6000
 
 
                 if(timeA > openingTimeA && timeA < closingTimeA) {
