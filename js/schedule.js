@@ -353,6 +353,9 @@ function getWeekSchelude(direction, lib) {
 
                 // If not, check if self service time.
                 else {
+                    alert(timeA + " NOT " + openingTimeA +  " - " + closingTimeA);
+
+
                     timeB = moment(moment(), HHmmFormat),
                         openingTimeB = moment(dayStart, HHmmFormat),
                         closingTimeB = moment(dayEnd, HHmmFormat);
