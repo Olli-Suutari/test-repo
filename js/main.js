@@ -971,7 +971,7 @@ function adjustParentHeight() {
         catch (e) {
             console.log("ifram size adjustment failed: " + e);
         }
-    }, 100);
+    }, 800);
 }
 
 
