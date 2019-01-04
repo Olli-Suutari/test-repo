@@ -942,7 +942,7 @@ function adjustParentHeight() {
         try {
             var height = 50;
             height = height + document.getElementById("mainContainer").scrollHeight;
-            parent.postMessage(height, '/library.html');
+            parent.postMessage(height, '*');
         }
         catch (e) {
             console.log("iframe size adjustment failed: " + e);
