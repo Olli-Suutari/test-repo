@@ -339,14 +339,18 @@ function getWeekSchelude(direction, lib) {
                     openingTimeA = moment(staffPresentStart, HHmmFormat),
                     closingTimeA = moment(staffPresentEnd, HHmmFormat);
                 
-                alert("CHECK " + timeA + " | " + openingTimeA + " -  " + closingTimeA);
+                //alert("CHECK " + timeA + " | " + openingTimeA + " -  " + closingTimeA);
 
                 console.log("1546 589 334211 | 1546 588 800000 -  1546 610 400000");
-                // Check if staff is present.
-                if (moment(timeA).isBetween(openingTimeA, closingTimeA)) {
+
+                //1546 598 948 5308 | 1546 596 000 000 | 1546 617 6000
+
+
+                if(timeA > openingTimeA && timeA < closingTimeA) {
                     isTodayClass = "is-open";
                     alert("CHECK SUCCESS");
                 }
+
                 // If not, check if self service time.
                 else {
                     timeB = moment(moment(), HHmmFormat),
