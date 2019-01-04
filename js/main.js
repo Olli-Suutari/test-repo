@@ -947,7 +947,7 @@ function adjustParentHeight() {
         catch (e) {
             console.log("iframe size adjustment failed: " + e);
         }
-    }, 150);
+    }, 350);
 }
 
 
