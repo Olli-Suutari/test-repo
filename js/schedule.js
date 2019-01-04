@@ -332,60 +332,24 @@ function getWeekSchelude(direction, lib) {
             }
             // If today, apply 'today' -class.
             if(moment(begin).isSame(moment(), 'day')) {
-
-                    function checkTime(i) {
-                        return (i < 10) ? "0" + i : i;
-                    }
-                
-                    function startTime() {
-                        var today = new Date(),
-                            h = checkTime(today.getHours()),
-                            m = checkTime(today.getMinutes()),
-                            s = checkTime(today.getSeconds());
-                        alert(h + ":" + m + ":" + s);
-                        t = setTimeout(function () {
-                            //startTime()
-                        }, 500);
-                    }
-
-                    startTime();
-
-
-                console.log("IS TODAY");
                 isTodayClass =  "is-closed";
                 // var time = moment() gives you current time. no format required.
-                var timeA = moment(moment(), HHmmFormat),
-                    openingTimeA = moment(staffPresentStart, HHmmFormat),
-                    closingTimeA = moment(staffPresentEnd, HHmmFormat);
-                
-                //alert("CHECK " + timeA + " | " + openingTimeA + " -  " + closingTimeA);
-
-                console.log("1546 589 334211 | 1546 588 800000 -  1546 610 400000");
-
-                //1546 598 948 5308 | 1546 596 000 000 | 1546 617 6000
-
-
-                //1546 589 891 053 | 1546 596 000 000 | 1546 617 6000
-
-
-                if(timeA > openingTimeA && timeA < closingTimeA) {
+                var time = moment(moment(), HHmmFormat),
+                    openingTime = moment(staffPresentStart, HHmmFormat),
+                    closingTime = moment(staffPresentEnd, HHmmFormat);
+                // Check if staff is present.
+                if (time.isBetween(openingTime, closingTime)) {
                     isTodayClass = "is-open";
-                    alert("CHECK SUCCESS");
                 }
-
                 // If not, check if self service time.
                 else {
-                    alert(timeA + " NOT " + openingTimeA +  " - " + closingTimeA);
-
-
-                    timeB = moment(moment(), HHmmFormat),
-                        openingTimeB = moment(dayStart, HHmmFormat),
-                        closingTimeB = moment(dayEnd, HHmmFormat);
-                    if (moment(timeB).isBetween(openingTimeB, closingTimeB)) {
+                    time = moment(moment(), HHmmFormat),
+                        openingTime = moment(dayStart, HHmmFormat),
+                        closingTime = moment(dayEnd, HHmmFormat);
+                    if (time.isBetween(openingTime, closingTime)) {
                         isTodayClass = "is-self-service";
                     }
                 }
-                alert(isTodayClass);
                 // Apply the class to the sections.
                 selfServiceBefore = selfServiceBefore.replace("isTodayClass", isTodayClass);
                 magazinesBefore = magazinesBefore.replace("isTodayClass", isTodayClass);
