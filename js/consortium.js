@@ -74,8 +74,13 @@ function generateSelect() {
             return citiesDeferred.promise();
         }
 
-        $.when( asyncReplaceIdWithCity() ).then(
+        // Replace city ID:s with names and check refurl for library names.
+        $.when( asyncCheckUrlForKeskiLibrary(), asyncReplaceIdWithCity() ).then(
             function(){
+                // Trigger schedule fetching.
+                getWeekSchelude(0, library);
+                // Fetch library details, map is also generated during the process - it is important that we have already generated the list for map items.
+                fetchInformation(lang);
                 // Consortium listing
                 if(city === undefined) {
                     $.when( librariesGroupped = groupByCity(libraryList) ).then(
@@ -101,6 +106,7 @@ function generateSelect() {
                     );
                 }
             }
+
         );
     }
 }
@@ -108,6 +114,7 @@ function generateSelect() {
 $(document).ready(function() {
     // Fetch libraries of city, that belong to the same consortium
     if(consortium !== undefined && city !== undefined) {
+        isLibaryList = true;
         $.getJSON("https://api.kirjastot.fi/v3/organisation?lang=" + lang + "&city.name=" + city, function(data) {
             for (var i=0; i<data.items.length; i++) {
                 // Due to a bug in the api, a test library cannot be deleted or hidden
@@ -127,6 +134,7 @@ $(document).ready(function() {
     }
     // Fetch libraries of city
     else if(consortium === undefined && city !== undefined) {
+        isLibaryList = true;
         $.getJSON("https://api.kirjastot.fi/v3/organisation?lang=" + lang + "&city.name=" + city, function(data) {
             for (var i=0; i<data.items.length; i++) {
                 // Ignore mobile libraries
@@ -143,6 +151,7 @@ $(document).ready(function() {
     }
     // Fetch libraries of consortium
     else if(consortium !== undefined && city === undefined) {
+        isLibaryList = true;
         $.getJSON("https://api.kirjastot.fi/v3/organisation?lang=" + lang + "&consortium=" + consortium + "&limit=500", function(data) {
             for (var i=0; i<data.items.length; i++) {
                 // Due to a bug in the api, a test library cannot be deleted or hidden
@@ -167,7 +176,8 @@ $(document).ready(function() {
     }
 
     $("#librarySelector").change(function(){
-        if($(this).val() !== library) {
+        // Don't use !== as it won't match.
+        if($(this).val() != library) {
              $("#pageContainer").replaceWith(divClone.clone()); // Restore main with a copy of divClone
                 // Reset variables.
                 accessibilityIsEmpty = true;
@@ -178,13 +188,17 @@ $(document).ready(function() {
                 contactsIsEmpty = true;
                 noServices = true;
                 indexItemClicked = false;
+                generateImagesHasRun = false;
                 isReFetching = false;
+                map = L.map('mapContainer');
+                contactlist = [];
+                numbersList = [];
+                staffList = [];
                 // Set the global library parameter, so schedule switching won't mess things up.
                 library = $(this).val();
                 // Fetch data
                 getWeekSchelude(0, library);
                 fetchInformation(lang, $(this).val());
-                fetchImagesAndSocialMedia($(this).val());
                 // Re-bind navigation and other stuff.
                 bindActions();
                 bindScheduleKeyNavigation();

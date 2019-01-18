@@ -1,3 +1,6 @@
+// isLibraryList variable is used to determine when to load schedules.
+var isLibaryList = false;
+
 moment.locale(lang);
 var HHmmFormat = 'HH:mm';
 
@@ -50,7 +53,7 @@ function getWeekSchelude(direction, lib) {
     // As of 4.1.2019, the API does not return the schedule periods and their infos from
     // 2018, thus limit going back to the last year, prevent going to the last year..
     if(weekCounter < 0 && weekNumber == 52) {
-        weekCounter = 0;
+        weekCounter = weekCounter +1;
         return;
     }
     // Do not allow going more than 10 weeks to the past or for more than 26 weeks.
@@ -524,6 +527,9 @@ function getWeekSchelude(direction, lib) {
                     $(".library-schedules").addClass('m-font');
                     $("#scheduleInfo").addClass('m-font');
                 }
+            } else {
+                $('#scheduleTitle').html(i18n.get("Aukioloajat"));
+                $('#scheduleTitle').css('display', 'block');
             }
         }, 50);
 
@@ -617,8 +623,10 @@ function swipeNavigation(el,d) {
 }
 
 $(document).ready(function() {
-    // Scheludes
-    getWeekSchelude(0, library);
+    // Trigger schedule fetching, if no library list, otherwise trigger in consortium.js
+    if(!isLibaryList) {
+        getWeekSchelude(0, library);
+    }
     // UI texts.
     $('#scheludesSr').append(i18n.get("Aikataulut"));
     bindScheduleKeyNavigation();
