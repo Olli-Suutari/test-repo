@@ -827,5 +827,11 @@ body {
 */
 
 .modal-body {
-    -webkit-overflow-scrolling: touch!important;
+    -webkit-overflow-scrolling: auto !important;
+    overflow-y: auto !important;
+}
+
+.modal {
+    -webkit-overflow-scrolling: auto !important;
+    overflow-y: auto !important;
 }
