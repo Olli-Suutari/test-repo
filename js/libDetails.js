@@ -141,8 +141,7 @@ function asyncFetchGenericDetails() {
     return genericDeferred.promise();
 }
 
-var isSet = false;
-
+//var isSet = false;
 // Fetch services & generate the UI
 function asyncFetchServices() {
     var servicesDeferred = jQuery.Deferred();
@@ -339,11 +338,10 @@ function asyncFetchServices() {
                             var offsetLeft = $(this)[0].offsetLeft;
 
 
-
+                            /*
                             if(!isSet) {
                                 isSet = true
                                 $('#myModal').on('show.bs.modal', function (e) {
-                                    alert("OPEN!")
                                     var is_safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
                                     if(is_safari || navigator.userAgent.match(/iPhone/i) ||
                                         navigator.userAgent.match(/ipad/i) ||
@@ -351,6 +349,7 @@ function asyncFetchServices() {
                                         // block scroll for mobile;
                                         // causes underlying page to jump to top;
                                         // prevents scrolling on all screens
+
                                         $('.modal-open').css('overflow', 'hidden');
                                         $('.modal-open').css('position', 'fixed');
                                         $('body.modal-open').css('overflow', 'hidden');
@@ -360,7 +359,7 @@ function asyncFetchServices() {
                                     }
                                 });
                             }
-
+                            */
 
 
 

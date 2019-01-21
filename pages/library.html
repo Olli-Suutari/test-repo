@@ -37,7 +37,7 @@
 <div id="mainContainer" class="container">
   <!-- Library selector is used only when city/consertium parameters are provided. -->
   <div id="librarySelectorContainer" style="display: none">
-    <h1 id="librarySelectorTitle"></h1>
+    <h1 id="librarySelectorTitle"><label id="librarySelectorLabel" for="librarySelector"></label></h1>
     <div class="select-container">
       <select id="librarySelector" class="library-select"></select>
     </div>
@@ -78,11 +78,11 @@
             <h3 id="accessibilityTitle">
               <span class="badge" id="accessibilityBadge"></span>
             </h3>
-            <ul class="accessibility-details">
+            <div class="accessibility-details">
               <div style="margin: 10px 0 10px 0" class="accessibility-images"></div>
-              <div id="accessibilityList"></div>
+              <ul id="accessibilityList"></ul>
               <div style="margin: 10px 0 10px 0" id="accessibilityDetails"></div>
-            </ul>
+            </div>
           </div>
         </section><!-- Palvelut -->
       </div><!-- col-lg-8 -->
@@ -92,8 +92,8 @@
           <h3 id="scheduleTitle" class="underlined-title" style="display: none"></h3>
           <span id="scheduleInfo" style="display: none" class="info-text"><i class="fa fa-info-circle" > </i></span>
           <table class="table table-sm">
+            <thead class="thead-light">
             <tr>
-              <thead class="thead-light">
               <td colspan="3">
                 <button type="button" id="lastWeek" class="btn btn-sm btn-light btn-back btn-arrow" aria-hidden="true" onclick="getWeekSchelude(-1)">
                   ❮
@@ -103,8 +103,8 @@
                   ❯
                 </button>
               </td>
-              </thead>
             </tr>
+            </thead>
             <tbody id="weekSchelude" class="schedules-weekly">
             </tbody>
           </table>
@@ -133,8 +133,8 @@
                 <table id="addressTable" class="table">
                   <thead>
                   <tr>
-                    <th><h3 id="addressTh"></h3></th>
-                    <th><h3 id="postalTh"></h3></th>
+                    <th id="addressTh"></th>
+                    <th id="postalTh"></th>
                   </tr>
                   </thead>
                   <tbody>

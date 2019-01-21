@@ -133,9 +133,20 @@ header {
     margin-bottom: 0.5em;
 }
 
-.nav-link.active {
+.nav-link {
+    font-size: 1.15em;
+    margin-right: 0.5em;
     font-weight: 700;
-    background-color: #595959
+}
+
+.nav-link.active {
+    color: black!important;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-bottom: 2px solid #026FCF;
+    background: none!important;
+    border-radius: unset!important;
+    display: inline;
 }
 
 .nav-link:hover {
@@ -787,7 +798,7 @@ ul.cols {
     color: #d83d1e;
 }
 
-/* Fix modal scrolling on Safari: https://stackoverflow.com/questions/44082430/in-ios-iframe-in-a-bootstrap-modal-can-not-scroll */
+/* Fix modal scrolling on Safari: https://stackoverflow.com/questions/44082430/in-ios-iframe-in-a-bootstrap-modal-can-not-scroll
 
 
 .modal {
@@ -810,3 +821,4 @@ body {
     padding:0!important;
     margin:0!important;
 }
+*/
