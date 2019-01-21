@@ -793,11 +793,19 @@ ul.cols {
 .modal {
     -webkit-overflow-scrolling: auto!important;
     overflow-y: auto !important;
+    overflow: hidden!important;
+    position: fixed!important;
+}
+
+.modal-open {
+    -webkit-overflow-scrolling: auto!important;
+    overflow-y: auto !important;
+    overflow-y: auto !important;
+    overflow: hidden!important;
+    position: fixed!important;
 }
 
 body {
-    overflow-x: hidden!important;
-    overflow-y: scroll !important;
     width:100%!important;
     padding:0!important;
     margin:0!important;
