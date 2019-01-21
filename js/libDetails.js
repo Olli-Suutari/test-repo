@@ -141,21 +141,6 @@ function asyncFetchGenericDetails() {
     return genericDeferred.promise();
 }
 
-$('#myModal').on('show.bs.modal', function (e) {
-    var is_safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    alert("DO OPEN");
-    if(is_safari || navigator.userAgent.match(/iPhone/i) ||
-        navigator.userAgent.match(/ipad/i) ||
-        navigator.userAgent.match(/iPod/i)) {
-        // block scroll for mobile;
-        // causes underlying page to jump to top;
-        // prevents scrolling on all screens
-        $('body.modal-open').css('overflow', 'hidden');
-        $('body.modal-open').css('position', 'fixed');
-        alert("IS IOS");
-
-    }
-});
 
 // Fetch services & generate the UI
 function asyncFetchServices() {
@@ -353,6 +338,22 @@ function asyncFetchServices() {
                             var offsetLeft = $(this)[0].offsetLeft;
 
 
+
+                            $('#myModal').on('show.bs.modal', function (e) {
+                                var is_safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+                                alert("DO OPEN");
+                                if(is_safari || navigator.userAgent.match(/iPhone/i) ||
+                                    navigator.userAgent.match(/ipad/i) ||
+                                    navigator.userAgent.match(/iPod/i)) {
+                                    // block scroll for mobile;
+                                    // causes underlying page to jump to top;
+                                    // prevents scrolling on all screens
+                                    $('body.modal-open').css('overflow', 'hidden');
+                                    $('body.modal-open').css('position', 'fixed');
+                                    alert("IS IOS");
+
+                                }
+                            });
 
 
 
