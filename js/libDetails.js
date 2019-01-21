@@ -94,28 +94,28 @@ function asyncFetchGenericDetails() {
                 $('#triviaTitle').append( i18n.get("Tietoa kirjastosta"));
                 if (data.extra.founded != null) {
                     triviaIsEmpty = false;
-                    $("#triviaBody").append('<tr><td class="aligned-text"><strong>' + i18n.get("Perustamisvuosi") + ': </strong></td>' +
-                        '<td>' + data.extra.founded + '</td></tr>');
+                    $("#triviaBody").append('<tr><td class="trivia-cell-title"><strong>' + i18n.get("Perustamisvuosi") + ': </strong></td>' +
+                        '<td class="trivia-detail">' + data.extra.founded + '</td></tr>');
                 }
                 if (data.extra.building.building_name != null) {
                     triviaIsEmpty = false;
-                    $("#triviaBody").append('<tr><td class="aligned-text"><strong>' + i18n.get("Rakennus") + ': </strong></td>' +
-                        '<td>' + data.extra.building.building_name + '</td></tr>');
+                    $("#triviaBody").append('<tr><td class="trivia-cell-title"><strong>' + i18n.get("Rakennus") + ': </strong></td>' +
+                        '<td class="trivia-detail">' + data.extra.building.building_name + '</td></tr>');
                 }
                 if (data.extra.building.construction_year != null && data.extra.building.construction_year != 0) {
                     triviaIsEmpty = false;
-                    $("#triviaBody").append('<tr><td class="aligned-text"><strong>' + i18n.get("Rakennettu") + ': </strong></td>' +
-                        '<td>' + data.extra.building.construction_year + '</td></tr>');
+                    $("#triviaBody").append('<tr><td class="trivia-cell-title"><strong>' + i18n.get("Rakennettu") + ': </strong></td>' +
+                        '<td class="trivia-detail">' + data.extra.building.construction_year + '</td></tr>');
                 }
                 if (data.extra.building.building_architect != null) {
                     triviaIsEmpty = false;
-                    $("#triviaBody").append('<tr><td class="aligned-text"><strong>' + i18n.get("Arkkitehti") + ': </strong></td>' +
-                        '<td>' + data.extra.building.building_architect + '</td></tr>');
+                    $("#triviaBody").append('<tr><td class="trivia-cell-title"><strong>' + i18n.get("Arkkitehti") + ': </strong></td>' +
+                        '<td class="trivia-detail">' + data.extra.building.building_architect + '</td></tr>');
                 }
                 if (data.extra.building.interior_designer != null) {
                     triviaIsEmpty = false;
-                    $("#triviaBody").append('<tr><td class="aligned-text"><strong>' + i18n.get("Sisustus") + ': </strong></td>' +
-                        '<td>' + data.extra.building.interior_designer + '</td></tr>');
+                    $("#triviaBody").append('<tr><td class="trivia-cell-title"><strong>' + i18n.get("Sisustus") + ': </strong></td>' +
+                        '<td class="trivia-detail">' + data.extra.building.interior_designer + '</td></tr>');
                 }
                 if (triviaIsEmpty) {
                     $("#triviaTitle").css("display", "none");
@@ -325,13 +325,11 @@ function asyncFetchServices() {
 
                             // Check if text contains headers..
                             if(popupText.indexOf("<h") !== -1) {
-                                console.log("LAARFG")
                                 $('#modalTitle').removeClass("modal-title-small");
                             }
                             else {
                                 $('#modalTitle').addClass("modal-title-small");
                             }
-
 
 
                             // Define these here, won't work inside  hide.bs.modal event.
