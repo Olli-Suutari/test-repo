@@ -792,6 +792,7 @@ ul.cols {
 
 .modal {
     -webkit-overflow-scrolling: auto!important;
+    overflow-y: auto !important;
 }
 
 body {
