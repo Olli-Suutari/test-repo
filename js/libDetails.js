@@ -339,8 +339,9 @@ function asyncFetchServices() {
 
 
                             $('#myModal').on('show.bs.modal', function (e) {
-                                console.log("hey!");
-                                if( (navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i))) {
+                                alert("OPEN");
+                                var is_safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+                                if( (is_safari || navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i))) {
                                     // block scroll for mobile;
                                     // causes underlying page to jump to top;
                                     // prevents scrolling on all screens
