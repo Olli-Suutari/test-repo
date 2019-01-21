@@ -336,6 +336,25 @@ function asyncFetchServices() {
                             var offsetTop = $(this)[0].offsetTop;
                             var offsetLeft = $(this)[0].offsetLeft;
 
+
+
+                            $('#myModal').on('show.bs.modal', function (e) {
+                                console.log("hey!");
+                                if( (navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i))) {
+                                    // block scroll for mobile;
+                                    // causes underlying page to jump to top;
+                                    // prevents scrolling on all screens
+                                    $('body.modal-open').css('overflow', 'hidden');
+                                    $('body.modal-open').css('position', 'fixed');
+                                    alert("IOS");
+
+                                }
+                            })
+
+
+
+
+
                             // Show modal, bind hiding event.
                             $('#myModal').modal();
 
