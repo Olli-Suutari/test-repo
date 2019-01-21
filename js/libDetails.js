@@ -366,13 +366,16 @@ function asyncFetchServices() {
                             // Show modal, bind hiding event.
                             $('#myModal').modal();
 
+                            $('body').css('overflow','hidden');
+                            $('body').css('position','fixed');
 
 
                             // Add timeout. This prevents duplicated click events if we have changed library.
                             setTimeout(function()
                             {
-                                alert("SHO");
                                 $('#myModal').on('hide.bs.modal', function (e) {
+                                    $('body').css('overflow','auto');
+                                    $('body').css('position','relative');
                                     window.scrollTo(offsetLeft, offsetTop);
                                 });
                                 indexItemClicked = false;
