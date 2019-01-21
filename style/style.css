@@ -788,7 +788,8 @@ ul.cols {
 }
 
 /* Fix modal scrolling on Safari: https://stackoverflow.com/questions/44082430/in-ios-iframe-in-a-bootstrap-modal-can-not-scroll */
-.modal-body, body {
-    -webkit-overflow-scrolling: auto !important;
-    overflow-y: auto !important;
+
+
+.modal {
+    -webkit-overflow-scrolling: unset!important;
 }
