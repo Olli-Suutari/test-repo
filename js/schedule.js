@@ -421,7 +421,6 @@ function getWeekSchelude(direction, lib) {
             str += scheludeRow;
             begin.add(1, 'd');
         }
-
         $( "#weekSchelude" ).replaceWith( '<tbody id="weekSchelude" class="schedules-weekly">' + str );
         // If document has no title, set it to Library name.
         if(document.title === '') {
