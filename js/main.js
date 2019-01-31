@@ -9,20 +9,20 @@ function toggleFullScreen(target) {
         $('#mapContainer').toggleClass("map-borders");
     }
     if (
-        document.fullscreenElement ||
-        document.webkitFullscreenElement ||
-        document.mozFullScreenElement ||
-        document.msFullscreenElement
+      document.fullscreenElement ||
+      document.webkitFullscreenElement ||
+      document.mozFullScreenElement ||
+      document.msFullscreenElement
     ) {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-        }
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
     } else {
         element = $(target).get(0);
         if (element.requestFullscreen) {
@@ -319,6 +319,8 @@ function adjustParentUrl(toAdd, type) {
 
     toAdd = toAdd.toLowerCase();
     toAdd = toAdd.replace(/ /g, "_");
+    toAdd = toAdd.replace(/ä/g, "a");
+    toAdd = toAdd.replace(/ö/g, "o");
 
     // Remove item from url, if it already exists.
     refUrl = refUrl.replace(new RegExp(toAdd,"i"), "");
@@ -329,6 +331,8 @@ function adjustParentUrl(toAdd, type) {
 
             var serviceName = serviceNames[i].toLowerCase();
             serviceName = serviceName.replace(/ /g, "_");
+            serviceName = serviceName.replace(/ä/g, "a");
+            serviceName = serviceName.replace(/ö/g, "o");
 
             if(refUrl.indexOf(serviceName) > -1) {
                 console.log(serviceName + " == " + refUrl);
@@ -346,9 +350,11 @@ function adjustParentUrl(toAdd, type) {
         for (var i = 0; i < libraryList.length; i++) {
             var libraryName = libraryList[i].text.toLowerCase();
             libraryName = libraryName.replace(/ /g, "_");
-            if(refUrl.indexOf(libraryName) > -1) {
-                console.log(libraryName + " == " + refUrl);
-                refUrl = refUrl.replace(libraryName, "");
+            libraryName = libraryName.replace(/ä/g, "a");
+            libraryName = libraryName.replace(/ö/g, "o");
+            if(refUrl.indexOf(libraryName.toLowerCase()) > -1) {
+                refUrl = refUrl.replace(
+                    new RegExp(libraryName,"i"), "");
             }
         }
     }

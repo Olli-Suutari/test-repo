@@ -385,7 +385,13 @@ function asyncFetchServices() {
                 for (var i = 0; i < serviceNames.length; i++) {
                     var urlUnescapeSpaces = refUrl.replace(/%20/g, " ");
                     urlUnescapeSpaces = refUrl.replace(/_/g, " ");
-                    if(urlUnescapeSpaces.indexOf(serviceNames[i].toLowerCase()) > -1) {
+
+                    var escapedName = serviceNames[i].toLowerCase();
+                    escapedName = escapedName.replace(/ /g, "_");
+                    escapedName = escapedName.replace(/ä/g, "a");
+                    escapedName = escapedName.replace(/ö/g, "o");
+
+                    if(urlUnescapeSpaces.indexOf(escapedName) > -1) {
                         $("li").find('[data-name="'+ serviceNames[i] +'"]').click();
                         isInfoBoxVisible = true;
                     }
