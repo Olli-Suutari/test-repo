@@ -337,6 +337,9 @@ function adjustParentUrl(toAdd, type) {
                 refUrl = refUrl.replace(
                     new RegExp(serviceName,"g"), "");
             }
+            else {
+                console.log(serviceName + " != " + refUrl);
+            }
         }
     }
     // Remove contacts from url if navigating to introduction.
