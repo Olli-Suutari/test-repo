@@ -336,7 +336,7 @@ function adjustParentUrl(toAdd, type) {
 
             if(refUrl.indexOf(serviceName) > -1) {
                 console.log(serviceName + " == " + refUrl);
-                serviceName = serviceName.replace(serviceName, "");
+                refUrl = refUrl.replace(serviceName, "");
             }
             else {
             }
