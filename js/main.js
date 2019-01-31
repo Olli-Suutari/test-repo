@@ -337,6 +337,8 @@ function adjustParentUrl(toAdd, type) {
         for (var i = 0; i < libraryList.length; i++) {
             var libraryName = libraryList[i].text.toString();
             libraryName = libraryName.replace(/ /g, "_");
+            libraryName = libraryName.replace(/ä /g, "a");
+            libraryName = libraryName.replace(/ö /g, "ö");
             if(refUrl.indexOf(libraryName.toLowerCase()) > -1) {
                 refUrl = refUrl.replace(
                     new RegExp(libraryName,"i"), "");
