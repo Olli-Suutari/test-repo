@@ -229,7 +229,12 @@ function bindActions() {
                 mapLoaded = true;
             }
         }
-        adjustParentUrl('', 'contact');
+        if(lang === "fi") {
+            adjustParentUrl('yhteystiedot', 'contact');
+        }
+        else {
+            adjustParentUrl('contacts', 'contact');
+        }
     }
 
     $( "#navEsittely" ).on('click', function () {
@@ -310,6 +315,9 @@ function adjustParentUrl(toAdd, type) {
     //refUrl = "file:///C:/git/kirkanta-widgets/pages/consortiumFrameExample.html" + "?Joutsan pääkirjasto?unonsali";
     refUrl = refUrl.replace(/%20/g, " ");
     refUrl = refUrl.toLowerCase();
+    // Remove item from url, if it already exists.
+    refUrl = refUrl.replace(new RegExp(toAdd,"i"), "");
+    // Check for services.
     if(type !== "introduction" && type !== "contact") {
         // Loop services and check if refUrl contains one of them, if so remove it.
         for (var i = 0; i < serviceNames.length; i++) {
@@ -319,29 +327,13 @@ function adjustParentUrl(toAdd, type) {
             }
         }
     }
-    // Add/remove "contacts" from the url.
-    if(lang === "fi") {
-        if(type === "contact") {
-            toAdd = "yhteystiedot";
-            // Remove duplicates.
-            refUrl = refUrl.replace(/yhteystiedot/g, "");
-        }
-        else if(type === "introduction") {
-            refUrl = refUrl.replace(/yhteystiedot/g, "");
-        }
+    // Remove contacts from url if navigating to introduction.
+    if(type === "introduction") {
+        refUrl = refUrl.replace(/yhteystiedot/g, "");
+        refUrl = refUrl.replace(/contacts/g, "");
     }
-    else {
-        if(type === "contact") {
-            toAdd = "contacts";
-            refUrl = refUrl.replace(/contacts/g, "");
-        }
-        else if(type === "introduction") {
-            refUrl = refUrl.replace(/contacts/g, "");
-        }
-    }
-
+    // Loop libraries and check if refUrl contains one of them, if so remove it.
     if(type === "library") {
-        // Loop libraries and check if refUrl contains one of them, if so remove it.
         for (var i = 0; i < libraryList.length; i++) {
             if(refUrl.indexOf(libraryList[i].text.toLowerCase()) > -1) {
                 refUrl = refUrl.replace(
@@ -349,9 +341,6 @@ function adjustParentUrl(toAdd, type) {
             }
         }
     }
-
-    //console.log(libraryList);
-
 
     if(toAdd !== ''){
         refUrl = refUrl + "?" + toAdd;
