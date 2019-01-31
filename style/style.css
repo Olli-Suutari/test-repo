@@ -184,9 +184,8 @@ header {
     padding-top: 2em;
     padding-left: 1.5em;
     padding-right: 1.5em;
-    border-top: 0.0016rem solid #026fcf;
+    border-top: 1px solid #026fcf;
 }
-
 
 .blockquote {
     padding: 0 2rem;
@@ -613,11 +612,14 @@ ul.cols {
     padding-left: 2em;
 }
 
+#contactsFirstCol {
+    border-top: 1px solid #026fcf;
+}
+
 @media (min-width: 769px) {
     #contactsFirstCol {
         padding: 1.7rem 2.7rem;
         padding-top: 2.7rem;
-        border-top: 1px solid #026fcf;
         background: #EDEDE7;
     }
 
@@ -749,38 +751,52 @@ ul.cols {
 }
 
 /* Modal */
-.modal-lg #modalContent {
-    margin-top: -1.7em;
-    padding-left: 5em;
-    padding-right: 5em;
+/* Fix modal being clipped from the bottom */
+html {
+    overflow-y: scroll!important;
 }
 
-#modalContent, #linkToInfo {
-    padding: 0 5em;
+/* Fix modal scrolling on Safari on iPads & iPhones: https://stackoverflow.com/questions/44082430/in-ios-iframe-in-a-bootstrap-modal-can-not-scroll TO DO: Still broken? */
+.modal-body {
+    -webkit-overflow-scrolling: touch!important;
 }
 
-@media screen and (max-width: 499px) {
+.modal-backdrop {
+    background: rgba(0,0,0, 0)!important;
+}
 
+#myModal {
+    height: auto!important;
+    max-height: 5500px!important;
+    z-index: 99999999!important;
+}
 
-    .modal-lg #modalContent {
-        margin-top: -1.3em;
-        padding-left: 2em;
-        padding-right: 2em;
+#closeModal {
+    font-size: 1.1em;
+    justify-content: space-between;
+    margin: -0.6em auto .6em;
+}
+
+/* Close button in the right corner of the modal */
+.close {
+    font-size: 1.85em;
+    color: #f7502e;
+}
+
+.close:hover {
+    color: #d83d1e;
+}
+
+/* Media query for IE 10-11. Since object-fit: contain; is not supported in IE, set width to avoid silly scaling in IE.
+   Also float schedule infos to left. */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    #closeModal {
+        display: block;
+        position: absolute;
+        left: 45%;
+        bottom: -25px;
+        margin-bottom: 35px;
     }
-
-    #modalContent, #linkToInfo {
-        padding: 0 2em;
-    }
-}
-
-.modal-lg #linkToInfo {
-    padding-left: 5em;
-    padding-right: 5em;
-}
-
-#modalTitle {
-    margin-left: 1.5em;
-    margin-top: 0.8em;
 }
 
 .modal-title-small {
@@ -792,43 +808,19 @@ ul.cols {
     border-radius: 4px;
     max-width: 100%;
     max-height: 350px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+}
+
+.modal-body iframe {
+    margin: 0.35em 0;
 }
 
 .modal-header, .modal-footer {
     border: none!important;
 }
 
-#closeModal {
-    font-size: 1.1em;
-    justify-content: space-between;
-    margin: -0.6em auto 0.35em;
-}
-
-/* Close button in the right corner */
-.close {
-    font-size: 1.85em;
-    color: #f7502e;
-}
-
-.close:hover {
-    color: #d83d1e;
-}
-
-.modal-backdrop {
-    display: none !important;
-}
-
-
 .modal {
     border-radius:10px;
-}
-
-#myModal {
-    height: auto!important;
-    max-height: 5500px!important;
-    z-index: 99999999!important;
-
 }
 
 #modalContentContainer {
@@ -843,13 +835,50 @@ ul.cols {
     background-clip: padding-box;
 
 }
-/* Fix modal being clipped from the bottom */
-html {
-    overflow-y: scroll!important;
+
+#modalTitle {
+    margin-left: 1.5em;
+    margin-top: 0.8em;
 }
 
-/* Fix modal scrolling on Safari on iPads & iPhones: https://stackoverflow.com/questions/44082430/in-ios-iframe-in-a-bootstrap-modal-can-not-scroll TO DO: Still broken? */
+#modalContent {
+    margin-top: -.3em;
+    padding-left: 5em;
+    padding-right: 5em;
+}
 
-.modal-body {
-    -webkit-overflow-scrolling: touch!important;
+@media screen and (min-width: 500px) and (max-width: 768px) {
+    .modal-lg #modalContent {
+        margin-top: -.3em;
+        padding-left: 1em;
+        padding-right: 1em;
+    }
+
+    #modalTitle {
+        margin-left: 0.7em;
+    }
+}
+
+@media screen and (max-width: 499px) {
+    .modal, .modal-lg {
+        margin-left: calc(50% - 50vw) !important;
+        margin-right: calc(50% - 50vw) !important;
+        width: 100vmin !important;
+    }
+
+    #modalContent {
+        margin-top: -.1em;
+        padding-left: 0.3em;
+        padding-right: 0.3em;
+    }
+
+    #modalTitle {
+        margin-left: 0.2em;
+    }
+
+    .modal-body iframe {
+        margin-left: calc(50% - 46vw) !important;
+        margin-right: calc(50% - 45vw) !important;
+        width: 91vmin !important;
+    }
 }

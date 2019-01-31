@@ -230,35 +230,41 @@ $(document).ready(function() {
     $("#librarySelector").change(function(){
         // Don't use !== as it won't match.
         if($(this).val() != library) {
+            if (isInfoBoxVisible) {
+                toggleModal();
+            }
              $("#pageContainer").replaceWith(divClone.clone()); // Restore main with a copy of divClone
-                // Reset variables.
-                accessibilityIsEmpty = true;
-                transitIsEmpty = true;
-                descriptionIsEmpty = true;
-                mapLoaded = false;
-                sliderNeedsToRestart = true;
-                contactsIsEmpty = true;
-                noServices = true;
-                indexItemClicked = false;
-                generateImagesHasRun = false;
-                isReFetching = false;
-                map = L.map('mapContainer');
-                contactlist = [];
-                numbersList = [];
-                staffList = [];
-                // Set the global library parameter, so schedule switching won't mess things up.
-                library = $(this).val();
-                // Fetch data
-                getWeekSchelude(0, library);
-                fetchInformation(lang, $(this).val());
-                // Re-bind navigation and other stuff.
-                bindActions();
-                bindScheduleKeyNavigation();
-                // Add swiping detection for schedules & sliderbox if available.
-                detectswipe("schedules", swipeNavigation);
-                if(document.getElementById("sliderBox") != null) {
-                    detectswipe("sliderBox", swipeNavigation);
-                }
+            // Reset variables.
+            accessibilityIsEmpty = true;
+            transitIsEmpty = true;
+            descriptionIsEmpty = true;
+            mapLoaded = false;
+            sliderNeedsToRestart = true;
+            contactsIsEmpty = true;
+            noServices = true;
+            isReFetching = false;
+            isModalCloseBinded = false;
+            isServiceClickBinded = false;
+            map = L.map('mapContainer');
+            roomCount = 0;
+            contactlist = [];
+            numbersList = [];
+            staffList = [];
+            // Set the global library parameter, so schedule switching won't mess things up.
+            library = $(this).val();
+            // Fetch data
+            getWeekSchelude(0, library);
+            fetchInformation(lang, $(this).val());
+            // Re-bind navigation and other stuff.
+            bindActions();
+            bindScheduleKeyNavigation();
+            // Add swiping detection for schedules & sliderbox if available.
+            detectswipe("schedules", swipeNavigation);
+            if(document.getElementById("sliderBox") != null) {
+                detectswipe("sliderBox", swipeNavigation);
+            }
+            // Adjust parent url.
+            adjustParentUrl($("#librarySelector option:selected").text(), "library");
         }
     });
 

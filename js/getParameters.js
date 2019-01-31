@@ -4,9 +4,9 @@ var lang;
 var city;
 var consortium;
 var largeSchedules = false;
+var refUrl;
 // Get parameters from iframe url.
-function getParamValue(paramName)
-{
+function getParamValue(paramName) {
     var url = window.location.search.substring(1); //get rid of "?" in querystring
     var qArray = url.split('&'); //get key-value pairs
     for (var i = 0; i < qArray.length; i++)
@@ -42,12 +42,17 @@ if(lang == undefined && library == undefined){
 var i18n = $('body').translate({lang: lang, t: dict}); // Use the correct language
 $("html").attr("lang", lang);
 
-// Get referrer url (Iframe parent). If Library name is set, use that as the default (checkForKeskiConsortium.js)
-var refUrl = (window.location != window.parent.location)
+// Get referrer url (Iframe parent). If Library name is set, use that as the default (checkForKeskiConsortium.js).
+// This is also used for navigating to service x by default.
+refUrl = (window.location != window.parent.location)
     ? document.referrer
     : document.location.href;
 refUrl = refUrl.toLocaleLowerCase();
+if(refUrl.length === 0) {
+    refUrl = window.location.href;
+    console.log("ITS: " + refUrl);
 
+}
 // Navigate to contacts or services, if parameter is in the url.
 // Active tab: 0 = info, 1 = contact details, 3 = services.
 var activeTab = 0;

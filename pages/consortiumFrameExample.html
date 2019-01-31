@@ -18,7 +18,23 @@
   document.head.appendChild(css);
   // https://stackoverflow.com/questions/25098021/securityerror-blocked-a-frame-with-origin-from-accessing-a-cross-origin-frame
   window.addEventListener('message', function(event) {
-    container.style.height = (event.data) + "px";
+    // Adjust height if message is a number.
+    if(Number.isInteger(event.data)) {
+      container.style.height = (event.data) + "px";
+    }
+    // Adjust url.
+    else {
+      console.log(event.data);
+      try {
+        history.pushState("#", "", event.data);
+      }
+      catch (e) {
+        console.log("Url failed to update: " + e);
+      }
+
+
+    }
+
   });
 </script>
 

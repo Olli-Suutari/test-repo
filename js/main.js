@@ -44,13 +44,14 @@ function toggleFullScreen(target) {
 // Define accessibility count here, define other counts later on.
 var accessibilityCount = 0;
 var accessibilityIsEmpty = true;
+var serviceNames = [];
 function addItem(item, listElement) {
     var name = item.name;
     // Use "custom_name", where available.
     if (item.custom_name != null && item.custom_name.length != 0) {
         name = item.custom_name;
     }
-    if(item.name === "Esteettömyyspalvelut" && accessibilityIsEmpty) {
+    if(listElement === "#accessibilityItems" && accessibilityIsEmpty) {
         if (isEmpty($('#accessibilityDetails'))) {
             // Description.
             if (item.description != null && item.description.length != 0) {
@@ -60,10 +61,10 @@ function addItem(item, listElement) {
             }
         }
         // List of values separated by "," in the short description.
-        if (item.short_description !== null && isEmpty($('#accessibility-images')) && isEmpty($('#accessibilityList'))) {
+        if (item.shortDescription !== null && isEmpty($('#accessibility-images')) && isEmpty($('#accessibilityList'))) {
             accessibilityIsEmpty = false;
             $(".accessibility-details").css("display", "block");
-            var splittedValues = item.short_description.split(",");
+            var splittedValues = item.shortDescription.split(",");
             $.each(splittedValues, function (index, value) {
                 accessibilityCount = accessibilityCount + 1;
                 if (value.toLocaleLowerCase().indexOf("esteetön sisäänpääsy") !== -1) {
@@ -110,12 +111,14 @@ function addItem(item, listElement) {
         }
     }
     else {
+        // serviceNames list is used to navigate to the service via url.
+        serviceNames.push(name);
         // Add popup link if additional details are available.
-        if (item.short_description != null && item.short_description.length != 0 ||
+        if (item.shortDescription != null && item.shortDescription.length != 0 ||
             item.description != null && item.description.length != 0) {
             var description = "";
-            if (item.short_description != null && item.short_description.length != 0) {
-                description = item.short_description;
+            if (item.shortDescription != null && item.shortDescription.length != 0) {
+                description = '<p>' + item.shortDescription + '</p>';
             }
             var websiteLink = item.website;
             // Add "long" description where available.
@@ -126,13 +129,34 @@ function addItem(item, listElement) {
             }
             // Replace links from the description
             if (description.indexOf("<a href=") !== -1) {
-                description = description.replace(/(<a href=")+/g, "LINKSTART");
-                description = description.replace(/(">)+/g, "URLEND");
-                description = description.replace(/(<\/a>)+/g, "LINKEND");
+                // Make all links external.
+                description = description.replace(/(<a href=")+/g, '<a class="external-link" target="_blank" href="');
+                // Generate iframes from links that contain "embed"
+                var linksAsIframes = [];
+                var reFindLinks = new RegExp(/<a\b[^>]*>(.*?)<\/a>/g);
+                var reFindLinksExec = reFindLinks.exec(description);
+                while (reFindLinksExec != null) {
+                    // If link contains "embed", turn it into iframe.
+                    if (description.indexOf("embed") !== -1) {
+                        // Find url
+                        var urlOfLink = new RegExp(/"(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?"/g).exec(reFindLinksExec[0]);
+                        // Generate iframe
+                        var iframeCode = '<iframe frameborder="0" height="500px" scrolling="no" src='  + urlOfLink[0] + ' width="100%"></iframe>';
+                        // Push to array
+                        linksAsIframes.push({position: reFindLinksExec[0], iframe: iframeCode});
+                    }
+                    // Loop all links.
+                    reFindLinksExec = reFindLinks.exec(description);
+                }
+                // Loop & add iframes from embedded links.
+                for (var i = 0; i < linksAsIframes.length; i++) {
+                    description = description.replace(linksAsIframes[i].position, linksAsIframes[i].iframe);
+                }
             }
+
             // Add price where available.
             if (item.price != null && item.price.length != 0) {
-                description = description + '<p>' + i18n.get("Hintatiedot") + ': ' + item.price + '</p>';
+                description = description + '<p><strong>' + i18n.get("Hintatiedot") + ':</strong> ' + item.price + '</p>';
             }
             // Replace quotes from the description., they would break things...
             description = description.replace(/["']/g, '&quot;');
@@ -155,19 +179,6 @@ function isEmpty( el ){
     return !$.trim(el.html())
 }
 
-var isInfoBoxVisible = false;
-// Togles the visibility of the popover modal.
-function toggleInfoBox(delay) {
-    if(isInfoBoxVisible) {
-        isInfoBoxVisible = false;
-        $('#infoPopup').toggle(delay);
-    }
-    else {
-        isInfoBoxVisible = true;
-        $('#infoPopup').toggle(delay);
-    }
-}
-
 function bindActions() {
     // Navigation events
     function navigateToDefault(animationTime) {
@@ -179,10 +190,11 @@ function bindActions() {
         $(".esittely").show(animationTime);
         // Hide infobox if visible.
         if(isInfoBoxVisible) {
-            toggleInfoBox();
+            toggleModal();
         }
         activeTab = 0;
         adjustParentHeight(animationTime);
+        adjustParentUrl('', 'introduction');
     }
 
     function navigateToContacts(animationTime) {
@@ -194,7 +206,7 @@ function bindActions() {
         $(".yhteystiedot").show(animationTime);
         // Hide infobox if visible.
         if(isInfoBoxVisible) {
-            toggleInfoBox();
+            toggleModal();
         }
         if(activeTab === 0) {
             // If we are switching between tabs, adjust parent height.
@@ -217,6 +229,7 @@ function bindActions() {
                 mapLoaded = true;
             }
         }
+        adjustParentUrl('', 'contact');
     }
 
     $( "#navEsittely" ).on('click', function () {
@@ -259,7 +272,18 @@ function bindActions() {
     }
 }
 
+// Timer  is used to stop onresize event from firing after adjustment is done by triggering the function manually.
+var isAdjustingHeight = false;
+var clearTimer;
+function setAdjustingToFalse() {
+    clearTimer = setTimeout(function(){
+        isAdjustingHeight = false;
+    }, 1200);
+}
+
 function adjustParentHeight(delay) {
+    isAdjustingHeight = true;
+    clearTimeout(clearTimer);
     delay = delay + 150;
     setTimeout(function(){
         try {
@@ -267,17 +291,80 @@ function adjustParentHeight(delay) {
             height = height + document.getElementById("mainContainer").scrollHeight;
             if(isInfoBoxVisible) {
                 var popoverHeight = document.getElementById("modalContentContainer").scrollHeight;
-                if(popoverHeight > 500) {
-                    popoverHeight = popoverHeight -450;
-                    height = height + (popoverHeight - popoverHeight/2);
+                if(popoverHeight > 400) {
+                    popoverHeight = popoverHeight - 375;
+                    height = height + popoverHeight;
                 }
             }
             parent.postMessage(height, '*');
+            setAdjustingToFalse();
         }
         catch (e) {
             console.log("iframe size adjustment failed: " + e);
         }
     }, delay);
+}
+
+
+function adjustParentUrl(toAdd, type) {
+    //refUrl = "file:///C:/git/kirkanta-widgets/pages/consortiumFrameExample.html" + "?Joutsan pääkirjasto?unonsali";
+    refUrl = refUrl.replace(/%20/g, " ");
+    refUrl = refUrl.toLowerCase();
+    if(type !== "introduction" && type !== "contact") {
+        // Loop services and check if refUrl contains one of them, if so remove it.
+        for (var i = 0; i < serviceNames.length; i++) {
+            if(refUrl.indexOf(serviceNames[i].toLowerCase()) > -1) {
+                refUrl = refUrl.replace(
+                    new RegExp(serviceNames[i].toString(),"i"), "");
+            }
+        }
+    }
+    // Add/remove "contacts" from the url.
+    if(lang === "fi") {
+        if(type === "contact") {
+            toAdd = "yhteystiedot"
+        }
+        else if(type === "introduction") {
+            refUrl = refUrl.replace(/yhteystiedot/g, "");
+        }
+    }
+    else {
+        if(type === "contact") {
+            toAdd = "contacts"
+        }
+        else if(type === "introduction") {
+            refUrl = refUrl.replace(/contacts/g, "");
+        }
+    }
+
+    if(type === "library") {
+        // Loop libraries and check if refUrl contains one of them, if so remove it.
+        for (var i = 0; i < libraryList.length; i++) {
+            if(refUrl.indexOf(libraryList[i].text.toLowerCase()) > -1) {
+                refUrl = refUrl.replace(
+                    new RegExp(libraryList[i].text.toString(),"i"), "");
+            }
+        }
+    }
+
+    //console.log(libraryList);
+
+
+    if(toAdd !== ''){
+        refUrl = refUrl + "?" + toAdd;
+    }
+    // Remove duplicated ?
+    refUrl = refUrl.replace(/[?]{2,}/g, "?");
+    // Remove ? if last character.
+    refUrl = refUrl.replace(/\?$/, '');
+    try {
+        // Loop services and check if refUrl contains one of them and click if so.
+        parent.postMessage(refUrl, '*');
+        setAdjustingToFalse();
+    }
+    catch (e) {
+        console.log("Parent url adjustment failed: " + e);
+    }
 }
 
 // divClone & active tab are used with consortium.js
@@ -346,5 +433,28 @@ $(document).ready(function() {
     // Fetch details if not generating select for libraries, otherwise trigger this in consortium.js
     if(consortium === undefined && city === undefined) {
         fetchInformation(lang);
+    }
+
+    // Add event listener for resizing the window, adjust parent when done so.
+    // https://stackoverflow.com/questions/5489946/jquery-how-to-wait-for-the-end-of-resize-event-and-only-then-perform-an-ac
+    var rtime;
+    var timeout = false;
+    var delta = 200;
+    $(window).resize(function() {
+        rtime = new Date();
+        if (timeout === false) {
+            timeout = true;
+            setTimeout(resizeend, delta);
+        }
+    });
+    function resizeend() {
+        if (new Date() - rtime < delta) {
+            setTimeout(resizeend, delta);
+        } else {
+            timeout = false;
+            if(!isAdjustingHeight) {
+                adjustParentHeight(1);
+            }
+        }
     }
 }); // OnReady

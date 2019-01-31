@@ -6,7 +6,7 @@ var descriptionIsEmpty = true;
 var isReFetching = false;
 var contactsIsEmpty = true;
 var noServices = true;
-var indexItemClicked = false;
+var isInfoBoxVisible = false;
 var lon;
 var lat;
 var mapLoaded = false;
@@ -140,15 +140,115 @@ function asyncFetchGenericDetails() {
     // Return the Promise so caller can't change the Deferred
     return genericDeferred.promise();
 }
-
+// CollectionCount is used with departments.
+var roomCount = 0;
+// Bind modal closing event only once.
+var isModalCloseBinded = false;
 // Fetch services & generate the UI
+
+function hideModal() {
+    isInfoBoxVisible = false;
+    $('#myModal').modal('hide');
+    adjustParentHeight(50);
+    adjustParentUrl('', 'service');
+}
+
+function toggleModal() {
+    if(isInfoBoxVisible) {
+        hideModal();
+    }
+    else {
+        $('#myModal').modal('show');
+        // Re-bind backdrop event. This is destroyed when modal is hidden.
+        // Bind this, since the default event area is not full page in height.
+        $(".modal-backdrop").on('click', function () {
+            hideModal();
+        });
+        isInfoBoxVisible = true;
+        // Add timeout. This prevents duplicated click events if we have changed library.
+        setTimeout(function() {
+            // Bind closing event. If this is done before generating content, it doesn't work.
+            if(!isModalCloseBinded) {
+                // When clicking close buttons or outside that is not in .modal-backdrop
+                $('#myModal').on('hide.bs.modal', function (e) {
+                    // calling hideModal here would result in a loop.
+                    isInfoBoxVisible = false;
+                    adjustParentHeight(50);
+                    adjustParentUrl('', 'service');
+                });
+                isModalCloseBinded = true;
+            }
+            adjustParentHeight(50)
+
+        }, 100);
+    }
+}
+
+var isServiceClickBinded = false;
+function bindServiceClicks() {
+    if(isServiceClickBinded) {
+        return
+    }
+    $(".index-item").on('click', function () {
+        var popupText = $(this).data('message');
+        // Remove multiple spaces
+        popupText = popupText.replace(/^(&nbsp;)+/g, '');
+        // This would remove br from <br>*:  popupText = popupText.replace(/(<|&lt;)br\s*\/*(>|&gt;)/g, ' ');
+        // Remove empty paragraphs
+        popupText = popupText.replace(/(<p>&nbsp;<\/p>)+/g, "");
+        popupText = popupText.replace(/(<p><\/p>)+/g, "");
+        popupText = popupText.replace(/(<p>\s<\/p>)+/g, "");
+
+        // Check if large or small text/modal.
+        if(popupText.length > 200) {
+            $('#modal').addClass("modal-lg");
+            $('#modal').css("text-align", "left");
+        }
+        else {
+            $('#modal').removeClass("modal-lg");
+            $('#modal').css("text-align", "center");
+        }
+
+        // If website is not null and contains stuff. Sometimes empty website is shown unless lenght is checked.
+        if ($(this).data('website') !== null && $(this).data('website') !== "undefined" &&
+            $(this).data('website').length > 5) {
+            // Use _blank, because iframes don't like moving to new pages.
+            popupText = popupText + '<p id="linkToInfo"><a target="_blank" href="' + $(this).data('website') +
+                '" class="external-link">' + i18n.get("Lisätietoja") + '</a></p>';
+        }
+
+        $("#modalContent").replaceWith('<div id="modalContent">' + popupText + '</div>');
+
+        // Check if text contains headers..
+        if(popupText.indexOf("<h") !== -1) {
+            $("#modalTitle").replaceWith('<h1 id="modalTitle" class="modal-title underlined-title">' +
+                $(this).data('name') + '</h1>');
+        }
+        else {
+            $("#modalTitle").replaceWith('<h1 id="modalTitle" class="modal-title modal-title-small underlined-title">' +
+                $(this).data('name') + '</h1>');
+        }
+
+        // Use animate, $('#myModal').css('top', -posY); works pretty badly.
+        $('#myModal').css({
+            position: 'absolute',
+            left: 0,
+            top: $(this).offset().top-85  // Element position -85,
+        }).animate();
+        // Show modal.
+        toggleModal();
+        // Adjust parent url.
+        adjustParentUrl($(this).data('name'), "service");
+    });
+    isServiceClickBinded = true;
+}
+
 function asyncFetchServices() {
     var servicesDeferred = jQuery.Deferred();
     setTimeout(function() {
-        $.getJSON(jsonp_url + "&with=services", function (data) {
-            var collectionCount = 0;
+        $.getJSON(jsonpUrlV4 + "&with=services", function (data) {
             var hardwareCount = 0;
-            var roomCount = 0;
+            var collectionCount = 0;
             var serviceCount = 0;
             var collections = [];
             var hardware = [];
@@ -170,6 +270,7 @@ function asyncFetchServices() {
             if (isEmpty($('#accessibilityItems'))) {
                 accessibilityAdded = false;
             }
+            var data = data.data;
             for (var i = 0; i < data.services.length; i++) {
                 // Collections
                 if (data.services[i].name != null && data.services[i].name.length != 0 || data.services[i].custom_name != null) {
@@ -197,7 +298,7 @@ function asyncFetchServices() {
                     }
                     // Services
                     else if (data.services[i].type == "service") {
-                        if(data.services[i].name === "Esteettömyyspalvelut" || data.services[i].name === "Accessibility services") {
+                        if(data.services[i].name === "Saavutettavuus" || data.services[i].name === "Esteettömyyspalvelut" || data.services[i].name === "Accessibility services") {
                             // Set accessibility added to true, this is used to display "Services" tab if other tabs are missing.
                             if(!accessibilityAdded) {
                                 accessibilityAdded = true;
@@ -268,123 +369,7 @@ function asyncFetchServices() {
                 } else {
                     $('#navEsittely').css('display', 'block');
                     // Add event listener for clicking links.
-                    $(".index-item").on('click', function () {
-                        if (!indexItemClicked) {
-                            indexItemClicked = true;
-                            // If infobox already visible, hide it instantly to avoid wonky animations.
-                            if (isInfoBoxVisible) {
-                                toggleInfoBox(0);
-                            }
-                            // If website is not null and contains stuff. Sometimes empty website is shown unless lenght is checked.
-                            if ($(this).data('website') !== null && $(this).data('website') !== "undefined" && $(this).data('website').length > 5) {
-                                // Use _blank, because iframes don't like moving to new pages.
-                                $("#linkToInfo").replaceWith('<p id="linkToInfo"><a target="_blank" href="' + $(this).data('website') +
-                                    '" class="external-link">' + i18n.get("Lisätietoja") + '</a></p>');
-                            } else {
-                                $("#linkToInfo").replaceWith('<p id="linkToInfo"></p>');
-                            }
-
-                            var popupText = $(this).data('message');
-                            // Check the description for links.
-                            if(popupText.indexOf("LINKSTART") !== -1) {
-                                popupText = popupText.replace(/(LINKSTART)+/g, '<a class="external-link" target="_blank" href="');
-                                popupText = popupText.replace(/(URLEND)+/g, '">');
-                                popupText = popupText.replace(/(LINKEND)+/g, '<\/a>');
-                            }
-
-                            popupText = popupText.replace(/(<|&lt;)br\s*\/*(>|&gt;)/g, ' ');
-                            // Remove multiple spaces
-                            popupText = popupText.replace(/^(&nbsp;)+/g, '');
-                            // Remove empty paragraphs
-                            popupText = popupText.replace(/(<p>&nbsp;<\/p>)+/g, "");
-                            popupText = popupText.replace(/(<p><\/p>)+/g, "");
-                            popupText = popupText.replace(/(<p>\s<\/p>)+/g, "");
-
-                            if(popupText.length > 175) {
-                                $('#modal').addClass("modal-lg");
-                                $('#modal').css("text-align", "left");
-                            }
-                            else {
-                                $('#modal').removeClass("modal-lg");
-                                $('#modal').css("text-align", "center");
-                            }
-
-                            $("#modalContent").replaceWith('<div id="modalContent"><p>' + popupText + '</p></div>');
-
-
-                            // Check if text contains headers..
-                            if(popupText.indexOf("<h") !== -1) {
-                                $("#modalTitle").replaceWith('<h1 id="modalTitle" class="modal-title underlined-title">' +
-                                    $(this).data('name') + '</h1>');
-                            }
-                            else {
-                                $("#modalTitle").replaceWith('<h1 id="modalTitle" class="modal-title modal-title-small underlined-title">' +
-                                    $(this).data('name') + '</h1>');
-                            }
-
-                            // Check if text contains headers..
-                            if(popupText.indexOf("<h") !== -1) {
-                                $('#modalTitle').removeClass("modal-title-small");
-                            }
-                            else {
-                                $('#modalTitle').addClass("modal-title-small");
-                            }
-
-
-
-                            // Get element position
-                            var posX = $(this).offset().left,
-                                // Set top to be slightly under the element
-                                posY = $(this).offset().top;
-
-
-                            console.log("pos " + posY);
-
-
-
-                            // Define these here, won't work inside  hide.bs.modal event.
-                            var offsetTop = $(this)[0].offsetTop;
-                            var offsetLeft = $(this)[0].offsetLeft;
-
-
-
-                            //Use animate, $('#myModal').css('top', -posY); works pretty badly.
-
-
-                            $('#myModal').css({
-                                position: 'absolute',
-                                left: 0,
-                                top: posY-75
-                            }).animate();
-
-
-
-
-                            // Add timeout. This prevents duplicated click events if we have changed library.
-                            setTimeout(function()
-                            {
-                                // Show modal, bind hiding event.
-                                $('#myModal').modal();
-                                isInfoBoxVisible = true;
-                            }, 50);
-
-
-                            // Add timeout. This prevents duplicated click events if we have changed library.
-                            setTimeout(function()
-                            {
-                                //$('.modal').css('overflow-y', 'scroll');
-                                adjustParentHeight();
-
-                                $('#myModal').on('hide.bs.modal', function (e) {
-                                    window.scrollTo(offsetLeft, offsetTop);
-                                    adjustParentHeight();
-                                    isInfoBoxVisible = false
-                                });
-                                indexItemClicked = false;
-                                //$('#myModal').modal('handleUpdate')
-                            }, 100);
-                        }
-                    });
+                    bindServiceClicks();
                 }
                 if(noServices) {
                     $('#libraryServices').css('display', 'none');
@@ -393,9 +378,16 @@ function asyncFetchServices() {
                         // Hide the content on left, make the sidebar 100% in width.
                         $(".details").css("display", "none");
                         $("#leftBar").css("display", "none");
-
                         $("#introductionSidebar").addClass("col-md-12");
                         $("#introductionSidebar").removeClass("col-lg-5 col-xl-4 order-2 sidebar");
+                    }
+                }
+                // Loop services and check if refUrl contains one of them and click if so.
+                for (var i = 0; i < serviceNames.length; i++) {
+                    var urlUnescapeSpaces = refUrl.replace(/%20/g, " ");
+                    if(urlUnescapeSpaces.indexOf(serviceNames[i].toLowerCase()) > -1) {
+                        $("li").find('[data-name="'+ serviceNames[i] +'"]').click();
+                        isInfoBoxVisible = true;
                     }
                 }
             }
@@ -420,6 +412,7 @@ function asyncFetchDepartments() {
                 else {
                     for (var i = 0; i < data.length; i++) {
                         // Collections
+                        roomCount = roomCount +1;
                         addItem(data[i], '#roomsAndCollectionsItems');
                     }
                 }
@@ -937,7 +930,7 @@ function fetchInformation(language, lib) {
                 }, 400);
             }
             else {
-                adjustParentHeight(250);
+                adjustParentHeight(200);
             }
         }
     );
