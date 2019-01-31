@@ -335,7 +335,7 @@ function adjustParentUrl(toAdd, type) {
 
             if(refUrl.indexOf(serviceName) > -1) {
                 refUrl = refUrl.replace(
-                    new RegExp(serviceName,"g"), "");
+                    new RegExp(serviceName,"i"), "");
             }
             else {
                 console.log(serviceName + " != " + refUrl);
@@ -356,7 +356,7 @@ function adjustParentUrl(toAdd, type) {
             libraryName = libraryName.replace(/ö/g, "ö");
             if(refUrl.indexOf(libraryName.toLowerCase()) > -1) {
                 refUrl = refUrl.replace(
-                    new RegExp(libraryName,"g"), "");
+                    new RegExp(libraryName,"i"), "");
             }
         }
     }
