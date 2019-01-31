@@ -313,7 +313,7 @@ function adjustParentHeight(delay) {
 
 function adjustParentUrl(toAdd, type) {
     //refUrl = "file:///C:/git/kirkanta-widgets/pages/consortiumFrameExample.html" + "?Joutsan pääkirjasto?unonsali";
-    refUrl = refUrl.replace(/%20/g, " ");
+    refUrl = refUrl.replace(/%20/g, "_");
     refUrl = refUrl.toLowerCase();
     // Remove item from url, if it already exists.
     refUrl = refUrl.replace(new RegExp(toAdd,"i"), "");
@@ -335,9 +335,11 @@ function adjustParentUrl(toAdd, type) {
     // Loop libraries and check if refUrl contains one of them, if so remove it.
     if(type === "library") {
         for (var i = 0; i < libraryList.length; i++) {
-            if(refUrl.indexOf(libraryList[i].text.toLowerCase()) > -1) {
+            var libraryName = libraryList[i].text.toString();
+            libraryName = libraryName.replace(/ /g, "_");
+            if(refUrl.indexOf(libraryName.toLowerCase()) > -1) {
                 refUrl = refUrl.replace(
-                    new RegExp(libraryList[i].text.toString(),"i"), "");
+                    new RegExp(libraryName,"i"), "");
             }
         }
     }
