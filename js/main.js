@@ -9,20 +9,20 @@ function toggleFullScreen(target) {
         $('#mapContainer').toggleClass("map-borders");
     }
     if (
-      document.fullscreenElement ||
-      document.webkitFullscreenElement ||
-      document.mozFullScreenElement ||
-      document.msFullscreenElement
+        document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.mozFullScreenElement ||
+        document.msFullscreenElement
     ) {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-      }
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
     } else {
         element = $(target).get(0);
         if (element.requestFullscreen) {
@@ -337,8 +337,6 @@ function adjustParentUrl(toAdd, type) {
             if(refUrl.indexOf(serviceName) > -1) {
                 console.log(serviceName + " == " + refUrl);
                 refUrl = refUrl.replace(serviceName, "");
-            }
-            else {
             }
         }
     }

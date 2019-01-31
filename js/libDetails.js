@@ -145,7 +145,6 @@ var roomCount = 0;
 // Bind modal closing event only once.
 var isModalCloseBinded = false;
 // Fetch services & generate the UI
-
 function hideModal() {
     isInfoBoxVisible = false;
     $('#myModal').modal('hide');
@@ -385,6 +384,7 @@ function asyncFetchServices() {
                 // Loop services and check if refUrl contains one of them and click if so.
                 for (var i = 0; i < serviceNames.length; i++) {
                     var urlUnescapeSpaces = refUrl.replace(/%20/g, " ");
+                    urlUnescapeSpaces = refUrl.replace(/_/g, " ");
                     if(urlUnescapeSpaces.indexOf(serviceNames[i].toLowerCase()) > -1) {
                         $("li").find('[data-name="'+ serviceNames[i] +'"]').click();
                         isInfoBoxVisible = true;
