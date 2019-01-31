@@ -387,7 +387,6 @@ function asyncFetchServices() {
                     urlUnescapeSpaces = refUrl.replace(/_/g, " ");
 
                     var escapedName = serviceNames[i].toLowerCase();
-                    escapedName = escapedName.replace(/ /g, "_");
                     escapedName = escapedName.replace(/ä/g, "a");
                     escapedName = escapedName.replace(/ö/g, "o");
 
