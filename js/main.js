@@ -322,7 +322,9 @@ function adjustParentUrl(toAdd, type) {
     // Add/remove "contacts" from the url.
     if(lang === "fi") {
         if(type === "contact") {
-            toAdd = "yhteystiedot"
+            toAdd = "yhteystiedot";
+            // Remove duplicates.
+            refUrl = refUrl.replace(/yhteystiedot/g, "");
         }
         else if(type === "introduction") {
             refUrl = refUrl.replace(/yhteystiedot/g, "");
@@ -330,7 +332,8 @@ function adjustParentUrl(toAdd, type) {
     }
     else {
         if(type === "contact") {
-            toAdd = "contacts"
+            toAdd = "contacts";
+            refUrl = refUrl.replace(/contacts/g, "");
         }
         else if(type === "introduction") {
             refUrl = refUrl.replace(/contacts/g, "");
