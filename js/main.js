@@ -313,6 +313,7 @@ function adjustParentHeight(delay) {
 
 function adjustParentUrl(toAdd, type) {
     //refUrl = "file:///C:/git/kirkanta-widgets/pages/consortiumFrameExample.html" + "?Joutsan pääkirjasto?unonsali";
+    refUrl = refUrl.replace(/ /g, "_");
     refUrl = refUrl.replace(/%20/g, "_");
     refUrl = refUrl.toLowerCase();
 
