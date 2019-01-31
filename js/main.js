@@ -346,9 +346,9 @@ function adjustParentUrl(toAdd, type) {
         for (var i = 0; i < libraryList.length; i++) {
             var libraryName = libraryList[i].text.toLowerCase();
             libraryName = libraryName.replace(/ /g, "_");
-            if(refUrl.indexOf(libraryName.toLowerCase()) > -1) {
-                refUrl = refUrl.replace(
-                    new RegExp(libraryName,"i"), "");
+            if(refUrl.indexOf(libraryName) > -1) {
+                console.log(libraryName + " == " + refUrl);
+                refUrl = refUrl.replace(libraryName, "");
             }
         }
     }
