@@ -334,11 +334,10 @@ function adjustParentUrl(toAdd, type) {
             serviceName = serviceName.replace(/ö/g, "ö");
 
             if(refUrl.indexOf(serviceName) > -1) {
-                refUrl = refUrl.replace(
-                    new RegExp(serviceName,"i"), "");
+                console.log(serviceName + " == " + refUrl);
+                serviceName = serviceName.replace(serviceName, "");
             }
             else {
-                console.log(serviceName + " != " + refUrl);
             }
         }
     }
