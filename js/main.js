@@ -318,8 +318,8 @@ function adjustParentUrl(toAdd, type) {
 
     toAdd = toAdd.toLowerCase();
     toAdd = toAdd.replace(/ /g, "_");
-    toAdd = toAdd.replace(/ä /g, "a");
-    toAdd = toAdd.replace(/ö /g, "ö");
+    toAdd = toAdd.replace(/ä/g, "a");
+    toAdd = toAdd.replace(/ö/g, "ö");
 
     // Remove item from url, if it already exists.
     refUrl = refUrl.replace(new RegExp(toAdd,"i"), "");
@@ -330,8 +330,8 @@ function adjustParentUrl(toAdd, type) {
 
             var serviceName = serviceNames[i].toLowerCase();
             serviceName = serviceName.replace(/ /g, "_");
-            serviceName = serviceName.replace(/ä /g, "a");
-            serviceName = serviceName.replace(/ö /g, "ö");
+            serviceName = serviceName.replace(/ä/g, "a");
+            serviceName = serviceName.replace(/ö/g, "ö");
 
             if(refUrl.indexOf(serviceName) > -1) {
                 refUrl = refUrl.replace(
@@ -349,8 +349,8 @@ function adjustParentUrl(toAdd, type) {
         for (var i = 0; i < libraryList.length; i++) {
             var libraryName = libraryList[i].text.toLowerCase();
             libraryName = libraryName.replace(/ /g, "_");
-            libraryName = libraryName.replace(/ä /g, "a");
-            libraryName = libraryName.replace(/ö /g, "ö");
+            libraryName = libraryName.replace(/ä/g, "a");
+            libraryName = libraryName.replace(/ö/g, "ö");
             if(refUrl.indexOf(libraryName.toLowerCase()) > -1) {
                 refUrl = refUrl.replace(
                     new RegExp(libraryName,"g"), "");
