@@ -315,6 +315,11 @@ function adjustParentUrl(toAdd, type) {
     //refUrl = "file:///C:/git/kirkanta-widgets/pages/consortiumFrameExample.html" + "?Joutsan pääkirjasto?unonsali";
     refUrl = refUrl.replace(/%20/g, "_");
     refUrl = refUrl.toLowerCase();
+
+    toAdd = toAdd.replace(/ /g, "_");
+    toAdd = toAdd.replace(/ä /g, "a");
+    toAdd = toAdd.replace(/ö /g, "ö");
+
     // Remove item from url, if it already exists.
     refUrl = refUrl.replace(new RegExp(toAdd,"i"), "");
     // Check for services.
