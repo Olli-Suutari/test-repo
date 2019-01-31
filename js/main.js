@@ -327,9 +327,15 @@ function adjustParentUrl(toAdd, type) {
     if(type !== "introduction" && type !== "contact") {
         // Loop services and check if refUrl contains one of them, if so remove it.
         for (var i = 0; i < serviceNames.length; i++) {
-            if(refUrl.indexOf(serviceNames[i].toLowerCase()) > -1) {
+
+            var serviceName = serviceNames[i].toLowerCase();
+            serviceName = serviceName.replace(/ /g, "_");
+            serviceName = serviceName.replace(/ä /g, "a");
+            serviceName = serviceName.replace(/ö /g, "ö");
+
+            if(refUrl.indexOf(serviceName) > -1) {
                 refUrl = refUrl.replace(
-                    new RegExp(serviceNames[i].toString(),"i"), "");
+                    new RegExp(serviceName,"g"), "");
             }
         }
     }
@@ -341,13 +347,13 @@ function adjustParentUrl(toAdd, type) {
     // Loop libraries and check if refUrl contains one of them, if so remove it.
     if(type === "library") {
         for (var i = 0; i < libraryList.length; i++) {
-            var libraryName = libraryList[i].text.toString();
+            var libraryName = libraryList[i].text.toLowerCase();
             libraryName = libraryName.replace(/ /g, "_");
             libraryName = libraryName.replace(/ä /g, "a");
             libraryName = libraryName.replace(/ö /g, "ö");
             if(refUrl.indexOf(libraryName.toLowerCase()) > -1) {
                 refUrl = refUrl.replace(
-                    new RegExp(libraryName,"i"), "");
+                    new RegExp(libraryName,"g"), "");
             }
         }
     }
