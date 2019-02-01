@@ -9,20 +9,20 @@ function toggleFullScreen(target) {
         $('#mapContainer').toggleClass("map-borders");
     }
     if (
-      document.fullscreenElement ||
-      document.webkitFullscreenElement ||
-      document.mozFullScreenElement ||
-      document.msFullscreenElement
+        document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.mozFullScreenElement ||
+        document.msFullscreenElement
     ) {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-      }
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
     } else {
         element = $(target).get(0);
         if (element.requestFullscreen) {
@@ -328,14 +328,11 @@ function adjustParentUrl(toAdd, type) {
     if(type !== "introduction" && type !== "contact") {
         // Loop services and check if refUrl contains one of them, if so remove it.
         for (var i = 0; i < serviceNames.length; i++) {
-
             var serviceName = serviceNames[i].toLowerCase();
             serviceName = serviceName.replace(/ /g, "_");
             serviceName = serviceName.replace(/ä/g, "a");
             serviceName = serviceName.replace(/ö/g, "o");
-
             if(refUrl.indexOf(serviceName) > -1) {
-                console.log(serviceName + " == " + refUrl);
                 refUrl = refUrl.replace(serviceName, "");
             }
         }

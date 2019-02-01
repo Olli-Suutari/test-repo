@@ -85,6 +85,9 @@ function initSelect(items) {
 }
 
 function setSelectDefault() {
+
+
+    console.log("DEF")
     $('.library-select').val(library).trigger('change');
 }
 
@@ -227,13 +230,16 @@ $(document).ready(function() {
         });
     }
 
-    $("#librarySelector").change(function(){
+    $('#librarySelector').on('select2:select', function (e) {
+
         // Don't use !== as it won't match.
         if($(this).val() != library) {
             if (isInfoBoxVisible) {
                 toggleModal();
             }
-             $("#pageContainer").replaceWith(divClone.clone()); // Restore main with a copy of divClone
+            console.log("DOO IT!")
+
+            $("#pageContainer").replaceWith(divClone.clone()); // Restore main with a copy of divClone
             // Reset variables.
             accessibilityIsEmpty = true;
             transitIsEmpty = true;
@@ -271,6 +277,13 @@ $(document).ready(function() {
     $(document).on('click', '.map-library-changer', function () {
         // Trigger the library change.
         $('.library-select').val($(this).val()).trigger('change');
-
     });
+
+    setTimeout(function(){
+    }, 1900);
+
+
+
+
+
 }); // OnReady
