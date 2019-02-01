@@ -333,42 +333,42 @@ function retry(isDone, next) {
     );
 }
 
-var is_private;
-function detectPrivateMode(callback) {
+var isFFPrivate;
+function detectFFPrivateMode(callback) {
     var db;
     try {
         db = window.indexedDB.open('test');
     } catch (e) {
-        is_private = true;
+        isFFPrivate = true;
     }
 
-    if (typeof is_private === 'undefined') {
+    if (typeof isFFPrivate === 'undefined') {
         retry(
             function isDone() {
                 return db.readyState === 'done' ? true : false;
             },
             function next(is_timeout) {
                 if (!is_timeout) {
-                    is_private = db.result ? false : true;
+                    isFFPrivate = db.result ? false : true;
                 }
             }
         );
     }
     retry(
         function isDone() {
-            return typeof is_private !== 'undefined' ? true : false;
+            return typeof isFFPrivate !== 'undefined' ? true : false;
         },
         function next(is_timeout) {
-            callback(is_private);
+            callback(isFFPrivate);
         }
     );
 }
 
 
 if (window.indexedDB && /Firefox/.test(window.navigator.userAgent)) {
-    detectPrivateMode(
-        function(is_private) {
-            if(is_private) {
+    detectFFPrivateMode(
+        function(isFFPrivate) {
+            if(isFFPrivate) {
                 document.getElementById('result').innerHTML = '<span>' +
                     i18n.get('Firefox In Private') + '</span>'
             }
@@ -377,7 +377,7 @@ if (window.indexedDB && /Firefox/.test(window.navigator.userAgent)) {
 }
 
 function adjustParentUrl(toAdd, type) {
-    if(!is_private) {
+    if(isFFPrivate) {
         return;
     }
     //refUrl = "file:///C:/git/kirkanta-widgets/pages/consortiumFrameExample.html" + "?Joutsan pääkirjasto?unonsali";
