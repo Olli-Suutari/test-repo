@@ -246,4 +246,8 @@ var dict = {
         fi: "HUOM: Kirjastojen tiedot haetaan valtakunnallisesta kirjastohakemistosta.  Poikkeusaukiolojen haussa on havaittu ongelmia, eivätkä tiedot pidä välttämättä  paikkaansa.",
         en: "ATTENTION: Schedules are fetched via the national library database, there are ongoing problems with fetching holiday schedules. Libraries may be shown to be closed or open incorrectly during the holidays.",
     },
+    "Firefox In Private": {
+        fi: "Huom! Käytät Firefoxia yksityisen selauksen tilassa. Yksityinen selaustila estää selaimen osoitteen välittämisen kirjastojen tietoja näyttävälle sovellukselle, siten navigointi osoitteen perusteella tiettyyn kirjastoon tai palveluun ei ole mahdollista.",
+        en: "Note: You are using  Private Browsing mode of Firefox. This prevents the page address from being transmitted to the application which shows the details of the library, thus navigation to a specific library or service by url does not work.",
+    },
 };

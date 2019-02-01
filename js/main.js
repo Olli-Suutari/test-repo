@@ -310,8 +310,76 @@ function adjustParentHeight(delay) {
     }, delay);
 }
 
+// Firefox Private mode prevents passing of arguments via url to iframe.
+// Detect and add a notification... https://codepen.io/fadupla/pen/EWxKRW
+function retry(isDone, next) {
+    var current_trial = 0,
+        max_retry = 50,
+        interval = 10,
+        is_timeout = false;
+    var id = window.setInterval(
+        function() {
+            if (isDone()) {
+                window.clearInterval(id);
+                next(is_timeout);
+            }
+            if (current_trial++ > max_retry) {
+                window.clearInterval(id);
+                is_timeout = true;
+                next(is_timeout);
+            }
+        },
+        10
+    );
+}
+
+var is_private;
+function detectPrivateMode(callback) {
+    var db;
+    try {
+        db = window.indexedDB.open('test');
+    } catch (e) {
+        is_private = true;
+    }
+
+    if (typeof is_private === 'undefined') {
+        retry(
+            function isDone() {
+                return db.readyState === 'done' ? true : false;
+            },
+            function next(is_timeout) {
+                if (!is_timeout) {
+                    is_private = db.result ? false : true;
+                }
+            }
+        );
+    }
+    retry(
+        function isDone() {
+            return typeof is_private !== 'undefined' ? true : false;
+        },
+        function next(is_timeout) {
+            callback(is_private);
+        }
+    );
+}
+
+
+if (window.indexedDB && /Firefox/.test(window.navigator.userAgent)) {
+    detectPrivateMode(
+        function(is_private) {
+            if(is_private) {
+                document.getElementById('result').innerHTML = '<span>' +
+                    i18n.get('Firefox In Private') + '</span>'
+            }
+        }
+    );
+}
 
 function adjustParentUrl(toAdd, type) {
+    if(!is_private) {
+        return;
+    }
     //refUrl = "file:///C:/git/kirkanta-widgets/pages/consortiumFrameExample.html" + "?Joutsan pääkirjasto?unonsali";
     refUrl = refUrl.replace(/ /g, "_");
     refUrl = refUrl.replace(/%20/g, "_");

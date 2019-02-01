@@ -929,7 +929,7 @@ function fetchInformation(language, lib) {
                 setTimeout(function () {
                     isReFetching = true;
                     fetchInformation("fi", lib);
-                    $("header").append('<small class="en-notification">Note: If information is missing in English, Finnish version is used where available.</small>');
+                    $("header").append('<span class="en-notification">Note: If information is missing in English, Finnish version is used where available.</span>');
                 }, 400);
             }
             else {
