@@ -56,12 +56,13 @@ function asyncCheckUrlForKeskiLibrary() {
                 library = libraryList[i].id;
             }
         }
-
         // If no library parameter was provided.
         if(library === undefined || library === null || library === '') {
             library = 85159;
         }
         urlDeferred.resolve();
+        adjustParentUrl('', 'library');
+
     }, 1 );
     // Return the Promise so caller can't change the Deferred
     return urlDeferred.promise();
