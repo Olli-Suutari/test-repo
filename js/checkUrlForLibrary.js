@@ -158,7 +158,7 @@ function asyncCheckUrlForKeskiLibrary() {
             }
         }
         // If no library parameter was provided.
-        if(library === undefined || library === null || library === '' || library === 85159) {
+        if(library === undefined || library === null || library === '' || library == 85159) {
             library = 85159;
             console.log("DOES DO?");
             if(lang === "fi") {
