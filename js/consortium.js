@@ -85,9 +85,6 @@ function initSelect(items) {
 }
 
 function setSelectDefault() {
-
-
-    console.log("DEF")
     $('.library-select').val(library).trigger('change');
 }
 
@@ -231,14 +228,11 @@ $(document).ready(function() {
     }
 
     $('#librarySelector').on('select2:select', function (e) {
-
         // Don't use !== as it won't match.
         if($(this).val() != library) {
             if (isInfoBoxVisible) {
                 toggleModal();
             }
-            console.log("DOO IT!")
-
             $("#pageContainer").replaceWith(divClone.clone()); // Restore main with a copy of divClone
             // Reset variables.
             accessibilityIsEmpty = true;
