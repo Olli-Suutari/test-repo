@@ -392,8 +392,8 @@ function adjustParentUrl(toAdd, type) {
     toAdd = toAdd.replace(/ä/g, "a");
     toAdd = toAdd.replace(/ö/g, "o");
 
-    toAdd = refUrl.replace(/\(/g, "_");
-    toAdd = refUrl.replace(/\)/g, "_");
+    toAdd = toAdd.replace(/\(/g, "_");
+    toAdd = toAdd.replace(/\)/g, "_");
 
     // Remove item from url, if it already exists.
     refUrl = refUrl.replace(new RegExp(toAdd,"i"), "");
@@ -405,8 +405,8 @@ function adjustParentUrl(toAdd, type) {
             serviceName = serviceName.replace(/ /g, "-");
             serviceName = serviceName.replace(/ä/g, "a");
             serviceName = serviceName.replace(/ö/g, "o");
-            serviceName = refUrl.replace(/\(/g, "_");
-            serviceName = refUrl.replace(/\)/g, "_");
+            serviceName = serviceName.replace(/\(/g, "_");
+            serviceName = serviceName.replace(/\)/g, "_");
             if(refUrl.indexOf(serviceName) > -1) {
                 refUrl = refUrl.replace(serviceName, "");
             }
@@ -424,8 +424,8 @@ function adjustParentUrl(toAdd, type) {
             libraryName = libraryName.replace(/ /g, "-");
             libraryName = libraryName.replace(/ä/g, "a");
             libraryName = libraryName.replace(/ö/g, "o");
-            serviceName = refUrl.replace(/\(/g, "_");
-            serviceName = refUrl.replace(/\)/g, "_");
+            serviceName = libraryName.replace(/\(/g, "_");
+            serviceName = libraryName.replace(/\)/g, "_");
             if(refUrl.indexOf(libraryName.toLowerCase()) > -1) {
                 refUrl = refUrl.replace(
                     new RegExp(libraryName,"i"), "");
