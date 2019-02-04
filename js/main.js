@@ -284,7 +284,7 @@ var clearTimer;
 function setAdjustingToFalse() {
     clearTimer = setTimeout(function(){
         isAdjustingHeight = false;
-    }, 1200);
+    }, 1400);
 }
 
 function adjustParentHeight(delay) {
