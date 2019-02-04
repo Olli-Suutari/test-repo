@@ -209,8 +209,6 @@ function bindActions() {
             toggleModal();
         }
         if(activeTab === 0) {
-            // If we are switching between tabs, adjust parent height.
-            adjustParentHeight(animationTime);
             activeTab = 1;
             // Map zoom gets messed if the map is loaded before hiding the map div.
             if(!mapLoaded && lat != null) {
@@ -235,6 +233,8 @@ function bindActions() {
         else {
             adjustParentUrl('contacts', 'contact');
         }
+        // If we are switching between tabs, adjust parent height.
+        adjustParentHeight(animationTime);
     }
 
     $( "#navEsittely" ).on('click', function () {
