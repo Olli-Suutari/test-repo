@@ -192,9 +192,11 @@ function bindActions() {
         if(isInfoBoxVisible) {
             toggleModal();
         }
-        activeTab = 0;
-        adjustParentHeight(animationTime);
-        adjustParentUrl('', 'introduction');
+        if(activeTab === 1) {
+            activeTab = 0;
+            //adjustParentHeight(animationTime);
+            adjustParentUrl('', 'introduction');
+        }
     }
 
     function navigateToContacts(animationTime) {
