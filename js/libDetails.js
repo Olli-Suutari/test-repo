@@ -401,7 +401,7 @@ function asyncFetchServices() {
                         isInfoBoxVisible = true;
                         try {
                             setTimeout(function(){
-                                parent.postMessage({value: $("#myModal").position().top, type: 'scroll'}, '*');
+                                //parent.postMessage({value: $("#myModal").position().top, type: 'scroll'}, '*');
                             }, 2500);
                         }
                         catch (e) {
