@@ -301,7 +301,7 @@ function adjustParentHeight(delay) {
                     height = height + popoverHeight;
                 }
             }
-            parent.postMessage([{value: height, type: 'resize'}], '*');
+            parent.postMessage({value: height, type: 'resize'}, '*');
             setAdjustingToFalse();
         }
         catch (e) {
@@ -376,7 +376,7 @@ function adjustParentUrl(toAdd, type) {
     // Remove ? if last character.
     refUrl = refUrl.replace(/\?$/, '');
     try {
-        parent.postMessage([{value: refUrl, type: 'url'}], '*');
+        parent.postMessage({value: refUrl, type: 'url'}, '*');
     }
     catch (e) {
         console.log("Parent url adjustment failed: " + e);
