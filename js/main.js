@@ -399,6 +399,7 @@ function adjustParentUrl(toAdd, type) {
         for (var i = 0; i < serviceNames.length; i++) {
             var serviceName = serviceNames[i].toLowerCase();
             serviceName = serviceName.replace(/ /g, "-");
+            serviceName = serviceName.replace(/ /g, "-");
             serviceName = serviceName.replace(/ä/g, "a");
             serviceName = serviceName.replace(/ö/g, "o");
             serviceName = serviceName.replace(/\(/g, "");
