@@ -310,7 +310,7 @@ function adjustParentHeight(delay) {
     }, delay);
 }
 
-// Firefox Private mode prevents passing of arguments via url to iframe.
+/* If iframe has no referrerpolicy="unsafe-url" attribute, FF private mode blocks url from passing to iframe.
 // Detect and add a notification... https://codepen.io/fadupla/pen/EWxKRW
 function retry(isDone, next) {
     var current_trial = 0,
@@ -332,7 +332,6 @@ function retry(isDone, next) {
         10
     );
 }
-/* If iframe has no referrerpolicy="unsafe-url" attribute, FF private mode blocks url from passing to iframe.
 var isFFPrivate;
 function detectFFPrivateMode(callback) {
     var db;
