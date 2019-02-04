@@ -194,7 +194,7 @@ function bindActions() {
         }
         if(activeTab === 1) {
             activeTab = 0;
-            //adjustParentHeight(animationTime);
+            adjustParentHeight(animationTime);
             adjustParentUrl('', 'introduction');
         }
     }
@@ -211,6 +211,7 @@ function bindActions() {
             toggleModal();
         }
         if(activeTab === 0) {
+            adjustParentHeight(animationTime);
             activeTab = 1;
             // Map zoom gets messed if the map is loaded before hiding the map div.
             if(!mapLoaded && lat != null) {
@@ -234,11 +235,6 @@ function bindActions() {
         }
         else {
             adjustParentUrl('contacts', 'contact');
-        }
-        if(activeTab === 0) {
-            activeTab = 1;
-            //adjustParentHeight(animationTime);
-            adjustParentUrl('', 'introduction');
         }
     }
 
