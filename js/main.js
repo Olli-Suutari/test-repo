@@ -284,7 +284,7 @@ var clearTimer;
 function setAdjustingToFalse() {
     clearTimer = setTimeout(function(){
         isAdjustingHeight = false;
-    }, 1400);
+    }, 1200);
 }
 
 function adjustParentHeight(delay) {
@@ -302,8 +302,11 @@ function adjustParentHeight(delay) {
                     height = height + popoverHeight;
                 }
             }
-            parent.postMessage({value: height, type: 'resize'}, '*');
+            if(!isAdjustingHeight) {
+                parent.postMessage({value: height, type: 'resize'}, '*');
+            }
             setAdjustingToFalse();
+
         }
         catch (e) {
             console.log("iframe size adjustment failed: " + e);
