@@ -424,8 +424,8 @@ function adjustParentUrl(toAdd, type) {
             libraryName = libraryName.replace(/ /g, "-");
             libraryName = libraryName.replace(/ä/g, "a");
             libraryName = libraryName.replace(/ö/g, "o");
-            serviceName = libraryName.replace(/\(/g, "_");
-            serviceName = libraryName.replace(/\)/g, "_");
+            libraryName = libraryName.replace(/\(/g, "_");
+            libraryName = libraryName.replace(/\)/g, "_");
             if(refUrl.indexOf(libraryName.toLowerCase()) > -1) {
                 refUrl = refUrl.replace(
                     new RegExp(libraryName,"i"), "");
