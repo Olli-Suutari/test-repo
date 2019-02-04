@@ -15,7 +15,7 @@ function asyncCheckUrlForKeskiLibrary() {
         // Loop libraries and check if refUrl contains one of them and click if so.
         for (var i = 0; i < libraryList.length; i++) {
             var urlUnescapeSpaces = refUrl.replace(/%20/g, " ");
-            urlUnescapeSpaces = refUrl.replace(/_/g, " ");
+            urlUnescapeSpaces = refUrl.replace(/-/g, " ");
             var escapedName = libraryList[i].text.toLowerCase();
             escapedName = escapedName.replace(/ä/g, "a");
             escapedName = escapedName.replace(/ö/g, "o");
@@ -30,10 +30,10 @@ function asyncCheckUrlForKeskiLibrary() {
                 library = 85305;
 
                 if(lang === "fi") {
-                    replaceJyvaskylaLibName("halssilan_lahikirjasto");
+                    replaceJyvaskylaLibName("halssilan-lahikirjasto");
                 }
                 else if(lang === "en") {
-                    replaceJyvaskylaLibName("halssila_library");
+                    replaceJyvaskylaLibName("halssila-library");
                 }
 
             }
@@ -41,131 +41,130 @@ function asyncCheckUrlForKeskiLibrary() {
                 library = 85533;
 
                 if(lang === "fi") {
-                    replaceJyvaskylaLibName("huhtasuon_lahikirjasto");
+                    replaceJyvaskylaLibName("huhtasuon-lahikirjasto");
                 }
                 else if(lang === "en") {
-                    replaceJyvaskylaLibName("huhtasuo_library");
+                    replaceJyvaskylaLibName("huhtasuo-library");
                 }
             }
             else if(refUrl.indexOf("keljo") > -1) {
                 library = 85516;
 
                 if(lang === "fi") {
-                    replaceJyvaskylaLibName("keljonkankaan_lahikirjasto");
+                    replaceJyvaskylaLibName("keljonkankaan-lahikirjasto");
                 }
                 else if(lang === "en") {
-                    replaceJyvaskylaLibName("keljonkangas_library");
+                    replaceJyvaskylaLibName("keljonkangas-library");
                 }
             }
             else if(refUrl.indexOf("keltin") > -1) {
                 library = 85754;
 
                 if(lang === "fi") {
-                    replaceJyvaskylaLibName("keltinmaen_lahikirjasto");
+                    replaceJyvaskylaLibName("keltinmaen-lahikirjasto");
                 }
                 else if(lang === "en") {
-                    replaceJyvaskylaLibName("keltinmaki_library");
+                    replaceJyvaskylaLibName("keltinmaki-library");
                 }
             }
             else if(refUrl.indexOf("korpi") > -1) {
                 library = 85116;
 
                 if(lang === "fi") {
-                    replaceJyvaskylaLibName("korpilahden_lahikirjasto");
+                    replaceJyvaskylaLibName("korpilahden-lahikirjasto");
                 }
                 else if(lang === "en") {
-                    replaceJyvaskylaLibName("korpilahti_library");
+                    replaceJyvaskylaLibName("korpilahti-library");
                 }
             }
             else if(refUrl.indexOf("korte") > -1) {
                 library = 85160;
 
                 if(lang === "fi") {
-                    replaceJyvaskylaLibName("kortepohjan_lahikirjasto");
+                    replaceJyvaskylaLibName("kortepohjan-lahikirjasto");
                 }
                 else if(lang === "en") {
-                    replaceJyvaskylaLibName("kortepohja_library");
+                    replaceJyvaskylaLibName("kortepohja-library");
                 }
             }
             else if(refUrl.indexOf("kuokka") > -1) {
                 library = 86583;
 
                 if(lang === "fi") {
-                    replaceJyvaskylaLibName("kuokkalan_lahikirjasto");
+                    replaceJyvaskylaLibName("kuokkalan-lahikirjasto");
                 }
                 else if(lang === "en") {
-                    replaceJyvaskylaLibName("kuokkala_library");
+                    replaceJyvaskylaLibName("kuokkala-library");
                 }
             }
             else if(refUrl.indexOf("lohi") > -1) {
                 library = 85909;
 
                 if(lang === "fi") {
-                    replaceJyvaskylaLibName("lohikosken_pienkirjasto");
+                    replaceJyvaskylaLibName("lohikosken-pienkirjasto");
                 }
                 else if(lang === "en") {
-                    replaceJyvaskylaLibName("lohikoski_library");
+                    replaceJyvaskylaLibName("lohikoski-library");
                 }
             }
             else if(refUrl.indexOf("palok") > -1) {
                 library = 85732;
 
                 if(lang === "fi") {
-                    replaceJyvaskylaLibName("palokan_aluekirjasto");
+                    replaceJyvaskylaLibName("palokan-aluekirjasto");
                 }
                 else if(lang === "en") {
-                    replaceJyvaskylaLibName("palokka_library");
+                    replaceJyvaskylaLibName("palokka-library");
                 }
             }
             else if(refUrl.indexOf("saynat") > -1 || refUrl.indexOf("s%c3%a4yn%c3%a4t") > -1 ||
                 refUrl.indexOf("s%C3%A4yn%C3%A4tsalo") > -1 || refUrl.indexOf("säynät") > -1) {
                 library = 85117;
                 if(lang === "fi") {
-                    replaceJyvaskylaLibName("saynatsalon_lahikirjasto");
+                    replaceJyvaskylaLibName("saynatsalon-lahikirjasto");
                 }
                 else if(lang === "en") {
-                    replaceJyvaskylaLibName("saynatsalo_library");
+                    replaceJyvaskylaLibName("saynatsalo-library");
                 }
             }
             else if(refUrl.indexOf("tikka") > -1) {
                 library = 85111;
                 if(lang === "fi") {
-                    replaceJyvaskylaLibName("tikkakosken_lahikirjasto");
+                    replaceJyvaskylaLibName("tikkakosken-lahikirjasto");
                 }
                 else if(lang === "en") {
-                    replaceJyvaskylaLibName("tikkakoski_library");
+                    replaceJyvaskylaLibName("tikkakoski-library");
                 }
             }
             else if(refUrl.indexOf("vaaja") > -1) {
                 library = 85573;
 
                 if(lang === "fi") {
-                    adjustParentUrl('vaajakosken_aluekirjasto', 'library');
+                    adjustParentUrl('vaajakosken-aluekirjasto', 'library');
                 }
                 else if(lang === "en") {
-                    adjustParentUrl('vaajakoski_library', 'library');
+                    adjustParentUrl('vaajakoski-library', 'library');
                 }
             }
             else if(refUrl.indexOf("vesan") > -1) {
                 library = 85306;
 
                 if(lang === "fi") {
-                    adjustParentUrl('vesangan_lahikirjasto', 'library');
+                    adjustParentUrl('vesangan-lahikirjasto', 'library');
                 }
                 else if(lang === "en") {
-                    adjustParentUrl('vesanka_library', 'library');
+                    adjustParentUrl('vesanka-library', 'library');
                 }
             }
         }
         // If no library parameter was provided.
         if(library === undefined || library === null || library === '' || library == 85159) {
             library = 85159;
-            console.log("DOES DO?");
             if(lang === "fi") {
-                adjustParentUrl('jyvaskylan_paakirjasto', 'library');
+                adjustParentUrl('jyvaskylan-paakirjasto', 'library');
             }
             else if(lang === "en") {
-                adjustParentUrl('main_library_(jyvaskyla)', 'library');
+                adjustParentUrl('main-library-(jyvaskyla)', 'library');
             }
         }
         urlDeferred.resolve();

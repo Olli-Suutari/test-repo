@@ -381,12 +381,12 @@ function adjustParentUrl(toAdd, type) {
         return;
     }
     //refUrl = "file:///C:/git/kirkanta-widgets/pages/consortiumFrameExample.html" + "?Joutsan pääkirjasto?unonsali";
-    refUrl = refUrl.replace(/ /g, "_");
-    refUrl = refUrl.replace(/%20/g, "_");
+    refUrl = refUrl.replace(/ /g, "-");
+    refUrl = refUrl.replace(/%20/g, "-");
     refUrl = refUrl.toLowerCase();
 
     toAdd = toAdd.toLowerCase();
-    toAdd = toAdd.replace(/ /g, "_");
+    toAdd = toAdd.replace(/ /g, "-");
     toAdd = toAdd.replace(/ä/g, "a");
     toAdd = toAdd.replace(/ö/g, "o");
 
@@ -397,7 +397,7 @@ function adjustParentUrl(toAdd, type) {
         // Loop services and check if refUrl contains one of them, if so remove it.
         for (var i = 0; i < serviceNames.length; i++) {
             var serviceName = serviceNames[i].toLowerCase();
-            serviceName = serviceName.replace(/ /g, "_");
+            serviceName = serviceName.replace(/ /g, "-");
             serviceName = serviceName.replace(/ä/g, "a");
             serviceName = serviceName.replace(/ö/g, "o");
             if(refUrl.indexOf(serviceName) > -1) {
@@ -414,7 +414,7 @@ function adjustParentUrl(toAdd, type) {
     if(type === "library") {
         for (var i = 0; i < libraryList.length; i++) {
             var libraryName = libraryList[i].text.toLowerCase();
-            libraryName = libraryName.replace(/ /g, "_");
+            libraryName = libraryName.replace(/ /g, "-");
             libraryName = libraryName.replace(/ä/g, "a");
             libraryName = libraryName.replace(/ö/g, "o");
             if(refUrl.indexOf(libraryName.toLowerCase()) > -1) {
