@@ -949,6 +949,7 @@ function fetchInformation(language, lib) {
                 }, 400);
             }
             else {
+                console.log("TRIGGER ADJUST");
                 adjustParentHeight(200);
             }
         }

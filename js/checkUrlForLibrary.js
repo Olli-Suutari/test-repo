@@ -10,6 +10,7 @@ function replaceJyvaskylaLibName(replaceWith) {
 
 function asyncCheckUrlForKeskiLibrary() {
     var urlDeferred = jQuery.Deferred();
+
     setTimeout(function() {
         var matchFound = false;
         // Loop libraries and check if refUrl contains one of them and click if so.

@@ -288,8 +288,12 @@ function setAdjustingToFalse() {
 }
 
 function adjustParentHeight(delay) {
-    isAdjustingHeight = true;
     clearTimeout(clearTimer);
+    if(isAdjustingHeight) {
+        setAdjustingToFalse();
+        return;
+    }
+    isAdjustingHeight = true;
     delay = delay + 150;
     setTimeout(function(){
         try {
@@ -302,9 +306,7 @@ function adjustParentHeight(delay) {
                     height = height + popoverHeight;
                 }
             }
-            if(!isAdjustingHeight) {
-                parent.postMessage({value: height, type: 'resize'}, '*');
-            }
+            parent.postMessage({value: height, type: 'resize'}, '*');
             setAdjustingToFalse();
 
         }
