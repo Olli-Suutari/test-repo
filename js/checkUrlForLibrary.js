@@ -19,6 +19,8 @@ function asyncCheckUrlForKeskiLibrary() {
             var escapedName = libraryList[i].text.toLowerCase();
             escapedName = escapedName.replace(/ä/g, "a");
             escapedName = escapedName.replace(/ö/g, "o");
+            escapedName = escapedName.replace(/\(/g, "");
+            escapedName = escapedName.replace(/\)/g, "");
             if(urlUnescapeSpaces.indexOf(escapedName) > -1) {
                 library = libraryList[i].id;
                 matchFound = true;
@@ -164,7 +166,7 @@ function asyncCheckUrlForKeskiLibrary() {
                 adjustParentUrl('jyvaskylan-paakirjasto', 'library');
             }
             else if(lang === "en") {
-                adjustParentUrl('main-library-(jyvaskyla)', 'library');
+                adjustParentUrl('main-library-jyvaskyla', 'library');
             }
         }
         urlDeferred.resolve();
