@@ -18,15 +18,20 @@
   document.head.appendChild(css);
   // https://stackoverflow.com/questions/25098021/securityerror-blocked-a-frame-with-origin-from-accessing-a-cross-origin-frame
   window.addEventListener('message', function(event) {
-    // Adjust height if message is a number.
-    if(Number.isInteger(event.data)) {
-      container.style.height = (event.data) + "px";
+    console.log(event.data);
+    var data = event.data;
+
+    if(data.type === "scroll") {
+      console.log("scroll to");
+      var rect = container.getBoundingClientRect();
+      window.scrollTo(0, rect.top + data.value);
     }
-    // Adjust url.
-    else {
-      console.log(event.data);
+    else if(data.type === "resize") {
+      container.style.height = (data.value) + "px";
+    }
+    else if(data.type === "url") {
       try {
-        history.pushState("#", "", event.data);
+        history.pushState("#", "", data.value);
       }
       catch (e) {
         console.log("Url failed to update: " + e);

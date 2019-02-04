@@ -392,6 +392,16 @@ function asyncFetchServices() {
                     if(urlUnescapeSpaces.indexOf(escapedName) > -1) {
                         $("li").find('[data-name="'+ serviceNames[i] +'"]').click();
                         isInfoBoxVisible = true;
+                        try {
+                            // Loop services and check if refUrl contains one of them and click if so.
+                            var rect = $('#myModal').getBoundingClientRect();
+                            parent.postMessage([{value: rect.top, type: 'scroll'}], '*');
+                        }
+                        catch (e) {
+                            console.log("Parent url adjustment failed: " + e);
+                        }
+
+
                     }
                 }
             }

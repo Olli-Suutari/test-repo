@@ -301,7 +301,7 @@ function adjustParentHeight(delay) {
                     height = height + popoverHeight;
                 }
             }
-            parent.postMessage(height, '*');
+            parent.postMessage([{value: height, type: 'resize'}], '*');
             setAdjustingToFalse();
         }
         catch (e) {
@@ -309,71 +309,9 @@ function adjustParentHeight(delay) {
         }
     }, delay);
 }
-
 /* If iframe has no referrerpolicy="unsafe-url" attribute, FF private mode blocks url from passing to iframe.
-// Detect and add a notification... https://codepen.io/fadupla/pen/EWxKRW
-function retry(isDone, next) {
-    var current_trial = 0,
-        max_retry = 50,
-        interval = 10,
-        is_timeout = false;
-    var id = window.setInterval(
-        function() {
-            if (isDone()) {
-                window.clearInterval(id);
-                next(is_timeout);
-            }
-            if (current_trial++ > max_retry) {
-                window.clearInterval(id);
-                is_timeout = true;
-                next(is_timeout);
-            }
-        },
-        10
-    );
-}
-var isFFPrivate;
-function detectFFPrivateMode(callback) {
-    var db;
-    try {
-        db = window.indexedDB.open('test');
-    } catch (e) {
-        isFFPrivate = true;
-    }
-
-    if (typeof isFFPrivate === 'undefined') {
-        retry(
-            function isDone() {
-                return db.readyState === 'done' ? true : false;
-            },
-            function next(is_timeout) {
-                if (!is_timeout) {
-                    isFFPrivate = db.result ? false : true;
-                }
-            }
-        );
-    }
-    retry(
-        function isDone() {
-            return typeof isFFPrivate !== 'undefined' ? true : false;
-        },
-        function next(is_timeout) {
-            callback(isFFPrivate);
-        }
-    );
-}
-if (window.indexedDB && /Firefox/.test(window.navigator.userAgent)) {
-    detectFFPrivateMode(
-        function(isFFPrivate) {
-            if(isFFPrivate) {
-                document.getElementById('result').innerHTML = '<span>' +
-                    i18n.get('Firefox In Private') + '</span>'
-            }
-        }
-    );
-}
-*/
-
+  https://gist.github.com/olli-suutari-jkl/8d6ccbc7d3c4e3b563bd5b7cbee095e2
+ */
 function adjustParentUrl(toAdd, type) {
     /*
     if(isFFPrivate) {
@@ -438,9 +376,7 @@ function adjustParentUrl(toAdd, type) {
     // Remove ? if last character.
     refUrl = refUrl.replace(/\?$/, '');
     try {
-        // Loop services and check if refUrl contains one of them and click if so.
-        parent.postMessage(refUrl, '*');
-        setAdjustingToFalse();
+        parent.postMessage([{value: refUrl, type: 'url'}], '*');
     }
     catch (e) {
         console.log("Parent url adjustment failed: " + e);
