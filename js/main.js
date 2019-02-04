@@ -378,7 +378,7 @@ if (window.indexedDB && /Firefox/.test(window.navigator.userAgent)) {
 
 function adjustParentUrl(toAdd, type) {
     if(isFFPrivate) {
-        return;
+        //return;
     }
     //refUrl = "file:///C:/git/kirkanta-widgets/pages/consortiumFrameExample.html" + "?Joutsan pääkirjasto?unonsali";
     refUrl = refUrl.replace(/ /g, "-");
