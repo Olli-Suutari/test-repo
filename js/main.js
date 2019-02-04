@@ -235,8 +235,11 @@ function bindActions() {
         else {
             adjustParentUrl('contacts', 'contact');
         }
-        // If we are switching between tabs, adjust parent height.
-        adjustParentHeight(animationTime);
+        if(activeTab === 0) {
+            activeTab = 1;
+            //adjustParentHeight(animationTime);
+            adjustParentUrl('', 'introduction');
+        }
     }
 
     $( "#navEsittely" ).on('click', function () {
