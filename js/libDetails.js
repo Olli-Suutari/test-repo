@@ -401,8 +401,8 @@ function asyncFetchServices() {
                         isInfoBoxVisible = true;
                         try {
                             setTimeout(function(){
-                                parent.postMessage({value: $("#myModal").position().top, type: 'scroll'}, '*');
-                            }, 2500);
+                                parent.postMessage({value: $("#myModal").position().top + 100, type: 'scroll'}, '*');
+                            }, 1800);
                         }
                         catch (e) {
                             console.log("Parent url adjustment failed: " + e);
