@@ -309,8 +309,8 @@ function adjustParentHeight(delay) {
             }
             if(newHeight !== height) {
                 parent.postMessage({value: newHeight, type: 'resize'}, '*');
-                height = newHeight;
             }
+            height = newHeight;
             setAdjustingToFalse();
 
         }
