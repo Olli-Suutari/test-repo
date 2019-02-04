@@ -287,6 +287,7 @@ function setAdjustingToFalse() {
     }, 1200);
 }
 
+var height = 0;
 function adjustParentHeight(delay) {
     clearTimeout(clearTimer);
     if(isAdjustingHeight) {
@@ -297,16 +298,19 @@ function adjustParentHeight(delay) {
     delay = delay + 150;
     setTimeout(function(){
         try {
-            var height = 75;
-            height = height + document.getElementById("mainContainer").scrollHeight;
+            var newHeight = 75;
+            newHeight = newHeight + document.getElementById("mainContainer").scrollHeight;
             if(isInfoBoxVisible) {
                 var popoverHeight = document.getElementById("modalContentContainer").scrollHeight;
                 if(popoverHeight > 400) {
                     popoverHeight = popoverHeight - 375;
-                    height = height + popoverHeight;
+                    newHeight = newHeight + popoverHeight;
                 }
             }
-            parent.postMessage({value: height, type: 'resize'}, '*');
+            if(newHeight !== height) {
+                parent.postMessage({value: newHeight, type: 'resize'}, '*');
+                height = newHeight;
+            }
             setAdjustingToFalse();
 
         }
