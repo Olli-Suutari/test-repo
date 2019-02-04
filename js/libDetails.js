@@ -402,7 +402,7 @@ function asyncFetchServices() {
                         try {
                             setTimeout(function(){
                                 parent.postMessage({value: $("#myModal").position().top, type: 'scroll'}, '*');
-                            }, 1500);
+                            }, 1750);
                         }
                         catch (e) {
                             console.log("Parent url adjustment failed: " + e);
