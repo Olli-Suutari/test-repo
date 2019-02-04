@@ -382,20 +382,25 @@ function asyncFetchServices() {
                     }
                 }
                 // Loop services and check if refUrl contains one of them and click if so.
+                var urlUnescapeSpaces = refUrl.replace(/%20/g, " ");
+                urlUnescapeSpaces = refUrl.replace(/_/g, " ");
+                urlUnescapeSpaces = refUrl.replace(/-/g, " ");
+                // Loop services and check if refUrl contains one of them and click if so.
                 for (var i = 0; i < serviceNames.length; i++) {
-                    var urlUnescapeSpaces = refUrl.replace(/%20/g, " ");
-                    urlUnescapeSpaces = refUrl.replace(/_/g, " ");
-                    urlUnescapeSpaces = refUrl.replace(/-/g, " ");
                     var escapedName = serviceNames[i].toLowerCase();
                     escapedName = escapedName.replace(/ä/g, "a");
                     escapedName = escapedName.replace(/ö/g, "o");
+                    escapedName = escapedName.replace(/\(/g, "");
+                    escapedName = escapedName.replace(/\)/g, "");
                     if(urlUnescapeSpaces.indexOf(escapedName) > -1) {
                         $("li").find('[data-name="'+ serviceNames[i] +'"]').click();
                         isInfoBoxVisible = true;
                         try {
-                            // Loop services and check if refUrl contains one of them and click if so.
-                            var rect = $('#myModal').getBoundingClientRect();
-                            parent.postMessage({value: rect.top, type: 'scroll'}, '*');
+                            setTimeout(function(){
+                                parent.postMessage({value: $("#myModal").position().top, type: 'scroll'}, '*');
+                            }, 1500);
+
+
                         }
                         catch (e) {
                             console.log("Parent url adjustment failed: " + e);
