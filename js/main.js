@@ -332,7 +332,7 @@ function retry(isDone, next) {
         10
     );
 }
-
+/* If iframe has no referrerpolicy="unsafe-url" attribute, FF private mode blocks url from passing to iframe.
 var isFFPrivate;
 function detectFFPrivateMode(callback) {
     var db;
@@ -363,8 +363,6 @@ function detectFFPrivateMode(callback) {
         }
     );
 }
-
-
 if (window.indexedDB && /Firefox/.test(window.navigator.userAgent)) {
     detectFFPrivateMode(
         function(isFFPrivate) {
@@ -375,23 +373,22 @@ if (window.indexedDB && /Firefox/.test(window.navigator.userAgent)) {
         }
     );
 }
+*/
 
 function adjustParentUrl(toAdd, type) {
+    /*
     if(isFFPrivate) {
         //return;
-    }
-    //refUrl = "file:///C:/git/kirkanta-widgets/pages/consortiumFrameExample.html" + "?Joutsan pääkirjasto?unonsali";
+    }*/
     refUrl = refUrl.replace(/ /g, "-");
     refUrl = refUrl.replace(/%20/g, "-");
     refUrl = refUrl.replace(/\(/g, "");
     refUrl = refUrl.replace(/\)/g, "");
     refUrl = refUrl.toLowerCase();
-
     toAdd = toAdd.toLowerCase();
     toAdd = toAdd.replace(/ /g, "-");
     toAdd = toAdd.replace(/ä/g, "a");
     toAdd = toAdd.replace(/ö/g, "o");
-
     toAdd = toAdd.replace(/\(/g, "");
     toAdd = toAdd.replace(/\)/g, "");
 
