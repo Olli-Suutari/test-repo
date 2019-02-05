@@ -227,7 +227,7 @@ $(document).ready(function() {
         });
     }
 
-    $('#librarySelector').on('select2:select', function (e) {
+    $("#librarySelector").change(function(){
         // Don't use !== as it won't match.
         if($(this).val() != library) {
             if (isInfoBoxVisible) {
@@ -272,12 +272,6 @@ $(document).ready(function() {
         // Trigger the library change.
         $('.library-select').val($(this).val()).trigger('change');
     });
-
-    setTimeout(function(){
-    }, 1900);
-
-
-
 
 
 }); // OnReady
