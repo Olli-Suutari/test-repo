@@ -290,10 +290,6 @@ function setAdjustingToFalse() {
 var height = 0;
 function adjustParentHeight(delay) {
     clearTimeout(clearTimer);
-    if(isAdjustingHeight) {
-        setAdjustingToFalse();
-        return;
-    }
     isAdjustingHeight = true;
     delay = delay + 150;
     setTimeout(function(){

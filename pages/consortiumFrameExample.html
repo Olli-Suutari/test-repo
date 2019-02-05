@@ -20,18 +20,34 @@
   window.addEventListener('message', function(event) {
     console.log(event.data);
     var data = event.data;
-
     if(data.type === "scroll") {
       console.log("scroll to");
       var rect = container.getBoundingClientRect();
-      window.scrollTo(0, rect.top + data.value);
+      var scrollToPos = rect.top + data.value;
+      if(data.scrollParameter === "under") {
+        // Scroll if under the scroll position
+        if(window.pageYOffset > scrollToPos) {
+          window.scrollTo({ top: scrollToPos, behavior: 'smooth' })
+        }
+      }
+      else if(data.scrollParameter === "center") {
+          // Scroll to position.
+          window.scrollTo({ top: scrollToPos, behavior: 'smooth' })
+      }
+      else {
+        // Scroll if above the scroll position.
+        if(window.pageYOffset < scrollToPos) {
+          window.scrollTo({ top: scrollToPos, behavior: 'smooth' })
+        }
+      }
     }
     else if(data.type === "resize") {
+      console.log("RESZIZ");
       container.style.height = (data.value) + "px";
     }
     else if(data.type === "url") {
       try {
-        history.pushState("#", "", data.value);
+        history.replaceState("#", "", data.value);
       }
       catch (e) {
         console.log("Url failed to update: " + e);
