@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,12 +41,11 @@
       }
     }
     else if(data.type === "resize") {
-      console.log("RESZIZ");
       container.style.height = (data.value) + "px";
     }
     else if(data.type === "url") {
       try {
-        history.replaceState("#", "", data.value);
+        history.replaceState("", "", data.value);
       }
       catch (e) {
         console.log("Url failed to update: " + e);
