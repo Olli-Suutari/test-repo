@@ -214,14 +214,10 @@ function bindActions() {
             adjustParentHeight(animationTime);
             activeTab = 1;
             // Map zoom gets messed if the map is loaded before hiding the map div.
-            if(!mapLoaded) {
+            if(!mapLoaded && lat != null) {
                 setTimeout(function(){
                     // If we try to set view & open the popup in asyncLoadMap, things get messed.
-                    if(lat !== undefined) {
-                        map.setView([lat, lon], 15);
-                    } else {
-                        map.setView(["62.750", "25.700"], 6);
-                    }
+                    map.setView([lat, lon], 15);
                     // Open popup
                     map.eachLayer(function (layer) {
                         if(layer._latlng !== undefined) {
@@ -416,8 +412,9 @@ $(document).ready(function() {
     // Yhteystiedot UI texts.
     document.getElementById('expandMap').title = i18n.get("Avaa tai sulje kokoruututila");
     $('#locationTitle').append(i18n.get("Sijainti"));
-    $('#srAddress').append(i18n.get("Osoitetiedot"));
-    $('#transitDetailsTitle').append(i18n.get("Ohjeita liikenteeseen"));
+    $('#addressTh').append(i18n.get("Osoite"));
+    $('#postalTh').append(i18n.get("Postiosoite"));
+    $('#emailTh').append(i18n.get("Sähköposti"));
     // Phone numbers
     $('#phonesTitle').append(i18n.get("Puhelinnumerot"));
     $('#sectionTh').append(i18n.get("Osasto"));
@@ -449,6 +446,7 @@ $(document).ready(function() {
             $('#contactsMapCol').css('height', '500px');
         }
     }
+
     // Since the api is having problems with special schedules, add a notification. To be commented when fixed.
     //$('#schedules').prepend('<p style="color: red">' + i18n.get("Virheelliset aukioloajat") + '</p>');
 

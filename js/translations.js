@@ -118,6 +118,10 @@ var dict = {
         fi: "Yleistietoa",
         en: "Trivia",
     },
+    "Osoite": {
+        fi: "Osoite",
+        en: "Address",
+    },
     "Perustamisvuosi": {
         fi: "Perustamisvuosi",
         en: "Founded",
@@ -137,14 +141,6 @@ var dict = {
     "Sisustus": {
         fi: "Sisustus",
         en: "Decoration",
-    },
-    "Osoitetiedot": {
-        fi: "Osoitetiedot",
-        en: "Address details",
-    },
-    "Osoite": {
-        fi: "Osoite",
-        en: "Address",
     },
     "Postiosoite": {
         fi: "Postiosoite",
