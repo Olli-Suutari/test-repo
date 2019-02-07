@@ -99,7 +99,7 @@ main {
 }
 
 .select2-container--default .select2-results>.select2-results__options{
-    max-height: 80vh!important;
+    max-height: 50vh!important;
 }
 
 #librarySelectorTitle {
@@ -540,55 +540,29 @@ ul.cols {
     text-align: center;
 }
 
-#addressTable {
-    margin-top: 1em;
-}
-
 #locationTitle {
     text-align: center;
     align-content: center;
 }
 
+#addressDetails {
+    margin-top: 1.5em;
+    margin-bottom: 1em;
+    display: flex;
+    flex-direction: row;
+}
+
+#streetAddress, #postalAddress {
+    width: 50%;
+}
 
 #triviaTable tr, #triviaTable td {
     border: none;
     padding: 0.5em;
 }
 
-#addressTable th, #addressTh, #postalTh, #triviaTable th, #triviaTable tr {
-    padding-top: 1.35rem;
-    margin-bottom: 0;
-    padding-right: 2.95rem;
-    border: none;
-}
-
-#addressTable td {
-    border: none;
-    padding-bottom: 1.35rem;
-    padding-right: 2.95rem;
-}
-
-.transit-details {
-    text-align: left;
-    padding-left: 1em;
-}
-
-#publicTransport {
-    margin-top: -0.6em;
-}
-
-#addressTh, #postalTh {
-    font-size: 1.25em!important;
-    margin-top: -10px;
-    padding: 0;
-}
-
 .map-library-changer {
     margin-top: 1em;
-}
-
-.transit-details {
-    margin-top: -0.8em;
 }
 
 #mapContainer {
@@ -601,15 +575,17 @@ ul.cols {
     top: 1em;
 }
 
-/* Map borders, if not in fullscreen mode */
-#contactsMapCol {
-
-}
-
 #noCoordinates {
-    margin-top: 14px;
-    margin-bottom: 6px;
-    padding-left: 2em;
+    z-index: 999!important;
+    position: relative;
+    display: inline-block;
+    margin-left: 3.5em;
+    margin-top: 15px;
+    width: 230px;
+    font-weight: 600;
+    font-size: .95rem;
+    color: black;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 
 #contactsFirstCol {
@@ -620,10 +596,6 @@ ul.cols {
     #contactsFirstCol {
         padding: 1.7rem 2.7rem;
         padding-top: 2.7rem;
-        background: #EDEDE7;
-    }
-
-    #addressTable {
         background: #EDEDE7;
     }
 

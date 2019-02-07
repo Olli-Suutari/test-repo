@@ -1,5 +1,7 @@
 // isLibraryList variable is used to determine when to load schedules.
 var isLibaryList = false;
+// isScheduleEmpty is is used for displaying error message if no description or schedules is found.
+var isScheduleEmpty = false;
 
 moment.locale(lang);
 var HHmmFormat = 'HH:mm';
@@ -73,6 +75,12 @@ function getWeekSchelude(direction, lib) {
     $( "#weekNumber" ).html( i18n.get("Viikko") + ' ' + weekNumber);
     $.getJSON("https://api.kirjastot.fi/v3/library/" + lib + "?lang=" + lang +
         "&with=schedules&period.start=" + weekCounter + "w&period.end=" + weekCounter + "w", function(data) {
+        console.log(data.schedules.length);
+        if(data.schedules.length === 0 ){
+            $('#schedules').css('display', 'none');
+            isScheduleEmpty = true;
+            return;
+        }
         var date = moment().add(weekCounter, 'weeks');
         dateInSchedule =  new Date();
         dateInSchedule.setDate(dateInSchedule.getDate() + (weekCounter * 7));

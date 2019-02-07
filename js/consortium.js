@@ -238,6 +238,9 @@ $(document).ready(function() {
             accessibilityIsEmpty = true;
             transitIsEmpty = true;
             descriptionIsEmpty = true;
+            isScheduleEmpty = true;
+            noImages = true;
+            triviaIsEmpty = true;
             mapLoaded = false;
             sliderNeedsToRestart = true;
             contactsIsEmpty = true;
