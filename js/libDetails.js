@@ -935,7 +935,6 @@ function fetchInformation(language, lib) {
                         $("#leftBar").css("display", "none");
                         $("#introductionSidebar").addClass("col-md-12");
                         $("#introductionSidebar").removeClass("col-lg-5 col-xl-4 order-2 sidebar");
-                        console.log("LEEEN: " + triviaIsEmpty);
                         if(isScheduleEmpty && noImages && triviaIsEmpty) {
                             $("#introductionSidebar").append('<div id="noIntroContent"><h3>' +
                                 i18n.get("No content") + ' <i class="fa fa-frown-o"></i></h3></div>');

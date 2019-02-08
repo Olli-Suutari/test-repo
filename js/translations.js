@@ -258,4 +258,8 @@ var dict = {
         fi: "Toimipisteellä ei valitettavasti ole kuvausta, kuvia tai aukioloaikatietoja.<br>Voit auttaa tilanteen korjaamisessa antamalla kirjastollesi palautetta.<br>Lisätietoja saattaa löytyä kirjaston kunnan kotisivuilta.",
         en: "Unfortunately this Library has no description, photos or schedules.<br>You can help fixing this by giving feedback to your library.<br>Additional details may be available at the muncipals website.",
     },
+    "Open library page": {
+        fi: "Siirry kirjaston tietoihin",
+        en: "Open the library details",
+    },
 };
