@@ -75,7 +75,6 @@ function getWeekSchelude(direction, lib) {
     $( "#weekNumber" ).html( i18n.get("Viikko") + ' ' + weekNumber);
     $.getJSON("https://api.kirjastot.fi/v3/library/" + lib + "?lang=" + lang +
         "&with=schedules&period.start=" + weekCounter + "w&period.end=" + weekCounter + "w", function(data) {
-        console.log(data.schedules.length);
         if(data.schedules.length === 0 ){
             $('#schedules').css('display', 'none');
             isScheduleEmpty = true;

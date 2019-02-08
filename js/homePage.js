@@ -50,7 +50,7 @@ $(document).ready(function() {
 
     $("#btnOpenLibryPage").append(i18n.get("Open library page"));
 
-    adjustHomePageHeight(150);
+    adjustHomePageHeight(250);
 
     $("#btnOpenLibryPage").on('click', function () {
         moveParentToLibraryUrl(libName);

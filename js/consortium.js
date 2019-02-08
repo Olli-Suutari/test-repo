@@ -270,10 +270,12 @@ $(document).ready(function() {
                 }
                 // Adjust parent url.
                 adjustParentUrl(libName, "library");
-                if(homePage) {
-                    adjustHomePageHeight(150)
-                }
             }
+
+            if(homePage) {
+                adjustHomePageHeight(50)
+            }
+
             // Fetch data
             getWeekSchelude(0, library);
             bindScheduleKeyNavigation();
