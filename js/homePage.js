@@ -23,6 +23,7 @@ function setAdjustingToFalse() {
     }, 1200);
 }
 
+var height = 0;
 function adjustHomePageHeight(delay) {
     clearTimeout(clearTimer);
     isAdjustingHeight = true;
@@ -31,6 +32,7 @@ function adjustHomePageHeight(delay) {
         try {
             var newHeight = 15;
             newHeight = newHeight + document.getElementById("homePageWidget").scrollHeight;
+            console.log("newHeight " + newHeight)
             if(newHeight !== height) {
                 parent.postMessage({value: newHeight, type: 'resize'}, '*');
             }
