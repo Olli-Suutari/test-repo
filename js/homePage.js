@@ -49,9 +49,7 @@ function adjustHomePageHeight(delay) {
 $(document).ready(function() {
 
     $("#btnOpenLibryPage").append(i18n.get("Open library page"));
-
-    adjustHomePageHeight(250);
-
+    adjustHomePageHeight(500);
     $("#btnOpenLibryPage").on('click', function () {
         moveParentToLibraryUrl(libName);
     });
