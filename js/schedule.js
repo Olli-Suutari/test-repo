@@ -66,11 +66,15 @@ function generateScheduleInfo(data) {
                 if (items[i].name != null) {
                     // Generic description has no valid_until (null)
 
-                        if(items[i].description !== null) {
+                        if(items[i].description !== null && items[i].description.length !== 0) {
                             if(items[i].validUntil === null) {
-
+                                console.log(items[i].description);
+                                genericDescription = items[i].description;
                             }
-                            genericDescription = items[i].description;
+                            else {
+                                holidayDescription = items[i].description;
+                                isHoliday = true;
+                            }
                         }
                     // Display the holiday info if holiday is during the current week or within valid_from to valid_until...
                     var beginsInSameWeek = moment(dateInSchedule).isSame(items[i].valid_from, 'week');
