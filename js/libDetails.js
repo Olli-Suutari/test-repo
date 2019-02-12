@@ -116,7 +116,6 @@ function asyncFetchGenericDetails() {
                         '<td class="trivia-detail">' + data.extra.building.interior_designer + '</td></tr>');
                 }
                 if (!triviaIsEmpty) {
-                    console.log("IS NOT EMPTYY")
                     $(".trivia-section").css("display", "block");
                 }
             }

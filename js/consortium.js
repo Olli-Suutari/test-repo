@@ -72,7 +72,6 @@ function modelMatcher (params, data) {
 }
 
 function initSelect(items) {
-    console.log("AFDAFGAKGOKO")
     var placeholderText = "Hae nimellä...";
     if(lang === "en") {
         placeholderText = "Search by name...";
