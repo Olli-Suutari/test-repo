@@ -309,7 +309,7 @@ function adjustParentHeight(delay) {
             }
             if(newHeight !== height) {
                 // Old method, to be removed once updated script is available on jyvaskyla.fi
-                parent.postMessage(height, '*');
+                parent.postMessage(newHeight, '*');
 
                 parent.postMessage({value: newHeight, type: 'resize'}, '*');
             }
