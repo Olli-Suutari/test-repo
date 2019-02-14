@@ -49,6 +49,7 @@ function generateScheduleInfo(data) {
     var holidayDescription;
     var isHoliday = false;
     var items = [];
+    // Turn object object array to object array.
     for (var key in data) {
         if (data.hasOwnProperty(key) && (typeof data[key] === "object")) {
             //jsonPrinter(data[key]);
@@ -61,14 +62,13 @@ function generateScheduleInfo(data) {
             items.push(row);
         }
     };
+    // Loop the array.
     for (var i = 0; i < items.length; i++) {
          // Collections
                 if (items[i].name != null) {
                     // Generic description has no valid_until (null)
-
-                        if(items[i].description !== null && items[i].description.length !== 0) {
-                            if(items[i].validUntil === null) {
-                                console.log(items[i].description);
+                    if(items[i].description !== null && items[i].description.length !== 0) {
+                        if(!items[i].isException) {
                                 genericDescription = items[i].description;
                             }
                             else {
@@ -76,26 +76,9 @@ function generateScheduleInfo(data) {
                                 isHoliday = true;
                             }
                         }
-                    // Display the holiday info if holiday is during the current week or within valid_from to valid_until...
-                    var beginsInSameWeek = moment(dateInSchedule).isSame(items[i].valid_from, 'week');
-                    var endsInSameWeek = moment(dateInSchedule).isSame(items[i].valid_until, 'week');
-                    var isInBetween = moment(dateInSchedule).isBetween(items[i].valid_from, items[i].valid_until);
-
-                    if(isInBetween || beginsInSameWeek || endsInSameWeek) {
-                        // Do not display the generic info, if current date is in between start/end of the holiday.
-                        if(isInBetween) {
-                            isHoliday = true;
-                        }
-                        // Set text for the holiday info if not null...
-                        if(items[i].description !== null) {
-                            holidayDescription = items[i].description;
-                        }
-                    }
                 }
-                // Show the info in the ui, if provided.
-                if(holidayDescription !== undefined && holidayDescription !== null && isHoliday) {
-                    $('#scheduleInfo').replaceWith('<span id="scheduleInfo" class="info-text"><i class="fa fa-info-circle" > </i> '
-                        + holidayDescription + '</span>');
+                var isSpecialWeek = false;
+                if(holidayDescription !== undefined) {
                     // Add rows for infoscreen font-size calculations...
                     if (holidayDescription.length < 40) {
                         totalRows = totalRows +1;
@@ -110,9 +93,25 @@ function generateScheduleInfo(data) {
                     else {
                         totalRows = totalRows +4;
                     }
+                    var mondayDate = moment().add(weekCounter, 'weeks').weekday(0).format("YYYY-MM-DD");
+                    var sundayDate = moment().add(weekCounter, 'weeks').weekday(6).format("YYYY-MM-DD");
+                    //console.log(items[i].validFrom + "|"  + mondayDate);
+                    //console.log(items[i].validUntil + "|"  + sundayDate);
+                    if(items[i].validFrom == mondayDate && items[i].validUntil == sundayDate) {
+                        isSpecialWeek = true;
+                        totalRows = totalRows +2;
+                        $('#specialInfo').replaceWith('<span id="specialInfo" class="info-span info-text"><i class="fa fa-info-circle" > </i> '
+                            + holidayDescription + '</span>');
+                    }
+                    else {
+                        totalRows = totalRows +2;
+                        //genericDescription = genericDescription + "<br><br>" + holidayDescription;
+                        $('#specialInfo').replaceWith('<span id="specialInfo" class="info-span info-text"><i class="fa fa-info-circle" > </i> '
+                            + holidayDescription + '</span>');
+                    }
                 }
-                else if(!isHoliday && genericDescription !== undefined && genericDescription !== null) {
-                    $('#scheduleInfo').replaceWith('<span id="scheduleInfo" class="info-text"><i class="fa fa-info-circle" > </i> '
+                if(genericDescription !== undefined && !isSpecialWeek) {
+                    $('#scheduleInfo').replaceWith('<span id="scheduleInfo" class="info-span info-text"><i class="fa fa-info-circle" > </i> '
                         + genericDescription + '</span>');
                     // Add rows for infoscreen font-size calculations...
                     if (genericDescription.length < 40) {
@@ -130,7 +129,10 @@ function generateScheduleInfo(data) {
                     }
                 }
                 else {
-                    $('#scheduleInfo').replaceWith('<span id="scheduleInfo" style="display: none" class="info-text"><i class="fa fa-info-circle" > </i></span>');
+                    $('#scheduleInfo').replaceWith('<span id="scheduleInfo" style="display: none" class="info-span info-text"><i class="fa fa-info-circle" > </i></span>');
+                }
+                if(holidayDescription === undefined) {
+                    $('#specialInfo').replaceWith('<span id="specialInfo" style="display: none" class="info-span info-text"><i class="fa fa-info-circle" > </i></span>');
                 }
         }
 }
@@ -167,7 +169,7 @@ function getWeekSchelude(direction, lib) {
     $("#weekNumber").html(i18n.get("Viikko") + ' ' + weekNumber);
     // Use &pretty: https://github.com/libraries-fi/kirkanta-api/issues/3
     $.getJSON("https://api.kirjastot.fi/v4/schedules?library=" + lib + "&lang=" + lang +
-        "&period.start=" + weekCounter + "w&period.end=" + weekCounter + "w&refs=period&pretty", function (data) {
+        "&period.start=" + weekCounter + "w&period.end=" + weekCounter + "w&refs=period&limit=5000&pretty", function (data) {
         if (data.items.length === 0) {
             $('#schedules').css('display', 'none');
             isScheduleEmpty = true;
