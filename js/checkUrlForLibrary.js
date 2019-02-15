@@ -10,8 +10,6 @@ function replaceJyvaskylaLibName(replaceWith) {
 
 function asyncCheckUrlForKeskiLibrary() {
     var urlDeferred = jQuery.Deferred();
-
-    console.log(homePage)
     setTimeout(function() {
         if(homePage) {
             urlDeferred.resolve();

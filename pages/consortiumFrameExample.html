@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 <body>
-<iframe id="libFrame" allowfullscreen="" scrolling="no" frameborder="0" height="1500px" src="homePage.html?lib=85159&amp;consortium=2113&amp;lang=fi&homePage=true&libPageUrl=https://www.keskikirjastot.fi/web/arena/os-testi-3" width="100%"></iframe>
+<iframe id="libFrame" allowfullscreen="" scrolling="no" frameborder="0" height="1500px" src="library.html?lib=85159&amp;consortium=2113&amp;lang=fi" width="100%"></iframe>
 </body>
 </html>
 <script type="text/javascript">
@@ -17,7 +17,6 @@
   document.head.appendChild(css);
   // https://stackoverflow.com/questions/25098021/securityerror-blocked-a-frame-with-origin-from-accessing-a-cross-origin-frame
   window.addEventListener('message', function(event) {
-    console.log(event.data);
     var data = event.data;
     if(data.type === "scroll") {
       console.log("scroll to");

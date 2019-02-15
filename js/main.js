@@ -130,20 +130,31 @@ function addItem(item, listElement) {
             // Replace links from the description
             if (description.indexOf("<a href=") !== -1) {
                 // Make all links external.
-                description = description.replace(/(<a href=")+/g, '<a class="external-link" target="_blank" href="');
+                //description = description.replace(/(<a href=")+/g, '<a class="external-link" target="_blank" href="');
                 // Generate iframes from links that contain "embed"
                 var linksAsIframes = [];
                 var reFindLinks = new RegExp(/<a\b[^>]*>(.*?)<\/a>/g);
                 var reFindLinksExec = reFindLinks.exec(description);
                 while (reFindLinksExec != null) {
                     // If link contains "embed", turn it into iframe.
-                    if (description.indexOf("embed") !== -1) {
+                    if (reFindLinksExec[0].indexOf("embed") !== -1) {
                         // Find url
                         var urlOfLink = new RegExp(/"(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?"/g).exec(reFindLinksExec[0]);
                         // Generate iframe
                         var iframeCode = '<iframe frameborder="0" height="500px" scrolling="no" src='  + urlOfLink[0] + ' width="100%"></iframe>';
                         // Push to array
                         linksAsIframes.push({position: reFindLinksExec[0], iframe: iframeCode});
+                    }/*
+                    // If link contains ?
+                    else if(reFindLinksExec[0].indexOf("?") !== -1) {
+                        var urlOfLink = new RegExp(/"(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?"/g).exec(reFindLinksExec[0]);
+                        console.log(urlOfLink);
+                        console.log(reFindLinksExec[0]);
+                    }*/
+                    // Normal links
+                    else {
+                        // Push to array
+                        linksAsIframes.push({position: reFindLinksExec[0], iframe: reFindLinksExec[0].replace(/(<a href=")+/g, '<a class="external-link" target="_blank" href="')});
                     }
                     // Loop all links.
                     reFindLinksExec = reFindLinks.exec(description);
@@ -308,9 +319,6 @@ function adjustParentHeight(delay) {
                 }
             }
             if(newHeight !== height) {
-                // Old method, to be removed once updated script is available on jyvaskyla.fi
-                parent.postMessage(newHeight, '*');
-
                 parent.postMessage({value: newHeight, type: 'resize'}, '*');
             }
             height = newHeight;

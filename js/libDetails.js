@@ -196,6 +196,72 @@ function bindServiceClicks() {
         popupText = popupText.replace(/(<p><\/p>)+/g, "");
         popupText = popupText.replace(/(<p>\s<\/p>)+/g, "");
 
+
+        if (popupText.indexOf("blockquote") !== -1) {
+            var linksToServices = [];
+            var reFindLinks = new RegExp(/<blockquote>.*?(<p>.*?<\/p>).*?<\/blockquote>/g);
+            var reFindLinksExec = reFindLinks.exec(popupText);
+            while (reFindLinksExec != null) {
+                var textInside = reFindLinksExec[0].replace("<blockquote>", "");
+                textInside = textInside.replace("</blockquote>","");
+                textInside = textInside.replace("<p>","");
+                textInside = textInside.replace("</p>","");
+                textInside = textInside.toLowerCase();
+                textInside = textInside.replace(/ä/g, "a");
+                textInside = textInside.replace(/ö/g, "o");
+                textInside = textInside.replace(/\(/g, "");
+                textInside = textInside.replace(/\)/g, "");
+                textInside = textInside.replace(/_/g, " ");
+                textInside = textInside.replace(/-/g, " ");
+
+                // Loop services and check if refUrl contains one of them and click if so.
+                for (var i = 0; i < serviceNames.length; i++) {
+                    var escapedName = serviceNames[i].toLowerCase();
+                    escapedName = escapedName.replace(/ä/g, "a");
+                    escapedName = escapedName.replace(/ö/g, "o");
+                    escapedName = escapedName.replace(/\(/g, "");
+                    escapedName = escapedName.replace(/\)/g, "");
+                    escapedName = escapedName.replace(/_/g, " ");
+                    escapedName = escapedName.replace(/-/g, " ");
+                    if(textInside.indexOf(escapedName) > -1) {
+                        var linkToService = reFindLinksExec[0].replace('<p>',
+                            '<a class="service-link-in-modal" data-name="' + serviceNames[i] + '" href="#">');
+                        linkToService = linkToService.replace('</p>', '</a>');
+                        linksToServices.push({position: reFindLinksExec[0], iframe: linkToService});
+                    }
+                }
+                // If link contains "embed", turn it into iframe.
+                if (reFindLinksExec[0].indexOf("embed") !== -1) {
+                    // Find url
+                    var urlOfLink = new RegExp(/"(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?"/g).exec(reFindLinksExec[0]);
+                    // Generate iframe
+                    var iframeCode = '<iframe frameborder="0" height="500px" scrolling="no" src='  + urlOfLink[0] + ' width="100%"></iframe>';
+                    // Push to array
+                    linksToServices.push({position: reFindLinksExec[0], iframe: iframeCode});
+                }/*
+                    // If link contains ?
+                    else if(reFindLinksExec[0].indexOf("?") !== -1) {
+                        var urlOfLink = new RegExp(/"(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?"/g).exec(reFindLinksExec[0]);
+                        console.log(urlOfLink);
+                        console.log(reFindLinksExec[0]);
+                    }*/
+                // Normal links
+                else {
+                    // Push to array
+                    linksToServices.push({position: reFindLinksExec[0], iframe: reFindLinksExec[0].replace(/(<a href=")+/g, '<a class="external-link" target="_blank" href="')});
+                }
+                // Loop all links.
+                reFindLinksExec = reFindLinks.exec(popupText);
+            }
+            // Loop & add iframes from embedded links.
+            for (var i = 0; i < linksToServices.length; i++) {
+                popupText = popupText.replace(linksToServices[i].position, linksToServices[i].iframe);
+            }
+
+
+        }
+
+
         // Check if large or small text/modal.
         if(popupText.length > 200) {
             $('#modal').addClass("modal-lg");
@@ -215,6 +281,26 @@ function bindServiceClicks() {
         }
 
         $("#modalContent").replaceWith('<div id="modalContent">' + popupText + '</div>');
+
+
+        // Bind click event for clicking links to other services inside the modal.
+        $(".service-link-in-modal").on('click', function () {
+            var name = $(this).data('name');
+            toggleModal();
+            setTimeout(function(){
+                $("li").find('[data-name="'+ name +'"]').click();
+            }, 50);
+
+            try {
+                setTimeout(function(){
+                    parent.postMessage({value: $("#myModal").position().top -50, type: 'scroll'}, '*');
+                }, 1300);
+            }
+            catch (e) {
+                console.log("Parent url adjustment failed: " + e);
+            }
+        });
+
 
         // Check if text contains headers..
         if(popupText.indexOf("<h") !== -1) {
@@ -397,7 +483,7 @@ function asyncFetchDepartments() {
     var departmentsDeferred = jQuery.Deferred();
     setTimeout(function() {
         // https://stackoverflow.com/questions/309953/how-do-i-catch-jquery-getjson-or-ajax-with-datatype-set-to-jsonp-error-w
-        $.getJSON(jsonpUrlV4 + "&with=departments",
+        $.getJSON(jsonpUrlV4 + "&with=departments&limit=500",
             function(data){
                 var data = data.data.departments;
                 // If no pictures found, hide the slider...
@@ -885,7 +971,6 @@ function generateContacts() {
 }
 
 function fetchInformation(language, lib) {
-    console.log(lib);
     if (lib === undefined) {
         lib = library; // Use default if none provided.
     }
