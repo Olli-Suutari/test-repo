@@ -190,7 +190,6 @@ function getDaySchelude(direction, lib) {
         for (var i = 0; i < schedules.length; i++) {
             // If today, add some colourful classes!
             var isTodayClass = '';
-            var dayInfo = '';
             var rowspanCount = 1;
             var isClosed = true;
             var dayStart = '';
@@ -232,6 +231,9 @@ function getDaySchelude(direction, lib) {
                     }
                     $('#dayInfo').replaceWith('<span id="dayInfo" class="info-span info-text"><i class="fa fa-info-circle"> </i> ' + infoText + '</span>');
                     increaseRowCount(true);
+                }
+                else {
+                    $('#dayInfo').replaceWith('<span id="dayInfo" style="display: none" class="info-text"><i class="fa fa-info-circle" > </i></span>');
                 }
                 for (var t = 0; t < schedules[i].times.length; t++) {
                     var time = schedules[i].times[t];
