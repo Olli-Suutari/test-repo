@@ -98,6 +98,7 @@
     display: flex;
     white-space: normal;
     text-align: left;
+    float: left;
 }
 
 .schedules-weekly tr.time--sub td {

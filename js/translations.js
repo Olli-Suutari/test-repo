@@ -90,6 +90,14 @@ var dict = {
         fi: "Palveluaika",
         en: "Service time",
     },
+    "Palveluaika": {
+        fi: "Palveluaika",
+        en: "Service time",
+    },
+    "Aukiolo": {
+        fi: "Aukioloaika",
+        en: "Day schedule",
+    },
     "Omatoimiaika": {
         fi: "Omatoimiaika",
         en: "Self-service",

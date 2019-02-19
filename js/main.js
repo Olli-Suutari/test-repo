@@ -132,7 +132,7 @@ function addItem(item, listElement) {
                 // Make all links external.
                 //description = description.replace(/(<a href=")+/g, '<a class="external-link" target="_blank" href="');
                 // Generate iframes from links that contain "embed"
-                var linksAsIframes = [];
+                var linksToReplace = [];
                 var reFindLinks = new RegExp(/<a\b[^>]*>(.*?)<\/a>/g);
                 var reFindLinksExec = reFindLinks.exec(description);
                 while (reFindLinksExec != null) {
@@ -143,25 +143,19 @@ function addItem(item, listElement) {
                         // Generate iframe
                         var iframeCode = '<iframe frameborder="0" height="500px" scrolling="no" src='  + urlOfLink[0] + ' width="100%"></iframe>';
                         // Push to array
-                        linksAsIframes.push({position: reFindLinksExec[0], iframe: iframeCode});
-                    }/*
-                    // If link contains ?
-                    else if(reFindLinksExec[0].indexOf("?") !== -1) {
-                        var urlOfLink = new RegExp(/"(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?"/g).exec(reFindLinksExec[0]);
-                        console.log(urlOfLink);
-                        console.log(reFindLinksExec[0]);
-                    }*/
+                        linksToReplace.push({position: reFindLinksExec[0], replacement: iframeCode});
+                    }
                     // Normal links
                     else {
                         // Push to array
-                        linksAsIframes.push({position: reFindLinksExec[0], iframe: reFindLinksExec[0].replace(/(<a href=")+/g, '<a class="external-link" target="_blank" href="')});
+                        linksToReplace.push({position: reFindLinksExec[0], replacement: reFindLinksExec[0].replace(/(<a href=")+/g, '<a class="external-link" target="_blank" href="')});
                     }
                     // Loop all links.
                     reFindLinksExec = reFindLinks.exec(description);
                 }
                 // Loop & add iframes from embedded links.
-                for (var i = 0; i < linksAsIframes.length; i++) {
-                    description = description.replace(linksAsIframes[i].position, linksAsIframes[i].iframe);
+                for (var i = 0; i < linksToReplace.length; i++) {
+                    description = description.replace(linksToReplace[i].position, linksToReplace[i].replacement);
                 }
             }
 
@@ -388,7 +382,6 @@ function adjustParentUrl(toAdd, type) {
             }
         }
     }
-
     if(toAdd !== ''){
         refUrl = refUrl + "?" + toAdd;
     }

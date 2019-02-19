@@ -196,7 +196,6 @@ function bindServiceClicks() {
         popupText = popupText.replace(/(<p><\/p>)+/g, "");
         popupText = popupText.replace(/(<p>\s<\/p>)+/g, "");
 
-
         if (popupText.indexOf("blockquote") !== -1) {
             var linksToServices = [];
             var reFindLinks = new RegExp(/<blockquote>.*?(<p>.*?<\/p>).*?<\/blockquote>/g);
@@ -213,7 +212,6 @@ function bindServiceClicks() {
                 textInside = textInside.replace(/\)/g, "");
                 textInside = textInside.replace(/_/g, " ");
                 textInside = textInside.replace(/-/g, " ");
-
                 // Loop services and check if refUrl contains one of them and click if so.
                 for (var i = 0; i < serviceNames.length; i++) {
                     var escapedName = serviceNames[i].toLowerCase();
@@ -230,26 +228,6 @@ function bindServiceClicks() {
                         linksToServices.push({position: reFindLinksExec[0], iframe: linkToService});
                     }
                 }
-                // If link contains "embed", turn it into iframe.
-                if (reFindLinksExec[0].indexOf("embed") !== -1) {
-                    // Find url
-                    var urlOfLink = new RegExp(/"(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?"/g).exec(reFindLinksExec[0]);
-                    // Generate iframe
-                    var iframeCode = '<iframe frameborder="0" height="500px" scrolling="no" src='  + urlOfLink[0] + ' width="100%"></iframe>';
-                    // Push to array
-                    linksToServices.push({position: reFindLinksExec[0], iframe: iframeCode});
-                }/*
-                    // If link contains ?
-                    else if(reFindLinksExec[0].indexOf("?") !== -1) {
-                        var urlOfLink = new RegExp(/"(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?"/g).exec(reFindLinksExec[0]);
-                        console.log(urlOfLink);
-                        console.log(reFindLinksExec[0]);
-                    }*/
-                // Normal links
-                else {
-                    // Push to array
-                    linksToServices.push({position: reFindLinksExec[0], iframe: reFindLinksExec[0].replace(/(<a href=")+/g, '<a class="external-link" target="_blank" href="')});
-                }
                 // Loop all links.
                 reFindLinksExec = reFindLinks.exec(popupText);
             }
@@ -257,10 +235,7 @@ function bindServiceClicks() {
             for (var i = 0; i < linksToServices.length; i++) {
                 popupText = popupText.replace(linksToServices[i].position, linksToServices[i].iframe);
             }
-
-
         }
-
 
         // Check if large or small text/modal.
         if(popupText.length > 200) {
@@ -271,7 +246,6 @@ function bindServiceClicks() {
             $('#modal').removeClass("modal-lg");
             $('#modal').css("text-align", "center");
         }
-
         // If website is not null and contains stuff. Sometimes empty website is shown unless lenght is checked.
         if ($(this).data('website') !== null && $(this).data('website') !== "undefined" &&
             $(this).data('website').length > 5) {
@@ -279,10 +253,7 @@ function bindServiceClicks() {
             popupText = popupText + '<p id="linkToInfo"><a target="_blank" href="' + $(this).data('website') +
                 '" class="external-link">' + i18n.get("Lisätietoja") + '</a></p>';
         }
-
         $("#modalContent").replaceWith('<div id="modalContent">' + popupText + '</div>');
-
-
         // Bind click event for clicking links to other services inside the modal.
         $(".service-link-in-modal").on('click', function () {
             var name = $(this).data('name');
@@ -297,10 +268,9 @@ function bindServiceClicks() {
                 }, 1300);
             }
             catch (e) {
-                console.log("Parent url adjustment failed: " + e);
+                console.log("Parent position adjustment failed: " + e);
             }
         });
-
 
         // Check if text contains headers..
         if(popupText.indexOf("<h") !== -1) {
@@ -467,7 +437,7 @@ function asyncFetchServices() {
                             }, 1300);
                         }
                         catch (e) {
-                            console.log("Parent url adjustment failed: " + e);
+                            console.log("Parent position adjustment failed: " + e);
                         }
                     }
                 }

@@ -1,11 +1,11 @@
 .select2-container--default .select2-results>.select2-results__options{
-    max-height: 50vh!important;
+    max-height: 75vh!important;
 }
 
 /* Homepage widget */
 #btnOpenLibryPage {
     width: 100%;
-    padding: .75em;
+    padding: .65em;
     font-size: 1.15em;
 }
 
@@ -16,4 +16,45 @@
 
 .select-lite .select2-container {
     width: 100%!important;
+}
+
+
+.time--sub {
+    font-size: 1.05rem;
+
+}
+
+.align-left {
+    text-align: left;
+}
+
+.time--sub .align-right{
+    padding-left: 30px!important;
+}
+
+.main-schedule {
+    text-align: center;
+    font-size: 1.05rem;
+
+}
+
+#weekNumber {
+    font-size: 1.1rem;
+}
+
+#weekSchelude {
+    margin: 2em!important;
+}
+
+tr td {
+    padding: 3px 0!important;
+}
+
+tbody tr:first-child, tbody tr:first-child td {
+    padding-top: 1em!important;
+}
+
+
+tbody tr:last-child, tbody tr:last-child td {
+    padding-bottom: 1em!important;
 }
