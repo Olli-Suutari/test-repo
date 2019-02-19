@@ -169,10 +169,8 @@ function getDaySchelude(direction, lib) {
             "&period.start=" + weekCounter + "d&period.end=" + weekCounter + "d&refs=period&limit=5000&pretty");
         if (data.items.length === 0) {
             //$('#schedules').css('display', 'none');
-            isScheduleEmpty = true;
             $("#weekSchelude").replaceWith('<tbody id="weekSchelude" class="schedules-weekly">' + "<tr><td></td></tr>");
-
-            $('#dayInfo').replaceWith('<span id="dayInfo" style="display: none;" class="info-span info-text"><i class="fa fa-info-circle" > </i></span>');
+            $('#dayInfo').replaceWith('<span id="dayInfo" style="display: none" class="info-text"><i class="fa fa-info-circle" > </i></span>');
             $('#scheduleInfo').replaceWith('<span id="scheduleInfo" class="info-span info-text"><i class="fa fa-info-circle" > </i> '
                 + i18n.get("Suljettu") + '</span>');
             return;
@@ -232,8 +230,7 @@ function getDaySchelude(direction, lib) {
                             infoText = splitString(infoText);
                         }
                     }
-                    dayInfo = '<span id="dayInfo" class="info-span info-text"><i class="fa fa-info-circle" > </i> '
-                        + infoText + '</span>';
+                    $('#dayInfo').replaceWith('<span id="dayInfo" class="info-span info-text"><i class="fa fa-info-circle"> </i> ' + infoText + '</span>');
                     increaseRowCount(true);
                 }
                 for (var t = 0; t < schedules[i].times.length; t++) {
@@ -298,7 +295,6 @@ function getDaySchelude(direction, lib) {
                 selfServiceBefore = selfServiceBefore.replace("isTodayClass", isTodayClass);
                 staffToday = staffToday.replace("isTodayClass", isTodayClass);
                 selfServiceAfter = selfServiceAfter.replace("isTodayClass", isTodayClass);
-                dayInfo = dayInfo.replace("isTodayClass", isTodayClass);
             //}
             // Replace : with . in schedules.
             selfServiceBefore = selfServiceBefore.replace(/:/g, ".");
@@ -322,10 +318,6 @@ function getDaySchelude(direction, lib) {
             }
             if (isClosed) {
                 // Add info row on closed days.
-                var closedRowSpan = 1;
-                if (dayInfo !== "") {
-                    closedRowSpan = 2;
-                }
                 scheludeRow = '<tr class="time ' + isTodayClass + '">' +
                     '<td colspan="2" class="main-schedule closed">' + i18n.get("Suljettu") + '</td>' +
                     '</tr>';
@@ -339,13 +331,8 @@ function getDaySchelude(direction, lib) {
                     selfServiceAfter.length !== 0)) {
                     mainSchedule = "";
                 }
-
-
                 scheludeRow = mainSchedule + selfServiceBefore + staffToday + selfServiceAfter;
             }
-            $('#dayInfo').replaceWith(dayInfo);
-
-
             str += scheludeRow;
             begin.add(1, 'd');
         }
