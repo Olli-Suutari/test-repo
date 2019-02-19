@@ -63,10 +63,10 @@ $(document).ready(function() {
         moveParentToLibraryUrl(libName);
     });
     $('#librarySelector').on('select2:open', function (e) {
-        adjustHomePageHeight(50, true);
+        adjustHomePageHeight(0, true);
     });
     $('#librarySelector').on('select2:close', function (e) {
-        adjustHomePageHeight(50);
+        adjustHomePageHeight(0);
     });
 });
 
