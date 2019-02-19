@@ -504,6 +504,7 @@ function asyncFetchImages() {
     var imagesDeferred = jQuery.Deferred();
     setTimeout(function() {
             $.getJSON(jsonp_url + "&with=pictures", function (data) {
+                console.log("F: " + jsonp_url);
                 // If no pictures found, hide the slider...
                 if (data.pictures.length === 0) {
                     $('#sliderBox').css('display', 'none');

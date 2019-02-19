@@ -10,7 +10,7 @@
 }
 
 #homePageWidget {
-    max-width: 800px;
+    max-width: 320px;
     background:rgba(0,0,0,0)!important;
 }
 
@@ -35,7 +35,6 @@
 .main-schedule {
     text-align: center;
     font-size: 1.05rem;
-
 }
 
 #weekNumber {
@@ -44,6 +43,14 @@
 
 #weekSchelude {
     margin: 2em!important;
+}
+
+
+.thead-light tr td{
+    margin: 0!important;
+    padding: 0!important;
+    border-bottom: 1px solid #0050a8;
+    border-top: none;
 }
 
 tr td {
