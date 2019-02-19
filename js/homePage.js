@@ -24,14 +24,20 @@ function setAdjustingToFalse() {
 }
 
 var height = 0;
-function adjustHomePageHeight(delay) {
+function adjustHomePageHeight(delay, openSelect) {
     clearTimeout(clearTimer);
     isAdjustingHeight = true;
     delay = delay + 150;
     setTimeout(function(){
         try {
             var newHeight = 15;
-            newHeight = newHeight + document.getElementById("homePageWidget").scrollHeight;
+            if(openSelect) {
+                newHeight = 650;
+            }
+            else {
+                newHeight = newHeight + document.getElementById("homePageWidget").scrollHeight;
+            }
+
             console.log("newHeight " + newHeight)
             if(newHeight !== height) {
                 parent.postMessage({value: newHeight, type: 'resize'}, '*');
@@ -51,6 +57,16 @@ $(document).ready(function() {
     adjustHomePageHeight(500);
     $("#btnOpenLibryPage").on('click', function () {
         moveParentToLibraryUrl(libName);
+    });
+
+    $("#btnOpenLibryPage").on('click', function () {
+        moveParentToLibraryUrl(libName);
+    });
+    $('#librarySelector').on('select2:open', function (e) {
+        adjustHomePageHeight(50, true);
+    });
+    $('#librarySelector').on('select2:close', function (e) {
+        adjustHomePageHeight(50);
     });
 });
 
@@ -152,8 +168,13 @@ function getDaySchelude(direction, lib) {
         console.log("https://api.kirjastot.fi/v4/schedules?library=" + lib + "&lang=" + lang +
             "&period.start=" + weekCounter + "d&period.end=" + weekCounter + "d&refs=period&limit=5000&pretty");
         if (data.items.length === 0) {
-            $('#schedules').css('display', 'none');
+            //$('#schedules').css('display', 'none');
             isScheduleEmpty = true;
+            $("#weekSchelude").replaceWith('<tbody id="weekSchelude" class="schedules-weekly">' + "<tr><td></td></tr>");
+
+            $('#dayInfo').replaceWith("");
+            $('#scheduleInfo').replaceWith('<span id="scheduleInfo" class="info-span info-text"><i class="fa fa-info-circle" > </i> '
+                + i18n.get("Suljettu") + '</span>');
             return;
         }
         var date = moment().add(weekCounter, 'weeks');

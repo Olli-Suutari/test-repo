@@ -612,6 +612,8 @@ function asyncFetchLocation() {
                         $("#contactsFirstCol").removeClass( "col-md-7" );
                         $("#contactsMapCol").addClass( "col-md-7");
                         $("#contactsMapCol").removeClass( "col-md-5" );
+                        $("#streetAddress").addClass( "col-md-12" );
+                        $("#streetAddress").removeClass( "col-md-6" );
                         $("#postalTh").css('display', 'none');
                     }
                 }
