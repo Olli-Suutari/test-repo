@@ -1,7 +1,7 @@
 #homePageWidget {
     max-width: 620px;
     background:rgba(0,0,0,0)!important;
-    min-height: 380px;
+    min-height: 350px;
     display: flex;
     flex-direction: column;
 }
