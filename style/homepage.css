@@ -1,5 +1,9 @@
-.select2-container--default .select2-results>.select2-results__options{
-    max-height: 500px!important;
+#homePageWidget {
+    max-width: 620px;
+    background:rgba(0,0,0,0)!important;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Homepage widget */
@@ -7,17 +11,16 @@
     width: 100%;
     padding: .65em;
     font-size: 1.15em;
+    margin-top: auto;
 }
 
-#homePageWidget {
-    max-width: 620px;
-    background:rgba(0,0,0,0)!important;
+.select2-container--default .select2-results>.select2-results__options{
+    max-height: 500px!important;
 }
 
 .select-lite .select2-container {
     width: 100%!important;
 }
-
 
 .time--sub {
     font-size: 1.05rem;

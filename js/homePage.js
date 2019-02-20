@@ -38,6 +38,9 @@ function adjustHomePageHeight(delay, openSelect) {
                 newHeight = newHeight + document.getElementById("homePageWidget").scrollHeight;
             }
 
+            if(newHeight <400) {
+                newHeight = 400;
+            }
             console.log("newHeight " + newHeight)
             if(newHeight !== height) {
                 parent.postMessage({value: newHeight, type: 'resize'}, '*');
