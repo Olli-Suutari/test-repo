@@ -275,7 +275,7 @@ function getDaySchelude(direction, lib) {
                         staffPresentEnd = to;
                         // Store the row as a variable.
                         staffToday = '<tr class="time--sub time isTodayClass time--with-staff">' +
-                            '<td class="align-right trn"><i class="fa fa-level-up fa-rotate-90"></i> ' + i18n.get("Henkilökunta paikalla") + '</td>' +
+                            '<td class="align-right trn"><i class="fa fa-level-up fa-rotate-90"></i> ' + i18n.get("Palveluaika") + '</td>' +
                             '<td class="align-left">' + staffPresentStart + ' – ' + staffPresentEnd + '</td>' +
                             '</tr>';
                     }

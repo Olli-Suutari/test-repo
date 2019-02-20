@@ -64,3 +64,46 @@ var activeTab = 0;
 if(refUrl.indexOf("yhteys") > -1 || refUrl.indexOf("contact") > -1) {
     activeTab = 1;
 }
+
+// Generate colors for less.
+var primary = getParamValue('primary');
+var links = getParamValue('links');
+var linksHover = getParamValue('linksHover');
+var linksExternal = getParamValue('linksExternal');
+
+if(primary === undefined){
+    primary = "#026FCF";
+}
+else {
+    primary = "#" + primary;
+}
+
+if(links === undefined){
+    links = "#0b62c1";
+}
+else {
+    links = "#" + links;
+}
+
+if(linksHover === undefined){
+    linksHover = "#0050a8";
+}
+else {
+    linksHover = "#" + linksHover;
+}
+
+if(linksExternal === undefined){
+    linksExternal = "#026FCF";
+}
+else {
+    linksExternal = "#" + linksExternal;
+}
+
+less.modifyVars({
+    '@primary': primary,
+    '@links': links,
+    '@linksHover': linksHover,
+    '@linksExternal': linksExternal
+});
+
+less.refreshStyles();

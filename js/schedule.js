@@ -216,7 +216,7 @@ function getWeekSchelude(direction, lib) {
                         staffPresentEnd = to;
                         // Store the row as a variable.
                         staffToday = '<tr class="time--sub time isTodayClass time--with-staff">' +
-                            '<td class="trn"><i class="fa fa-level-up fa-rotate-90"></i> ' + i18n.get("Henkilökunta paikalla") + '</td>' +
+                            '<td class="trn"><i class="fa fa-level-up fa-rotate-90"></i> ' + i18n.get("Palveluaika") + '</td>' +
                             '<td>' + staffPresentStart + ' – ' + staffPresentEnd + '</td>' +
                             '</tr>';
                     }
