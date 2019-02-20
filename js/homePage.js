@@ -38,8 +38,8 @@ function adjustHomePageHeight(delay, openSelect) {
                 newHeight = newHeight + document.getElementById("homePageWidget").scrollHeight;
             }
 
-            if(newHeight < 350) {
-                newHeight = 350;
+            if(newHeight < 320) {
+                newHeight = 320;
             }
             console.log("newHeight " + newHeight)
             if(newHeight !== height) {
