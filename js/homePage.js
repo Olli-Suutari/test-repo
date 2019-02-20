@@ -39,7 +39,10 @@ function adjustHomePageHeight(delay, openSelect) {
             }
 
             if(newHeight < 320 && $(window).width() > 989) {
+                console.log("HEY!")
                 newHeight = 320;
+            } else {
+                console.log($(window).width());
             }
             console.log("newHeight " + newHeight)
             if(newHeight !== height) {
@@ -71,6 +74,29 @@ $(document).ready(function() {
     $('#librarySelector').on('select2:close', function (e) {
         adjustHomePageHeight(0);
     });
+
+    // Add event listener for resizing the window, adjust parent when done so.
+    // https://stackoverflow.com/questions/5489946/jquery-how-to-wait-for-the-end-of-resize-event-and-only-then-perform-an-ac
+    var rtime;
+    var timeout = false;
+    var delta = 200;
+    $(window).resize(function() {
+        rtime = new Date();
+        if (timeout === false) {
+            timeout = true;
+            setTimeout(resizeend, delta);
+        }
+    });
+    function resizeend() {
+        if (new Date() - rtime < delta) {
+            setTimeout(resizeend, delta);
+        } else {
+            timeout = false;
+            if(!isAdjustingHeight) {
+                adjustHomePageHeight(1);
+            }
+        }
+    }
 });
 
 
