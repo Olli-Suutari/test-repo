@@ -1,9 +1,15 @@
 #homePageWidget {
     max-width: 620px;
     background:rgba(0,0,0,0)!important;
-    min-height: 320px;
     display: flex;
     flex-direction: column;
+}
+
+
+@media screen and (min-width: 990px) {
+    #homePageWidget {
+        min-height: 320px;
+    }
 }
 
 /* Homepage widget */

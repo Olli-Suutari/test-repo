@@ -38,7 +38,7 @@ function adjustHomePageHeight(delay, openSelect) {
                 newHeight = newHeight + document.getElementById("homePageWidget").scrollHeight;
             }
 
-            if(newHeight < 320) {
+            if(newHeight < 320 && $(window).width() > 989) {
                 newHeight = 320;
             }
             console.log("newHeight " + newHeight)
