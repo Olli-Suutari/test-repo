@@ -3,7 +3,12 @@
     background:rgba(0,0,0,0)!important;
     display: flex;
     flex-direction: column;
-    min-height: 320px;
+    height: 100%;
+
+}
+
+body, html, .container {
+    height: 100% !important;
 
 }
 
