@@ -150,34 +150,57 @@ function hideModal() {
     adjustParentUrl('', 'service');
 }
 
+var openOnLoad = false;
 function toggleModal(elementPosY) {
     if(isInfoBoxVisible) {
         hideModal();
     }
     else {
-        $('#myModal').modal('show');
-        // Re-bind backdrop event. This is destroyed when modal is hidden.
-        // Bind this, since the default event area is not full page in height.
-        $(".modal-backdrop").on('click', function () {
-            hideModal();
-        });
-        isInfoBoxVisible = true;
-        // Add timeout. This prevents duplicated click events if we have changed library.
-        setTimeout(function() {
-            // Bind closing event. If this is done before generating content, it doesn't work.
-            if(!isModalCloseBinded) {
-                // When clicking close buttons or outside that is not in .modal-backdrop
-                $('#myModal').on('hide.bs.modal', function (e) {
-                    // calling hideModal here would result in a loop.
-                    isInfoBoxVisible = false;
-                    adjustParentHeight(50);
-                    adjustParentUrl('', 'service');
-                });
-                isModalCloseBinded = true;
-            }
-            adjustParentHeight(50, elementPosY)
+        var delay = 0;
+        console.log(openOnLoad);
+        if(openOnLoad) {
+            delay = 50;
+            openOnLoad = false;
+            try {
+                setTimeout(function(){
+                    parent.postMessage({value: $("#myModal").position().top -50, type: 'scroll'}, '*');
+                }, delay + 300);
 
-        }, 100);
+            }
+            catch (e) {
+                console.log("Parent position adjustment failed: " + e);
+            }
+        }
+        function foo(delay) {
+            setTimeout(function() {
+                $('#myModal').modal('show');
+                // Re-bind backdrop event. This is destroyed when modal is hidden.
+                // Bind this, since the default event area is not full page in height.
+                $(".modal-backdrop").on('click', function () {
+                    hideModal();
+                });
+                isInfoBoxVisible = true;
+                // Add timeout. This prevents duplicated click events if we have changed library.
+                setTimeout(function() {
+                    // Bind closing event. If this is done before generating content, it doesn't work.
+                    if(!isModalCloseBinded) {
+                        // When clicking close buttons or outside that is not in .modal-backdrop
+                        $('#myModal').on('hide.bs.modal', function (e) {
+                            // calling hideModal here would result in a loop.
+                            isInfoBoxVisible = false;
+                            adjustParentHeight(50);
+                            adjustParentUrl('', 'service');
+                        });
+                        isModalCloseBinded = true;
+                    }
+                    adjustParentHeight(50, elementPosY)
+
+                }, 100);
+
+            }, delay);
+        }
+        foo(delay);
+
     }
 }
 
@@ -289,10 +312,17 @@ function bindServiceClicks() {
             top: $(this).offset().top-85  // Element position -85,
         }).animate();
         // Show modal.
+        var offSet = e.pageY;
+        // If we trigger the click programmatically, e.pageY will be undefined...
+        if(offSet === undefined) {
+            offSet = e.target;
+            // OffsetTop is always about 200 px too little...
+            offSet = offSet.offsetTop + 200;
+        }
         $('#circle').css("position", "absolute");
-        $('#circle').css("top", e.pageY);
-
-        toggleModal(e.pageY);
+        $('#circle').css("top", offSet);
+        console.log("e.pageY " + e.pageY + " | ta "  +offSet);
+        toggleModal(offSet);
         // Adjust parent url.
         adjustParentUrl($(this).data('name'), "service");
     });
@@ -423,6 +453,7 @@ function asyncFetchServices() {
                 urlUnescapeSpaces = urlUnescapeSpaces.replace(/\(/g, "");
                 urlUnescapeSpaces = urlUnescapeSpaces.replace(/\)/g, "");
                 // Loop services and check if refUrl contains one of them and click if so.
+                var toClick = "";
                 for (var i = 0; i < serviceNames.length; i++) {
                     var escapedName = serviceNames[i].toLowerCase();
                     escapedName = escapedName.replace(/ä/g, "a");
@@ -432,16 +463,15 @@ function asyncFetchServices() {
                     escapedName = escapedName.replace(/_/g, " ");
                     escapedName = escapedName.replace(/-/g, " ");
                     if(urlUnescapeSpaces.indexOf(escapedName) > -1) {
-                        $("li").find('[data-name="'+ serviceNames[i] +'"]').click();
-                        isInfoBoxVisible = true;
-                        try {
-                            setTimeout(function(){
-                                parent.postMessage({value: $("#myModal").position().top -50, type: 'scroll'}, '*');
-                            }, 1300);
-                        }
-                        catch (e) {
-                            console.log("Parent position adjustment failed: " + e);
-                        }
+                        toClick = serviceNames[i];
+
+                        setTimeout(function(){
+                            console.log("!SET TR")
+                            openOnLoad = true;
+                            $("li").find('[data-name="'+ toClick +'"]').click();
+                            isInfoBoxVisible = true;
+                        }, 600);
+
                     }
                 }
             }
