@@ -318,9 +318,7 @@ function bindServiceClicks() {
             // OffsetTop is always about 200 px too little...
             offSet = offSet.offsetTop + 200;
         }
-        $('#circle').css("position", "absolute");
-        $('#circle').css("top", offSet);
-        console.log("e.pageY " + e.pageY + " | ta "  +offSet);
+        //console.log("e.pageY " + e.pageY + " | ta "  +offSet);
         toggleModal(offSet);
         // Adjust parent url.
         adjustParentUrl($(this).data('name'), "service");
@@ -465,10 +463,9 @@ function asyncFetchServices() {
                         toClick = serviceNames[i];
 
                         setTimeout(function(){
-                            console.log("!SET TR")
                             openOnLoad = true;
-                            $("li").find('[data-name="'+ toClick +'"]').click();
                             isInfoBoxVisible = true;
+                            $("li").find('[data-name="'+ toClick +'"]').click();
                         }, 600);
 
                     }
