@@ -157,7 +157,6 @@ function toggleModal(elementPosY) {
     }
     else {
         var delay = 0;
-        console.log(openOnLoad);
         if(openOnLoad) {
             delay = 50;
             openOnLoad = false;
