@@ -150,7 +150,7 @@ function hideModal() {
     adjustParentUrl('', 'service');
 }
 
-function toggleModal() {
+function toggleModal(elementPosY) {
     if(isInfoBoxVisible) {
         hideModal();
     }
@@ -175,7 +175,7 @@ function toggleModal() {
                 });
                 isModalCloseBinded = true;
             }
-            adjustParentHeight(50)
+            adjustParentHeight(50, elementPosY)
 
         }, 100);
     }
@@ -289,7 +289,10 @@ function bindServiceClicks() {
             top: $(this).offset().top-85  // Element position -85,
         }).animate();
         // Show modal.
-        toggleModal();
+        var elementPos = $(this.offsetTop);
+        elementPos = elementPos[0];
+        console.log(elementPos);
+        toggleModal(elementPos);
         // Adjust parent url.
         adjustParentUrl($(this).data('name'), "service");
     });

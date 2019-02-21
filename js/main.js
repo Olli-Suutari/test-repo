@@ -297,7 +297,7 @@ function setAdjustingToFalse() {
 }
 
 var height = 0;
-function adjustParentHeight(delay) {
+function adjustParentHeight(delay, elementPosY) {
     clearTimeout(clearTimer);
     isAdjustingHeight = true;
     delay = delay + 150;
@@ -306,11 +306,22 @@ function adjustParentHeight(delay) {
             var newHeight = 75;
             newHeight = newHeight + document.getElementById("mainContainer").scrollHeight;
             if(isInfoBoxVisible) {
-                var popoverHeight = document.getElementById("modalContentContainer").scrollHeight;
+                var popoverHeight = document.getElementById("myModal").scrollHeight;
+
+                var adjustedPos = newHeight;
+                if(elementPosY !== undefined) {
+                    console.log(newHeight);
+                    adjustedPos = newHeight - elementPosY;
+                }
+                if(popoverHeight > adjustedPos) {
+                    console.log("POH " + popoverHeight + " ADJ P: " + adjustedPos);
+                    newHeight = adjustedPos + popoverHeight +200;
+                }
+                /*
                 if(popoverHeight > 400) {
                     popoverHeight = popoverHeight - 375;
                     newHeight = newHeight + popoverHeight;
-                }
+                }*/
             }
             if(newHeight !== height) {
                 parent.postMessage({value: newHeight, type: 'resize'}, '*');
