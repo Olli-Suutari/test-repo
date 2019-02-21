@@ -315,9 +315,11 @@ function adjustParentHeight(delay, elementPosY) {
                     console.log("adjustedPos: " + adjustedPos);
                 }
                 if(popoverHeight > adjustedPos) {
-                    console.log("popoverHeight: " + popoverHeight + " adjustedPos: " + adjustedPos);
-                    newHeight = adjustedPos + popoverHeight;
+
                 }
+                console.log("popoverHeight: " + popoverHeight + " adjustedPos: " + adjustedPos);
+                newHeight = adjustedPos + popoverHeight;
+
                 /*
                 if(popoverHeight > 400) {
                     popoverHeight = popoverHeight - 375;
