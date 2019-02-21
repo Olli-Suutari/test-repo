@@ -311,14 +311,18 @@ function adjustParentHeight(delay, elementPosY) {
                 var adjustedPos = newHeight;
                 if(elementPosY !== undefined) {
                     console.log("newHeight: " + newHeight + " elementPosY: " + elementPosY);
-                    adjustedPos = adjustedPos - elementPosY;
-                    console.log("adjustedPos: " + adjustedPos);
+                    var offSet = elementPosY - adjustedPos;
+                    console.log(offSet);
+                    console.log(adjustedPos - elementPosY);
+                    //adjustedPos = adjustedPos - elementPosY;
+                    popoverHeight = popoverHeight - adjustedPos;
+                    console.log("popoverHeight: " + popoverHeight);
                 }
-                if(popoverHeight > adjustedPos) {
-
+                if(popoverHeight > newHeight) {
+                    newHeight = newHeight + popoverHeight;
                 }
-                console.log("popoverHeight: " + popoverHeight + " adjustedPos: " + adjustedPos);
-                newHeight = adjustedPos + popoverHeight;
+                console.log("popoverHeight: " + newHeight + " adjustedPos: " + popoverHeight);
+                //newHeight = adjustedPos + popoverHeight;
 
                 /*
                 if(popoverHeight > 400) {
