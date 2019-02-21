@@ -464,7 +464,6 @@ function asyncFetchServices() {
 
                         setTimeout(function(){
                             openOnLoad = true;
-                            isInfoBoxVisible = true;
                             $("li").find('[data-name="'+ toClick +'"]').click();
                         }, 600);
 
