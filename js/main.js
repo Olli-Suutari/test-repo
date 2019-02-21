@@ -306,16 +306,17 @@ function adjustParentHeight(delay, elementPosY) {
             var newHeight = 75;
             newHeight = newHeight + document.getElementById("mainContainer").scrollHeight;
             if(isInfoBoxVisible) {
-                var popoverHeight = document.getElementById("myModal").scrollHeight;
+                var popoverHeight = document.getElementById("myModal").scrollHeight + 300;
 
                 var adjustedPos = newHeight;
                 if(elementPosY !== undefined) {
-                    console.log(newHeight);
-                    adjustedPos = newHeight - elementPosY;
+                    console.log("newHeight: " + newHeight + " elementPosY: " + elementPosY);
+                    adjustedPos = adjustedPos - elementPosY;
+                    console.log("adjustedPos: " + adjustedPos);
                 }
-                if(popoverHeight +350 > adjustedPos) {
-                    console.log("POH " + popoverHeight + " ADJ P: " + adjustedPos);
-                    newHeight = adjustedPos + popoverHeight + 350;
+                if(popoverHeight > adjustedPos) {
+                    console.log("popoverHeight: " + popoverHeight + " adjustedPos: " + adjustedPos);
+                    newHeight = adjustedPos + popoverHeight;
                 }
                 /*
                 if(popoverHeight > 400) {
