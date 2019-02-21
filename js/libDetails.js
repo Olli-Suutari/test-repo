@@ -186,7 +186,7 @@ function bindServiceClicks() {
     if(isServiceClickBinded) {
         return
     }
-    $(".index-item").on('click', function () {
+    $(".index-item").on('click', function (e) {
         var popupText = $(this).data('message');
         // Remove multiple spaces
         popupText = popupText.replace(/^(&nbsp;)+/g, '');
@@ -289,10 +289,10 @@ function bindServiceClicks() {
             top: $(this).offset().top-85  // Element position -85,
         }).animate();
         // Show modal.
-        var elementPos = $(this.offsetTop);
-        elementPos = elementPos[0];
-        console.log(elementPos);
-        toggleModal(elementPos);
+        $('#circle').css("position", "absolute");
+        $('#circle').css("top", e.pageY);
+
+        toggleModal(e.pageY);
         // Adjust parent url.
         adjustParentUrl($(this).data('name'), "service");
     });

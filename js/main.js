@@ -306,7 +306,7 @@ function adjustParentHeight(delay, elementPosY) {
             var newHeight = 75;
             newHeight = newHeight + document.getElementById("mainContainer").scrollHeight;
             if(isInfoBoxVisible) {
-                var popoverHeight = document.getElementById("myModal").scrollHeight + 300;
+                var popoverHeight = document.getElementById("myModal").scrollHeight + 75;
 
                 var adjustedPos = newHeight;
                 if(elementPosY !== undefined) {
