@@ -78,7 +78,6 @@ libraryCssXml.onreadystatechange = function() {
 };
 libraryCssXml.send();
 
-
 if(homePage) {
     var homePageCssXml = new XMLHttpRequest();
     homePageCssXml.open('GET', '../style/homepage.less');
