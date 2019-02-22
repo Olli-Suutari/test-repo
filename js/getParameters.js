@@ -65,11 +65,19 @@ if(refUrl.indexOf("yhteys") > -1 || refUrl.indexOf("contact") > -1) {
     activeTab = 1;
 }
 
+function addCssToDocument(css){
+    var style = document.createElement('style');
+    style.innerText = css;
+    document.head.appendChild(style);
+}
+
 // Generate colors for less.
 var primary = getParamValue('primary');
 var links = getParamValue('links');
 var linksHover = getParamValue('linksHover');
 var linksExternal = getParamValue('linksExternal');
+
+console.log(primary);
 
 if(primary === undefined){
     primary = "#026FCF";
@@ -99,11 +107,64 @@ else {
     linksExternal = "#" + linksExternal;
 }
 
-less.modifyVars({
+primary = "@primary: " + primary + "; ";
+links = "@links: " + links + "; ";
+linksHover = "@linksHover: " + linksHover + "; ";
+linksExternal = "@linksExternal: " + linksExternal + "; ";
+
+var lessVariables = primary + links + linksHover + linksExternal;
+
+/*
+    less.modifyVars({
     '@primary': primary,
     '@links': links,
     '@linksHover': linksHover,
     '@linksExternal': linksExternal
 });
 
-less.refreshStyles();
+less.registerStylesheets().then(
+    function () {
+        console.log("HAHFH");
+
+        less.refreshStyles();
+    }
+);
+*/
+
+
+var client = new XMLHttpRequest();
+client.open('GET', '../style/style.less');
+console.log("HEHHAHA");
+client.onreadystatechange = function() {
+    //console.log(client.responseText);
+    less.render(lessVariables + client.responseText)
+        .then(function(output) {
+            //console.log(output.css)
+            addCssToDocument(output.css);
+        });
+};
+client.send();
+
+var clientTwo = new XMLHttpRequest();
+clientTwo.open('GET', '../style/library.less');
+clientTwo.onreadystatechange = function() {
+    console.log(clientTwo.responseText);
+    less.render(lessVariables + clientTwo.responseText)
+        .then(function(output) {
+            console.log(output.css)
+            addCssToDocument(output.css);
+        });
+};
+clientTwo.send();
+
+var clientThree = new XMLHttpRequest();
+clientThree.open('GET', '../style/homepage.less');
+clientThree.onreadystatechange = function() {
+    console.log(clientThree.responseText);
+    less.render(lessVariables + clientThree.responseText)
+        .then(function(output) {
+            console.log(output.css)
+            addCssToDocument(output.css);
+        });
+};
+clientThree.send();
