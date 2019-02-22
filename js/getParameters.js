@@ -64,11 +64,17 @@ var activeTab = 0;
 if(refUrl.indexOf("yhteys") > -1 || refUrl.indexOf("contact") > -1) {
     activeTab = 1;
 }
-
+// https://stackoverflow.com/questions/3922139/add-css-to-head-with-javascript
 function addCssToDocument(css){
-    var style = document.createElement('style');
-    style.innerText = css;
-    document.head.appendChild(style);
+    var head = document.getElementsByTagName('head')[0];
+    var s = document.createElement('style');
+    s.setAttribute('type', 'text/css');
+    if (s.styleSheet) {   // IE
+        s.styleSheet.cssText = css;
+    } else {                // the world
+        s.appendChild(document.createTextNode(css));
+    }
+    head.appendChild(s);
 }
 
 // Generate colors for less.
@@ -140,6 +146,7 @@ client.onreadystatechange = function() {
     less.render(lessVariables + client.responseText)
         .then(function(output) {
             //console.log(output.css)
+            //console.log(output.css);
             addCssToDocument(output.css);
         });
 };
@@ -148,10 +155,10 @@ client.send();
 var clientTwo = new XMLHttpRequest();
 clientTwo.open('GET', '../style/library.less');
 clientTwo.onreadystatechange = function() {
-    console.log(clientTwo.responseText);
+    //console.log(clientTwo.responseText);
     less.render(lessVariables + clientTwo.responseText)
         .then(function(output) {
-            console.log(output.css)
+            //console.log(output.css)
             addCssToDocument(output.css);
         });
 };
@@ -160,10 +167,10 @@ clientTwo.send();
 var clientThree = new XMLHttpRequest();
 clientThree.open('GET', '../style/homepage.less');
 clientThree.onreadystatechange = function() {
-    console.log(clientThree.responseText);
+    //console.log(clientThree.responseText);
     less.render(lessVariables + clientThree.responseText)
         .then(function(output) {
-            console.log(output.css)
+            //console.log(output.css)
             addCssToDocument(output.css);
         });
 };
