@@ -5055,8 +5055,8 @@
           var d = e(a);
           c._defaults = d;
           var f = b ? e(b) : {};
-          //Object.assign(c, d, f)
           // Object.assign(c, d, f); would crash IE 11, fix this with a polyfill.
+          // See: https://github.com/less/less.js/issues/3321
           if (navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1)) {
            // Must be writable: true, enumerable: false, configurable: true
            Object.defineProperty(Object, "assign", {

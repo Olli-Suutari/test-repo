@@ -18,10 +18,12 @@ function getParamValue(paramName) {
             return pArr[1]; //return value
     }
 }
+
 library = getParamValue('lib');
 lang = getParamValue('lang');
 city = getParamValue('city');
 consortium = getParamValue('consortium');
+
 /* Large schedules are used in iDiD info screens. */
 if(getParamValue('large') === 'true') {
     largeSchedules = true;
@@ -83,8 +85,6 @@ var links = getParamValue('links');
 var linksHover = getParamValue('linksHover');
 var linksExternal = getParamValue('linksExternal');
 
-console.log(primary);
-
 if(primary === undefined){
     primary = "#026FCF";
 }
@@ -113,65 +113,51 @@ else {
     linksExternal = "#" + linksExternal;
 }
 
+// Generate lessVariables.
 primary = "@primary: " + primary + "; ";
 links = "@links: " + links + "; ";
 linksHover = "@linksHover: " + linksHover + "; ";
 linksExternal = "@linksExternal: " + linksExternal + "; ";
-
 var lessVariables = primary + links + linksHover + linksExternal;
 
-/*
-    less.modifyVars({
-    '@primary': primary,
-    '@links': links,
-    '@linksHover': linksHover,
-    '@linksExternal': linksExternal
-});
-
-less.registerStylesheets().then(
-    function () {
-        console.log("HAHFH");
-
-        less.refreshStyles();
-    }
-);
-*/
-
-
-var client = new XMLHttpRequest();
-client.open('GET', '../style/style.less');
-console.log("HEHHAHA");
-client.onreadystatechange = function() {
-    //console.log(client.responseText);
-    less.render(lessVariables + client.responseText)
+var styleCssXml = new XMLHttpRequest();
+styleCssXml.open('GET', '../style/style.less');
+styleCssXml.onreadystatechange = function() {
+    //console.log(styleCssXml.responseText);
+    less.render(lessVariables + styleCssXml.responseText)
         .then(function(output) {
             //console.log(output.css)
             //console.log(output.css);
             addCssToDocument(output.css);
         });
 };
-client.send();
+styleCssXml.send();
 
-var clientTwo = new XMLHttpRequest();
-clientTwo.open('GET', '../style/library.less');
-clientTwo.onreadystatechange = function() {
-    //console.log(clientTwo.responseText);
-    less.render(lessVariables + clientTwo.responseText)
-        .then(function(output) {
-            //console.log(output.css)
-            addCssToDocument(output.css);
-        });
-};
-clientTwo.send();
+// TO DO: This is still included in stand-alone schedules that are not large...
+if(!largeSchedules && !homePage) {
+    var libraryCssXml = new XMLHttpRequest();
+    libraryCssXml.open('GET', '../style/library.less');
+    libraryCssXml.onreadystatechange = function() {
+        //console.log(libraryCssXml.responseText);
+        less.render(lessVariables + libraryCssXml.responseText)
+            .then(function(output) {
+                //console.log(output.css)
+                addCssToDocument(output.css);
+            });
+    };
+    libraryCssXml.send();  
+}
 
-var clientThree = new XMLHttpRequest();
-clientThree.open('GET', '../style/homepage.less');
-clientThree.onreadystatechange = function() {
-    //console.log(clientThree.responseText);
-    less.render(lessVariables + clientThree.responseText)
-        .then(function(output) {
-            //console.log(output.css)
-            addCssToDocument(output.css);
-        });
-};
-clientThree.send();
+if(homePage) {
+    var homePageCssXml = new XMLHttpRequest();
+    homePageCssXml.open('GET', '../style/homepage.less');
+    homePageCssXml.onreadystatechange = function() {
+        //console.log(homePageCssXml.responseText);
+        less.render(lessVariables + homePageCssXml.responseText)
+            .then(function(output) {
+                //console.log(output.css)
+                addCssToDocument(output.css);
+            });
+    };
+    homePageCssXml.send();
+}
