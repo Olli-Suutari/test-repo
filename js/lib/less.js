@@ -5059,7 +5059,6 @@
           // Object.assign(c, d, f); would crash IE 11, fix this with a polyfill.
           if (navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1)) {
            // Must be writable: true, enumerable: false, configurable: true
-           console.log( c + d + f )
            Object.defineProperty(Object, "assign", {
             //var varArgs = c, d, f;
             value: function assign(target, varArgs) { // .length of function is 2
