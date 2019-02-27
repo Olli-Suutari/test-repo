@@ -31,6 +31,10 @@ var dict = {
         en: "Reittiopas ja julkinen liikenne",
         en: "Route and public transportation",
     },
+    "Reittiopas": {
+        en: "Reittiopas",
+        en: "Navigation to location",
+    },
     "Linja-autot": {
         fi: "Linja-autot",
         en: "Buses",

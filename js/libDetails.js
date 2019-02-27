@@ -66,17 +66,34 @@ function asyncFetchGenericDetails() {
                 }
             }
             if (transitIsEmpty) {
-
                 var coordinates = data.address.coordinates;
-                if(coordinates != null && data.address.street != null && data.address.city != null) {
+                var cityName = data.address.city;
+                if(coordinates != null && data.address.street != null && cityName != null) {
                     transitIsEmpty = false;
                     var linkToTransitInfo = data.address.street + ", "  + data.address.city +
                         "::" + coordinates.lat + ", "  + coordinates.lon ;
+
+                    var infoText = i18n.get("Reittiopas ja julkinen liikenne");
+
                     linkToTransitInfo = "https://opas.matka.fi/reitti/POS/" + linkToTransitInfo;
-                    console.log(linkToTransitInfo)
                     linkToTransitInfo = encodeURI(linkToTransitInfo);
-                    console.log(linkToTransitInfo)
-                    $('#transitBody').append('<p><a target="_blank" href="' + linkToTransitInfo + '">' + i18n.get("Reittiopas ja julkinen liikenne") + '</a></p>')
+                    // Matka.fi does not support all cities for public transport details, see: https://www.traficom.fi/fi/asioi-kanssamme/reittiopas
+                    if(cityName !== "Jyväskylä") {
+                        linkToTransitInfo = "https://www.google.com";
+                        if(lang === "fi") {
+                            linkToTransitInfo = "https://www.google.fi"
+                        }
+                        linkToTransitInfo = linkToTransitInfo + "/maps/dir//";
+                        linkToTransitInfo = linkToTransitInfo + data.address.street + ", "  + data.address.zipcode +
+                            ", " + data.address.city + "/@" + coordinates.lat + ", "  + coordinates.lon + ", 15z/";
+                        infoText = i18n.get("Reittiopas");
+                    }
+                    $('#transitBody').append('<p><a target="_blank" href="' + linkToTransitInfo + '">' + infoText + '</a></p>')
+                }
+
+                if (data.extra.transit.buses != null && data.extra.transit.buses !== "") {
+                    transitIsEmpty = false;
+                    $('#transitBody').append('<p>' + i18n.get("Linja-autot") + ': ' + data.extra.transit.buses + '</p>')
                 }
                 if (data.extra.transit.transit_directions != null && data.extra.transit.transit_directions.length != 0) {
                     transitIsEmpty = false;
