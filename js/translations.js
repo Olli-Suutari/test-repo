@@ -27,7 +27,12 @@ var dict = {
         fi: "Ohjeita liikenteeseen",
         en: "Instructions for transit",
     },
+    "Reittiopas ja julkinen liikenne": {
+        en: "Reittiopas ja julkinen liikenne",
+        en: "Route and public transportation",
+    },
     "Linja-autot": {
+        fi: "Linja-autot",
         en: "Buses",
     },
     "Pysäköinti": {

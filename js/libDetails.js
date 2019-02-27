@@ -66,9 +66,17 @@ function asyncFetchGenericDetails() {
                 }
             }
             if (transitIsEmpty) {
-                if (data.extra.transit.buses != null && data.extra.transit.buses !== "") {
+
+                var coordinates = data.address.coordinates;
+                if(coordinates != null && data.address.street != null && data.address.city != null) {
                     transitIsEmpty = false;
-                    $('#transitBody').append('<p>' + i18n.get("Linja-autot") + ': ' + data.extra.transit.buses + '</p>')
+                    var linkToTransitInfo = data.address.street + ", "  + data.address.city +
+                        "::" + coordinates.lat + ", "  + coordinates.lon ;
+                    linkToTransitInfo = "https://opas.matka.fi/reitti/POS/" + linkToTransitInfo;
+                    console.log(linkToTransitInfo)
+                    linkToTransitInfo = encodeURI(linkToTransitInfo);
+                    console.log(linkToTransitInfo)
+                    $('#transitBody').append('<p><a target="_blank" href="' + linkToTransitInfo + '">' + i18n.get("Reittiopas ja julkinen liikenne") + '</a></p>')
                 }
                 if (data.extra.transit.transit_directions != null && data.extra.transit.transit_directions.length != 0) {
                     transitIsEmpty = false;
@@ -81,7 +89,6 @@ function asyncFetchGenericDetails() {
                     $('#transitBody').append('<p>' + parking_instructions + '</p>')
                 }
             }
-
             if(!transitIsEmpty) {
                 $('#transitDetails').css('display', 'block');
             }
