@@ -18,14 +18,12 @@ var links = getParamValue('links');
 var linksHover = getParamValue('linksHover');
 var linksExternal = getParamValue('linksExternal');
 var btnHover =  getParamValue('btnHover');
-
 if(primary === undefined){
     primary = "#026FCF";
 }
 else {
     primary = "#" + primary;
 }
-
 if(links === undefined){
     links = "#0b62c1";
 }
@@ -46,15 +44,12 @@ if(linksExternal === undefined){
 else {
     linksExternal = "#" + linksExternal;
 }
-console.log(btnHover);
-
 if(btnHover === undefined){
     btnHover = primary;
 }
 else {
     btnHover = "#" + btnHover;
 }
-
 
 // Generate lessVariables.
 primary = "@primary: " + primary + "; ";
