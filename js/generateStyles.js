@@ -17,6 +17,7 @@ var primary = getParamValue('primary');
 var links = getParamValue('links');
 var linksHover = getParamValue('linksHover');
 var linksExternal = getParamValue('linksExternal');
+var btnHover =  getParamValue('btnHover');
 
 if(primary === undefined){
     primary = "#026FCF";
@@ -45,13 +46,23 @@ if(linksExternal === undefined){
 else {
     linksExternal = "#" + linksExternal;
 }
+console.log(btnHover);
+
+if(btnHover === undefined){
+    btnHover = primary;
+}
+else {
+    btnHover = "#" + btnHover;
+}
+
 
 // Generate lessVariables.
 primary = "@primary: " + primary + "; ";
 links = "@links: " + links + "; ";
 linksHover = "@linksHover: " + linksHover + "; ";
 linksExternal = "@linksExternal: " + linksExternal + "; ";
-var lessVariables = primary + links + linksHover + linksExternal;
+btnHover = "@btnHover: " + btnHover + "; ";
+var lessVariables = primary + links + linksHover + linksExternal + btnHover;
 
 // Read less stylesheet, generate .css and add it to header.
 var styleCssXml = new XMLHttpRequest();
