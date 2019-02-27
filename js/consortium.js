@@ -184,7 +184,7 @@ $(document).ready(function() {
                         city: data.items[i].city.toString(),
                         street: data.items[i].address.street,
                         zipcode: data.items[i].address.zipcode,
-                        coordinates: data.items[i].address.coordinates});
+                        coordinates: data.items[i].coordinates});
                 }
             }
             generateSelect();
@@ -202,7 +202,7 @@ $(document).ready(function() {
                         city: data.items[i].city.toString(),
                         street: data.items[i].address.street,
                         zipcode: data.items[i].address.zipcode,
-                        coordinates: data.items[i].address.coordinates});
+                        coordinates: data.items[i].coordinates});
                 }
             }
             generateSelect();
@@ -219,7 +219,7 @@ $(document).ready(function() {
                     city: data.items[i].city.toString(),
                     street: data.items[i].address.street,
                     zipcode: data.items[i].address.zipcode,
-                    coordinates: data.items[i].address.coordinates
+                    coordinates: data.items[i].coordinates
                 });
                 /*
                 if(data.items[i].branch_type !== "mobile") {
