@@ -323,23 +323,19 @@ function adjustParentHeight(delay, elementPosY) {
                     newHeight = newHeight + popoverHeight;
                 }*/
             }
-
             if (navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1)) {
                 //alert("Please dont use IE.");
                 console.log(newHeight);
-                if(newHeight < 300) {
+                if(newHeight < 200) {
                     newHeight = newHeight + 3000;
                     console.log(newHeight)
                 }
             }
-
-
             if(newHeight !== height) {
                 parent.postMessage({value: newHeight, type: 'resize'}, '*');
-            }
+            }    console.log(elementPosY);
             height = newHeight;
             setAdjustingToFalse();
-
         }
         catch (e) {
             console.log("iframe size adjustment failed: " + e);
@@ -350,10 +346,6 @@ function adjustParentHeight(delay, elementPosY) {
   https://gist.github.com/olli-suutari-jkl/8d6ccbc7d3c4e3b563bd5b7cbee095e2
  */
 function adjustParentUrl(toAdd, type) {
-    /*
-    if(isFFPrivate) {
-        //return;
-    }*/
     refUrl = refUrl.replace(/ /g, "-");
     refUrl = refUrl.replace(/%20/g, "-");
     refUrl = refUrl.replace(/\(/g, "");
@@ -365,7 +357,6 @@ function adjustParentUrl(toAdd, type) {
     toAdd = toAdd.replace(/ö/g, "o");
     toAdd = toAdd.replace(/\(/g, "");
     toAdd = toAdd.replace(/\)/g, "");
-
     // Remove item from url, if it already exists.
     refUrl = refUrl.replace(new RegExp(toAdd,"i"), "");
     // Check for services.

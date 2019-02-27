@@ -157,6 +157,7 @@ function toggleModal(elementPosY) {
     }
     else {
         var delay = 0;
+        // If we are opening a service by navigating to it via url, delay so page can finish adjusting in peace.
         if(openOnLoad) {
             delay = 50;
             openOnLoad = false;
@@ -170,7 +171,7 @@ function toggleModal(elementPosY) {
                 console.log("Parent position adjustment failed: " + e);
             }
         }
-        function foo(delay) {
+        function showModal(delay) {
             setTimeout(function() {
                 $('#myModal').modal('show');
                 // Re-bind backdrop event. This is destroyed when modal is hidden.
@@ -198,8 +199,7 @@ function toggleModal(elementPosY) {
 
             }, delay);
         }
-        foo(delay);
-
+        showModal(delay);
     }
 }
 
@@ -293,7 +293,6 @@ function bindServiceClicks() {
                 console.log("Parent position adjustment failed: " + e);
             }
         });
-
         // Check if text contains headers..
         if(popupText.indexOf("<h") !== -1) {
             $("#modalTitle").replaceWith('<h1 id="modalTitle" class="modal-title underlined-title">' +
@@ -303,7 +302,6 @@ function bindServiceClicks() {
             $("#modalTitle").replaceWith('<h1 id="modalTitle" class="modal-title modal-title-small underlined-title">' +
                 $(this).data('name') + '</h1>');
         }
-
         // Use animate, $('#myModal').css('top', -posY); works pretty badly.
         $('#myModal').css({
             position: 'absolute',
@@ -461,12 +459,10 @@ function asyncFetchServices() {
                     escapedName = escapedName.replace(/-/g, " ");
                     if(urlUnescapeSpaces.indexOf(escapedName) > -1) {
                         toClick = serviceNames[i];
-
                         setTimeout(function(){
                             openOnLoad = true;
                             $("li").find('[data-name="'+ toClick +'"]').click();
                         }, 600);
-
                     }
                 }
             }
@@ -507,7 +503,6 @@ function asyncFetchDepartments() {
     // Return the Promise so caller can't change the Deferred
     return departmentsDeferred.promise();
 }
-
 
 function generateImages(data) {
     var imageListDeferred = jQuery.Deferred();

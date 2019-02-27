@@ -53,14 +53,12 @@ linksHover = "@linksHover: " + linksHover + "; ";
 linksExternal = "@linksExternal: " + linksExternal + "; ";
 var lessVariables = primary + links + linksHover + linksExternal;
 
+// Read less stylesheet, generate .css and add it to header.
 var styleCssXml = new XMLHttpRequest();
 styleCssXml.open('GET', '../style/style.less');
 styleCssXml.onreadystatechange = function() {
-    //console.log(styleCssXml.responseText);
     less.render(lessVariables + styleCssXml.responseText)
         .then(function(output) {
-            //console.log(output.css)
-            //console.log(output.css);
             addCssToDocument(output.css);
         });
 };
@@ -77,7 +75,7 @@ libraryCssXml.onreadystatechange = function() {
         });
 };
 libraryCssXml.send();
-
+// HomePage stylings.
 if(homePage) {
     var homePageCssXml = new XMLHttpRequest();
     homePageCssXml.open('GET', '../style/homepage.less');
