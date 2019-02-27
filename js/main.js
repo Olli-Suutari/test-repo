@@ -333,7 +333,7 @@ function adjustParentHeight(delay, elementPosY) {
             }
             if(newHeight !== height) {
                 parent.postMessage({value: newHeight, type: 'resize'}, '*');
-            }    console.log(elementPosY);
+            }
             height = newHeight;
             setAdjustingToFalse();
         }
