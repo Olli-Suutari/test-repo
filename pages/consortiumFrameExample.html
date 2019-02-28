@@ -15,6 +15,9 @@
   css.type = "text/css";
   css.innerHTML = '#libFrame { transition: height 800ms; }';
   document.head.appendChild(css);
+
+  // LibId is used to adjust selected library, if changing language.
+  var libId;
   // https://stackoverflow.com/questions/25098021/securityerror-blocked-a-frame-with-origin-from-accessing-a-cross-origin-frame
   window.addEventListener('message', function(event) {
     var data = event.data;
@@ -56,6 +59,14 @@
       }
       catch (e) {
         console.log("Redirect failed: " + e);
+      }
+    }
+    else if(data.type === "libId") {
+      try {
+        libId = data.value;
+      }
+      catch (e) {
+        console.log("libId failed to update: " + e);
       }
     }
   });

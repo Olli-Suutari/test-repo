@@ -382,7 +382,6 @@ function adjustParentUrl(toAdd, type) {
     }
     // Loop libraries and check if refUrl contains one of them, if so remove it.
     if(type === "library") {
-        
         for (var i = 0; i < libraryList.length; i++) {
             var libraryName = libraryList[i].text.toLowerCase();
             libraryName = libraryName.replace(/ /g, "-");
@@ -408,6 +407,15 @@ function adjustParentUrl(toAdd, type) {
     }
     catch (e) {
         console.log("Parent url adjustment failed: " + e);
+    }
+}
+
+function adjustParentLibId(libId) {
+    try {
+        parent.postMessage({value: libId, type: 'libId'}, '*');
+    }
+    catch (e) {
+        console.log("Parent libId adjustment failed: " + e);
     }
 }
 

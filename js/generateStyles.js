@@ -98,8 +98,8 @@ if(homePage) {
 
 
 var digiTransitXml = new XMLHttpRequest();
-digiTransitXml.contentType = "application/graphql";
-digiTransitXml.open('POST', 'https://api.digitransit.fi/routing/v1/routers/finland/index/graphql');
+digiTransitXml.contentType = 'application/graphql';
+digiTransitXml.open('POST', 'https://api.digitransit.fi/graphiql/finland');
 digiTransitXml.onreadystatechange = function() {
     console.log(digiTransitXml.responseText);
 };
