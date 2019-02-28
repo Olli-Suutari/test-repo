@@ -410,13 +410,50 @@ function adjustParentUrl(toAdd, type) {
     }
 }
 
+function setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+
+function eraseCookie(name) {
+    console.log("E: cookies");
+    var cookies = document.cookie.split(";");
+
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i];
+        var eqPos = cookie.indexOf("=");
+        var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    }
+}
+
 function adjustParentLibId(libId, lang) {
+    console.log("SET C");
+    eraseCookie('testC');
+    setCookie('testC', libId + ',' + lang, 1);
+    /*
     try {
         parent.postMessage({value: libId, lang: lang, type: 'libId'}, '*');
     }
     catch (e) {
         console.log("Parent libId adjustment failed: " + e);
-    }
+    }*/
 }
 
 // divClone & active tab are used with consortium.js
@@ -507,4 +544,23 @@ $(document).ready(function() {
             }
         }
     }
+
+
+    eraseCookie();
+
+    $(window).on('beforeunload', function(e) {
+        eraseCookie()
+    });
+
+
+    var x = getCookie('testC');
+    setTimeout(function() {
+        if (x) {
+            console.log("FOUND! ");
+            console.log(x);
+        }
+    }, 259);
+
+
+
 }); // OnReady
