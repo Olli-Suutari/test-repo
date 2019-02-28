@@ -194,7 +194,7 @@ function getDaySchelude(direction, lib) {
             $("#weekSchelude").replaceWith('<tbody id="weekSchelude" class="schedules-weekly">' + "<tr><td></td></tr>");
             $('#dayInfo').replaceWith('<span id="dayInfo" style="display: none" class="info-text"><i class="fa fa-info-circle" > </i></span>');
             $('#scheduleInfo').replaceWith('<span id="scheduleInfo" class="info-span info-text"><i class="fa fa-info-circle" > </i> '
-                + i18n.get("Suljettu") + '</span>');
+                + i18n.get("Ei aukioloaikoja") + '</span>');
             return;
         }
         var date = moment().add(weekCounter, 'weeks');
