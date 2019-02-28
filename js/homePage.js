@@ -66,7 +66,7 @@ $(document).ready(function() {
         adjustHomePageHeight(0);
     });
     $('#librarySelector').on('select2:close', function (e) {
-        selectIsOpen = true;
+        selectIsOpen = false;
         adjustHomePageHeight(0);
     });
 
