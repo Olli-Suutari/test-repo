@@ -380,9 +380,21 @@ function adjustParentUrl(toAdd, type) {
         refUrl = refUrl.replace(/yhteystiedot/g, "");
         refUrl = refUrl.replace(/contacts/g, "");
     }
-    // If changing library, clean up the url.
+    // Loop libraries and check if refUrl contains one of them, if so remove it.
     if(type === "library") {
-        refUrl = refUrl.replace(/\?(.*)/g, "?");
+        
+        for (var i = 0; i < libraryList.length; i++) {
+            var libraryName = libraryList[i].text.toLowerCase();
+            libraryName = libraryName.replace(/ /g, "-");
+            libraryName = libraryName.replace(/ä/g, "a");
+            libraryName = libraryName.replace(/ö/g, "o");
+            libraryName = libraryName.replace(/\(/g, "");
+            libraryName = libraryName.replace(/\)/g, "");
+            if(refUrl.indexOf(libraryName.toLowerCase()) > -1) {
+                refUrl = refUrl.replace(
+                    new RegExp(libraryName,"i"), "");
+            }
+        }
     }
     if(toAdd !== ''){
         refUrl = refUrl + "?" + toAdd;
