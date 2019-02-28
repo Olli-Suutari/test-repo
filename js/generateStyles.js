@@ -98,9 +98,9 @@ if(homePage) {
 
 
 var digiTransitXml = new XMLHttpRequest();
-digiTransitXml.contentType = 'application/graphql';
-digiTransitXml.open('POST', 'https://api.digitransit.fi/graphiql/finland');
+digiTransitXml.open('POST', 'https://api.digitransit.fi/routing/v1/routers/finland/index/graphql');
+digiTransitXml.setRequestHeader('Content-Type', 'application/graphql');
 digiTransitXml.onreadystatechange = function() {
-    console.log(digiTransitXml.responseText);
+    //console.log(digiTransitXml.responseText);
 };
 digiTransitXml.send('{ stopsByRadius(lat:62.23846200,lon:25.74279600,radius:15000) { edges { node { stop { gtfsId name } distance } } } }');

@@ -410,9 +410,9 @@ function adjustParentUrl(toAdd, type) {
     }
 }
 
-function adjustParentLibId(libId) {
+function adjustParentLibId(libId, lang) {
     try {
-        parent.postMessage({value: libId, type: 'libId'}, '*');
+        parent.postMessage({value: libId, lang: lang, type: 'libId'}, '*');
     }
     catch (e) {
         console.log("Parent libId adjustment failed: " + e);

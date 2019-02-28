@@ -279,7 +279,7 @@ $(document).ready(function() {
                 }
                 // Adjust parent url.
                 adjustParentUrl(libName, "library");
-                adjustParentLibId(library);
+                adjustParentLibId(library, lang);
             }
 
             if(homePage) {
