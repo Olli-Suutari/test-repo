@@ -270,7 +270,7 @@ function getDaySchelude(direction, lib) {
                         dayEnd = to;
                     }
                     // If staff is present.
-                    if (time.staff) {
+                    if (time.status === 1) {
                         staffPresentStart = from;
                         staffPresentEnd = to;
                         // Store the row as a variable.
