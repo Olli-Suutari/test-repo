@@ -71,7 +71,7 @@ $(document).ready(function() {
     });
 
     setTimeout(function(){
-        var bodyHeight = $( "body" ).height();
+        var bodyHeight = $( "body" ).height() -15;
         if(bodyHeight > 300) {
             $('#homePageWidget').css("min-height", bodyHeight);
             console.log("bodyHeight " + bodyHeight);
