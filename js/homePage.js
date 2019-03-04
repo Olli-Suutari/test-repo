@@ -30,7 +30,7 @@ function adjustHomePageHeight(delay) {
     delay = delay + 150;
     setTimeout(function(){
         try {
-            var newHeight = 15;
+            var newHeight = 0;
             if(selectIsOpen) {
                 newHeight = 650;
             }
