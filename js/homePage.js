@@ -89,10 +89,10 @@ $(document).ready(function() {
         } else {
             timeout = false;
             if(!isAdjustingHeight) {
-                //console.log("RESIZE:");
+                console.log("RESIZE:");
                 var bodyHeight = $( "body" ).height();
                 $('#homePageWidget').css("min-height", bodyHeight);
-                console.log(bodyHeight);
+                console.log("bodyHeight " + bodyHeight);
                 adjustHomePageHeight(1);
             }
         }
