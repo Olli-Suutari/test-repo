@@ -72,7 +72,7 @@ $(document).ready(function() {
 
     setTimeout(function(){
         var bodyHeight = $( "body" ).height() -15;
-        if(bodyHeight > 300) {
+        if(bodyHeight > 235) {
             $('#homePageWidget').css("min-height", bodyHeight);
             console.log("bodyHeight " + bodyHeight);
         }
