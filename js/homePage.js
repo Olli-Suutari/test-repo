@@ -76,7 +76,8 @@ $(document).ready(function() {
             $('#homePageWidget').css("min-height", bodyHeight);
             console.log("bodyHeight " + bodyHeight);
         }
-    }, 500);
+        // If we do something like timeout 500, the size will go crazy!
+    }, 1000);
 
     // Add event listener for resizing the window, adjust parent when done so.
     // https://stackoverflow.com/questions/5489946/jquery-how-to-wait-for-the-end-of-resize-event-and-only-then-perform-an-ac
