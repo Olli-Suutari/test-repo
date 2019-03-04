@@ -72,7 +72,7 @@ $(document).ready(function() {
 
     setTimeout(function(){
         var bodyHeight = $( "body" ).height();
-        $('#homePageWidget').css("max-height", bodyHeight);
+        $('#homePageWidget').css("min-height", bodyHeight);
         console.log("bodyHeight " + bodyHeight);
     }, 1000);
 
