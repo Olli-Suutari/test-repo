@@ -76,6 +76,7 @@ $(document).ready(function() {
     var timeout = false;
     var delta = 200;
     $(window).resize(function() {
+
         rtime = new Date();
         if (timeout === false) {
             timeout = true;
@@ -88,6 +89,10 @@ $(document).ready(function() {
         } else {
             timeout = false;
             if(!isAdjustingHeight) {
+                //console.log("RESIZE:");
+                var bodyHeight = $( "body" ).height();
+                $('#homePageWidget').css("min-height", bodyHeight);
+                console.log(bodyHeight);
                 adjustHomePageHeight(1);
             }
         }
