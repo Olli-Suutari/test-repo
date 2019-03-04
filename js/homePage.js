@@ -70,6 +70,12 @@ $(document).ready(function() {
         adjustHomePageHeight(0);
     });
 
+    setTimeout(function(){
+        var bodyHeight = $( "body" ).height();
+        $('#homePageWidget').css("max-height", bodyHeight);
+        console.log("bodyHeight " + bodyHeight);
+    }, 1000);
+
     // Add event listener for resizing the window, adjust parent when done so.
     // https://stackoverflow.com/questions/5489946/jquery-how-to-wait-for-the-end-of-resize-event-and-only-then-perform-an-ac
     var rtime;
@@ -89,10 +95,6 @@ $(document).ready(function() {
         } else {
             timeout = false;
             if(!isAdjustingHeight) {
-                console.log("RESIZE:");
-                var bodyHeight = $( "body" ).height();
-                $('#homePageWidget').css("min-height", bodyHeight);
-                console.log("bodyHeight " + bodyHeight);
                 adjustHomePageHeight(1);
             }
         }
