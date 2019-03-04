@@ -74,7 +74,6 @@ $(document).ready(function() {
         var bodyHeight = $( "body" ).height() -15;
         if(bodyHeight > 275) {
             $('#homePageWidget').css("min-height", bodyHeight);
-            console.log("bodyHeight " + bodyHeight);
         }
         // If we do something like timeout 500, the size will go crazy!
     }, 1000);
@@ -85,7 +84,6 @@ $(document).ready(function() {
     var timeout = false;
     var delta = 200;
     $(window).resize(function() {
-
         rtime = new Date();
         if (timeout === false) {
             timeout = true;
@@ -103,7 +101,6 @@ $(document).ready(function() {
         }
     }
 });
-
 
 // Function for generating the period info of the schedule.
 function generateScheduleInfo(data) {
