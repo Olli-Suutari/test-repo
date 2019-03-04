@@ -8,13 +8,15 @@ html, body {
     display: flex;
     flex-direction: column;
     transition: min-height 400ms;
+    min-height: 300px;
 }
 
+/* Iframes cannot detect parent width...
 @media screen and (min-width: 767px) {
     #homePageWidget {
         min-height: 300px;
     }
-}
+}*/
 
 /* Homepage widget */
 #btnOpenLibryPage {
