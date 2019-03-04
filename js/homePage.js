@@ -71,10 +71,12 @@ $(document).ready(function() {
     });
 
     setTimeout(function(){
-        var bodyHeight = $( "body" ).height() -20;
-        $('#homePageWidget').css("min-height", bodyHeight);
-        console.log("bodyHeight " + bodyHeight);
-    }, 850);
+        var bodyHeight = $( "body" ).height();
+        if(bodyHeight > 300) {
+            $('#homePageWidget').css("min-height", bodyHeight);
+            console.log("bodyHeight " + bodyHeight);
+        }
+    }, 1000);
 
     // Add event listener for resizing the window, adjust parent when done so.
     // https://stackoverflow.com/questions/5489946/jquery-how-to-wait-for-the-end-of-resize-event-and-only-then-perform-an-ac
