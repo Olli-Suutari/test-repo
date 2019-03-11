@@ -38,9 +38,12 @@ console.log("src "  + src);
 
 console.log("src "  + src);
 
-getScript(src + "/lib/jquery-3.3.1.min.js", foo());
+getScript(src + "lib/jquery-3.3.1.min.js", foo());
 
-        //$( "#mainContainer" ).load( "homePage.html" );
+
+
+
+//$( "#mainContainer" ).load( "homePage.html" );
         // script is now loaded and executed.
         // put your dependent JS here.
         //foo();
@@ -51,6 +54,16 @@ getScript(src + "/lib/jquery-3.3.1.min.js", foo());
                     .done((data) => {
                         //console.info(data); // output the content of the html file
                         var head = data.match(/<head[^>]*>[\s\S]*<\/head>/gi);
+
+
+                        src = src.replace("js/", "");
+
+                        console.log(src);
+                        console.log(head);
+
+                        // Replace paths
+                        head = head.toString().replace(/(\.\.\/)/g, src);
+
                         var body = data.match(/<body[^>]*>[\s\S]*<\/body>/gi);
                         console.log(head);
                         $("head").append(head);
