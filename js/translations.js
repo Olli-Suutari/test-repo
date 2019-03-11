@@ -232,3 +232,5 @@ var dict = {
         en: "Open the library details",
     },
 };
+
+console.log("TRANSLATIONS DICT LOAD.")
