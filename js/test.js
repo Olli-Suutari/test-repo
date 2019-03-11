@@ -29,10 +29,16 @@ var map;
 
 
 
-getScript("../js/lib/jquery-3.3.1.min.js", foo());
+var scripts = document.getElementsByTagName("script"),
+    src = scripts[scripts.length-1].src;
 
+console.log("src "  + src);
 
+        src = src.replace("test.js", "");
 
+console.log("src "  + src);
+
+getScript(src + "/lib/jquery-3.3.1.min.js", foo());
 
         //$( "#mainContainer" ).load( "homePage.html" );
         // script is now loaded and executed.
@@ -41,7 +47,7 @@ getScript("../js/lib/jquery-3.3.1.min.js", foo());
 
         function foo() {
             setTimeout(function(){
-                $.get("homePageNew.html")
+                $.get(src + "../pages/homePageNew.html")
                     .done((data) => {
                         //console.info(data); // output the content of the html file
                         var head = data.match(/<head[^>]*>[\s\S]*<\/head>/gi);
