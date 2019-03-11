@@ -71,9 +71,8 @@ $(document).ready(function() {
     });
 
     setTimeout(function(){
-        var bodyHeight = $( "body" ).height() -15;
-        if(bodyHeight > 275) {
-            $('#homePageWidget').css("min-height", bodyHeight);
+        if($( "body" ).height() > 200) {
+            $('#homePageWidget').css("min-height", $( "body" ).height() -18);
         }
         // If we do something like timeout 500, the size will go crazy!
     }, 1000);
@@ -201,7 +200,7 @@ function getDaySchelude(direction, lib) {
             $("#weekSchelude").replaceWith('<tbody id="weekSchelude" class="schedules-weekly">' + "<tr><td></td></tr>");
             $('#dayInfo').replaceWith('<span id="dayInfo" style="display: none" class="info-text"><i class="fa fa-info-circle" > </i></span>');
             $('#scheduleInfo').replaceWith('<span id="scheduleInfo" class="info-span info-text"><i class="fa fa-info-circle" > </i> '
-                + i18n.get("Ei aukioloaikoja") + '</span>');
+                + i18n.get("No opening hours") + '</span>');
             return;
         }
         var date = moment().add(weekCounter, 'weeks');
@@ -282,7 +281,7 @@ function getDaySchelude(direction, lib) {
                         staffPresentEnd = to;
                         // Store the row as a variable.
                         staffToday = '<tr class="time--sub time isTodayClass time--with-staff">' +
-                            '<td class="align-right trn"><i class="fa fa-level-up fa-rotate-90"></i> ' + i18n.get("Palveluaika") + '</td>' +
+                            '<td class="align-right trn"><i class="fa fa-level-up fa-rotate-90"></i> ' + i18n.get("Service time") + '</td>' +
                             '<td class="align-left">' + staffPresentStart + ' – ' + staffPresentEnd + '</td>' +
                             '</tr>';
                     }
@@ -290,12 +289,12 @@ function getDaySchelude(direction, lib) {
                     else {
                         if (staffPresentStart === '') {
                             selfServiceBefore = '<tr class="time--sub time isTodayClass time--no-staff">' +
-                                '<td class="align-right"><i class="fa fa-level-up fa-rotate-90"></i> ' + i18n.get("Omatoimiaika") + '</td>' +
+                                '<td class="align-right"><i class="fa fa-level-up fa-rotate-90"></i> ' + i18n.get("Self-service") + '</td>' +
                                 '<td class="align-left">' + from + ' – ' + to + '</td>' +
                                 '</tr>';
                         } else {
                             selfServiceAfter = '<tr class="time--sub time isTodayClass time--no-staff">' +
-                                '<td class="align-right"><i class="fa fa-level-up fa-rotate-90"></i> ' + i18n.get("Omatoimiaika") + '</td>' +
+                                '<td class="align-right"><i class="fa fa-level-up fa-rotate-90"></i> ' + i18n.get("Self-service") + '</td>' +
                                 '<td class="align-left">' + from + ' – ' + to + '</td>' +
                                 '</tr>';
                         }
@@ -331,7 +330,7 @@ function getDaySchelude(direction, lib) {
             selfServiceBefore = selfServiceBefore.replace(/:/g, ".");
             staffToday = staffToday.replace(/:/g, ".");
             selfServiceAfter = selfServiceAfter.replace(/:/g, ".");
-            var mainScheduleText = i18n.get("Aukiolo");
+            var mainScheduleText = i18n.get("Day schedule");
             // If no selfService, don't display a separate row for "Staff present".
             if (selfServiceBefore.length === 0 && selfServiceAfter.length === 0) {
                 if (staffToday.length !== 0) {
@@ -342,7 +341,7 @@ function getDaySchelude(direction, lib) {
             // Display main schedule text as "Omatoimiaika"
             else {
                 if (staffToday.length === 0) {
-                    mainScheduleText = i18n.get("Omatoimiaika");
+                    mainScheduleText = i18n.get("Self-service");
                     selfServiceBefore = '';
                     selfServiceAfter = '';
                 }
@@ -350,7 +349,7 @@ function getDaySchelude(direction, lib) {
             if (isClosed) {
                 // Add info row on closed days.
                 scheludeRow = '<tr class="time ' + isTodayClass + '">' +
-                    '<td colspan="2" class="main-schedule closed">' + i18n.get("Suljettu") + '</td>' +
+                    '<td colspan="2" class="main-schedule closed">' + i18n.get("Closed") + '</td>' +
                     '</tr>';
             } else {
 
@@ -375,7 +374,7 @@ function getDaySchelude(direction, lib) {
             }
         }
         adjustHomePageHeight(0);
-        $('#scheduleTitle').html(i18n.get("Aukioloajat"));
+        $('#scheduleTitle').html(i18n.get("Opening hours"));
         $('#scheduleTitle').css('display', 'block');
     });
 }
