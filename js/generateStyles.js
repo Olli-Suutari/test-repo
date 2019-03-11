@@ -61,7 +61,7 @@ var lessVariables = primary + links + linksHover + linksExternal + btnHover;
 
 // Read less stylesheet, generate .css and add it to header.
 var styleCssXml = new XMLHttpRequest();
-styleCssXml.open('GET', '../style/style.less');
+styleCssXml.open('GET', src + '/style/style.less');
 styleCssXml.onreadystatechange = function() {
     less.render(lessVariables + styleCssXml.responseText)
         .then(function(output) {
@@ -71,7 +71,7 @@ styleCssXml.onreadystatechange = function() {
 styleCssXml.send();
 
 var libraryCssXml = new XMLHttpRequest();
-libraryCssXml.open('GET', '../style/library.less');
+libraryCssXml.open('GET',  src + '/style/library.less');
 libraryCssXml.onreadystatechange = function() {
     //console.log(libraryCssXml.responseText);
     less.render(lessVariables + libraryCssXml.responseText)
@@ -84,7 +84,7 @@ libraryCssXml.send();
 // HomePage stylings.
 if(homePage) {
     var homePageCssXml = new XMLHttpRequest();
-    homePageCssXml.open('GET', '../style/homepage.less');
+    homePageCssXml.open('GET', src + '/style/homepage.less');
     homePageCssXml.onreadystatechange = function() {
         //console.log(homePageCssXml.responseText);
         less.render(lessVariables + homePageCssXml.responseText)
