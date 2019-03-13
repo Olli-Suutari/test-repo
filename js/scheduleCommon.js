@@ -129,7 +129,6 @@ function swipeNavigation(el,d) {
 }
 
 $(document).ready(function() {
-    console.log("CRAASH " + homePage);
     // Trigger schedule fetching, if no library list, otherwise trigger in consortium.js
     if(!isLibaryList && !homePage) {
         getWeekSchelude(0, library);
