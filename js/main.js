@@ -384,7 +384,7 @@ function adjustParentHeight(delay, elementPosY) {
  */
 function adjustParentUrl(toAdd, type) {
     refUrl = encodeVal(refUrl);
-    console.log(toAdd);
+    console.log("HERE WE ARE: " + toAdd);
     toAdd = encodeVal(toAdd);
     // Remove item from url, if it already exists.
     refUrl = refUrl.replace(new RegExp(toAdd,"i"), "");
