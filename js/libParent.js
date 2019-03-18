@@ -21,15 +21,23 @@ window.addEventListener('message', function(event) {
 
         var referrer = document.referrer;
 
-        var url = window.location;
-        console.log("REFERRER: " + referrer + " URL: " + url);
+        //referrer = referrer + "?kannonkoski-library"
+
+        var taat = window.location.toString();
+        console.log("REFERRER: " + referrer + " URL: " + taat);
 
         if(lang === "fi") {
             for (var i = 0; i < libList.length; i++) {
                 // Ignore mobile libraries & other consortiums.
                 if (referrer.indexOf(libList[i].nameEn) > -1) {
-                    url = url.replace(/\?(.*)/g, "?" + libList[i].nameFi);
-                    window.location.href = url;
+                    console.log("URL: " + taat);
+                    var name = "?" + libList[i].nameFi;
+                    console.log("URLRET: " + taat);
+
+                    taat = taat.replace(/\?(.*)/g, name);
+                    console.log(taat);
+
+                    window.location.href = taat;
                 }
             }
         }
