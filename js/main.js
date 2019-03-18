@@ -52,16 +52,6 @@ function exitHandler() {
     }
 }
 
-// Check if provided value is not null, undefined or empty
-function isValue(value) {
-    if(value !== null && value !== undefined && value.length !== 0 && value !== "undefined") {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
 // Remove httml & www from url and / # from the end.
 function generatPrettyUrl(url) {
     url = url.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "");
@@ -394,6 +384,7 @@ function adjustParentHeight(delay, elementPosY) {
  */
 function adjustParentUrl(toAdd, type) {
     refUrl = encodeVal(refUrl);
+    console.log(toAdd);
     toAdd = encodeVal(toAdd);
     // Remove item from url, if it already exists.
     refUrl = refUrl.replace(new RegExp(toAdd,"i"), "");

@@ -16,20 +16,44 @@ function asyncCheckUrlForKeskiLibrary() {
             return;
         }
         var matchFound = false;
-        // Loop libraries and check if refUrl contains one of them and click if so.
-        for (var i = 0; i < libraryList.length; i++) {
-            var urlUnescapeSpaces = refUrl.replace(/%20/g, " ");
-            urlUnescapeSpaces = refUrl.replace(/-/g, " ");
-            var escapedName = libraryList[i].text.toLowerCase();
-            escapedName = escapedName.replace(/ä/g, "a");
-            escapedName = escapedName.replace(/ö/g, "o");
-            escapedName = escapedName.replace(/\(/g, "");
-            escapedName = escapedName.replace(/\)/g, "");
-            if(urlUnescapeSpaces.indexOf(escapedName) > -1) {
-                library = libraryList[i].id;
-                matchFound = true;
+
+        if(lang === "fi") {
+            for (var i = 0; i < libListMultiLang.length; i++) {
+                // Ignore mobile libraries & other consortiums.
+                if (refUrl.indexOf(libListMultiLang[i].nameEn) > -1) {
+                    library = libListMultiLang[i].id;
+                    adjustParentUrl(libListMultiLang[i].nameFi, 'library');
+                    matchFound = true;
+                }
             }
         }
+        else if(lang === "en") {
+            for (var i = 0; i < libListMultiLang.length; i++) {
+                // Ignore mobile libraries & other consortiums.
+                if (refUrl.indexOf(libListMultiLang[i].nameFi) > -1) {
+                    library = libListMultiLang[i].id;
+                    adjustParentUrl(libListMultiLang[i].nameEn, 'library');
+                    matchFound = true;
+                }
+            }
+        }
+        if(!matchFound) {
+            // Loop libraries and check if refUrl contains one of them and click if so.
+            for (var i = 0; i < libraryList.length; i++) {
+                var urlUnescapeSpaces = refUrl.replace(/%20/g, " ");
+                urlUnescapeSpaces = refUrl.replace(/-/g, " ");
+                var escapedName = libraryList[i].text.toLowerCase();
+                escapedName = escapedName.replace(/ä/g, "a");
+                escapedName = escapedName.replace(/ö/g, "o");
+                escapedName = escapedName.replace(/\(/g, "");
+                escapedName = escapedName.replace(/\)/g, "");
+                if(urlUnescapeSpaces.indexOf(escapedName) > -1) {
+                    library = libraryList[i].id;
+                    matchFound = true;
+                }
+            }
+        }
+
         // Custom names used for libraries of Jyväskylä.
         if(!matchFound) {
             if(refUrl.indexOf("halssila") > -1) {
