@@ -410,12 +410,9 @@ function adjustParentUrl(toAdd, type) {
     if(lang === "fi") {
         refUrl = refUrl.replace(/contacts/g, "");
     }
-
     else if(lang === "en") {
         refUrl = refUrl.replace(/yhteystiedot/g, "");
-
     }
-
     // Remove contacts from url if navigating to introduction.
     if(type === "introduction") {
         refUrl = refUrl.replace(/yhteystiedot/g, "");

@@ -4,7 +4,6 @@ var libListMultiLang = [];
 var libListMultiLangHelper = [];
 var libName;
 
-
 function encodeVal(value) {
     var value = value.toLowerCase();
     value = value.replace(/ /g, "-");
@@ -16,18 +15,6 @@ function encodeVal(value) {
     value = value.replace(/%20/g, "-");
     return value;
 }
-
-
-function decodeVal(value) {
-    var value = value.toLowerCase();
-    value = value.replace(/ /g, "-");
-    value = value.replace(/ /g, "-");
-    value = value.replace(/ä/g, "a");
-    value = value.replace(/ö/g, "o");
-    value = value.replace(/\(/g, "");
-    value = value.replace(/\)/g, "");
-}
-
 
 // Group libraries by city.
 // https://stackoverflow.com/questions/46043262/split-array-with-objects-to-multiple-arrays-based-on-unique-combination
@@ -126,6 +113,25 @@ function initSelect(items) {
 }
 
 function setSelectDefault() {
+
+
+    if(lang === "fi") {
+        for (var i = 0; i < libListMultiLang.length; i++) {
+            // Ignore mobile libraries & other consortiums.
+            if (refUrl.indexOf(libListMultiLang[i].nameEn) > -1) {
+                library = libListMultiLang[i].id;
+            }
+        }
+    }
+    else if(lang === "en") {
+        for (var i = 0; i < libListMultiLang.length; i++) {
+            // Ignore mobile libraries & other consortiums.
+            if (refUrl.indexOf(libListMultiLang[i].nameFi) > -1) {
+                library = libListMultiLang[i].id;
+            }
+        }
+    }
+
     $('.library-select').val(library).trigger('change');
     libName = $("#librarySelector option:selected").text();
 }
@@ -273,7 +279,6 @@ $(document).ready(function() {
             alert(e);
 
         }
-
     }
     // Fetch libraries of city
     else if(consortium === undefined && city !== undefined) {
