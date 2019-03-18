@@ -316,6 +316,12 @@ $(document).ready(function() {
                         libListMultiLang.push({nameEn: libListMultiLangHelper[index].nameEn, nameFi: encodeVal(data.items[i].name), id: data.items[i].id});
                     }
                 }
+                try {
+                    parent.postMessage({value: libListMultiLang, type: 'libList'}, '*');
+                }
+                catch (e) {
+                    console.log("Parent libList adjustment failed: " + e);
+                }
                 generateSelect();
             });
         });

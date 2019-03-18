@@ -6,10 +6,16 @@ css.type = "text/css";
 css.innerHTML = '#libFrame { transition: height 800ms; }';
 document.head.appendChild(css);
 // Event listener for messages from the iframe.
+var libList;
 window.addEventListener('message', function(event) {
     var data = event.data;
+
+    if(data.type === "libList") {
+        libList = data.value;
+        console.log(libList);
+    }
     // Scroll to position
-    if(data.type === "scroll") {
+    else if(data.type === "scroll") {
         var rect = container.getBoundingClientRect();
         var scrollToPos = rect.top + data.value;
         if(data.scrollParameter === "under") {
