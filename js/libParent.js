@@ -42,7 +42,7 @@ window.addEventListener('message', function(event) {
     // Update the url
     else if(data.type === "url") {
         try {
-            history.replaceState("", "", data.value);
+            history.pushState("", "", data.value);
         }
         catch (e) {
             console.log("Url failed to update: " + e);
