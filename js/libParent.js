@@ -45,8 +45,17 @@ window.addEventListener('message', function(event) {
             for (var i = 0; i < libList.length; i++) {
                 // Ignore mobile libraries & other consortiums.
                 if (referrer.indexOf(libList[i].nameFi) > -1) {
-                    url = url.replace(/\?(.*)/g, "?" + libList[i].nameEn);
-                    window.location.href = url;
+
+
+                        console.log("URL: " + taat);
+                        var name = "?" + libList[i].nameEn;
+                        console.log("URLRET: " + taat);
+
+                        taat = taat.replace(/\?(.*)/g, name);
+                        console.log(taat);
+
+                        window.location.href = taat;
+
                 }
             }
         }
