@@ -99,6 +99,10 @@ if(refUrl.length === 0) {
     refUrl = window.location.href;
 }
 
+var x = document.referrer;
+console.log("REFERRER: " + x);
+
+
 refUrl = decodeVal(refUrl);
 console.log("INIT refUrl: " + refUrl);
 
