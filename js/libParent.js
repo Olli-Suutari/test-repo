@@ -28,8 +28,8 @@ window.addEventListener('message', function(event) {
             for (var i = 0; i < libList.length; i++) {
                 // Ignore mobile libraries & other consortiums.
                 if (referrer.indexOf(libList[i].nameEn) > -1) {
-                    library = libList[i].id;
-                    adjustParentUrl(libList[i].nameFi, 'library');
+                    url = url.replace(/\?(.*)/g, "?" + libList[i].nameFi);
+                    window.location.href = url;
                 }
             }
         }
@@ -37,8 +37,8 @@ window.addEventListener('message', function(event) {
             for (var i = 0; i < libList.length; i++) {
                 // Ignore mobile libraries & other consortiums.
                 if (referrer.indexOf(libList[i].nameFi) > -1) {
-                    library = libList[i].id;
-                    adjustParentUrl(libList[i].nameEn, 'library');
+                    url = url.replace(/\?(.*)/g, "?" + libList[i].nameEn);
+                    window.location.href = url;
                 }
             }
         }
