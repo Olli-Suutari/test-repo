@@ -13,6 +13,36 @@ window.addEventListener('message', function(event) {
     if(data.type === "libList") {
         libList = data.value;
         console.log(libList);
+
+
+
+        var lang = data.lang;
+
+
+        var referrer = document.referrer;
+
+        var url = window.location;
+        console.log("REFERRER: " + referrer + " URL: " + url);
+
+        if(lang === "fi") {
+            for (var i = 0; i < libList.length; i++) {
+                // Ignore mobile libraries & other consortiums.
+                if (referrer.indexOf(libList[i].nameEn) > -1) {
+                    library = libList[i].id;
+                    adjustParentUrl(libList[i].nameFi, 'library');
+                }
+            }
+        }
+        else if(lang === "en") {
+            for (var i = 0; i < libList.length; i++) {
+                // Ignore mobile libraries & other consortiums.
+                if (referrer.indexOf(libList[i].nameFi) > -1) {
+                    library = libList[i].id;
+                    adjustParentUrl(libList[i].nameEn, 'library');
+                }
+            }
+        }
+
     }
     // Scroll to position
     else if(data.type === "scroll") {

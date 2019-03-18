@@ -317,7 +317,7 @@ $(document).ready(function() {
                     }
                 }
                 try {
-                    parent.postMessage({value: libListMultiLang, type: 'libList'}, '*');
+                    parent.postMessage({value: libListMultiLang, lang: lang, type: 'libList'}, '*');
                 }
                 catch (e) {
                     console.log("Parent libList adjustment failed: " + e);
