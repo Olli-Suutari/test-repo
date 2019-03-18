@@ -17,6 +17,7 @@ function asyncCheckUrlForKeskiLibrary() {
         }
         var matchFound = false;
 
+        console.log(refUrl);
         if(lang === "fi") {
             for (var i = 0; i < libListMultiLang.length; i++) {
                 // Ignore mobile libraries & other consortiums.
