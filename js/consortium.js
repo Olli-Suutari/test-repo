@@ -1,7 +1,34 @@
 var libraryList = [];
 // If we switch lang in keskikirjastot.fi, the old lang lib name will ghost in url.
 var libListMultiLang = [];
+var libListMultiLangHelper = [];
 var libName;
+
+
+function encodeVal(value) {
+    var value = value.toLowerCase();
+    value = value.replace(/ /g, "-");
+    value = value.replace(/ä/g, "a");
+    value = value.replace(/ö/g, "o");
+    value = value.replace(/\(/g, "");
+    value = value.replace(/\)/g, "");
+    value = encodeURI(value);
+    value = value.replace(/%20/g, "-");
+    return value;
+}
+
+
+function decodeVal(value) {
+    var value = value.toLowerCase();
+    value = value.replace(/ /g, "-");
+    value = value.replace(/ /g, "-");
+    value = value.replace(/ä/g, "a");
+    value = value.replace(/ö/g, "o");
+    value = value.replace(/\(/g, "");
+    value = value.replace(/\)/g, "");
+}
+
+
 // Group libraries by city.
 // https://stackoverflow.com/questions/46043262/split-array-with-objects-to-multiple-arrays-based-on-unique-combination
 function groupByCity(arr) {
@@ -189,6 +216,16 @@ function generateSelect() {
             });
     }
 }
+
+function findIndexInObjectArray(arraytosearch, key, valuetosearch) {
+    for (var i = 0; i < arraytosearch.length; i++) {
+        if (arraytosearch[i][key] == valuetosearch) {
+            return i;
+        }
+    }
+    return null;
+}
+
 $(document).ready(function() {
     var oppositeLang = "en";
     if(lang === "en") {
@@ -201,20 +238,31 @@ $(document).ready(function() {
             $.getJSON("https://api.kirjastot.fi/v4/library?lang=" + lang + "&city.name=" + city + "&limit=1500", function(data) {
                 for (var i=0; i<data.items.length; i++) {
                     // Ignore mobile libraries & other consortiums.
-                    if(data.items[i].branch_type !== "mobile" && data.items[i].consortium == consortium) {
+                    if(data.items[i].type !== "mobile" && data.items[i].consortium == consortium) {
                         libraryList.push({id: data.items[i].id, text: data.items[i].name,
                             city: data.items[i].city.toString(),
                             street: data.items[i].address.street,
                             zipcode: data.items[i].address.zipcode,
                             coordinates: data.items[i].coordinates});
-                        libListMultiLang.push(data.items[i].name);
+                        if(lang === "fi") {
+                            libListMultiLangHelper.push({nameFi: encodeVal(data.items[i].name), id: data.items[i].id});
+                        }
+                        else {
+                            libListMultiLangHelper.push({nameEn: encodeVal(data.items[i].name), id: data.items[i].id});
+                        }
                     }
                 }
                 $.getJSON("https://api.kirjastot.fi/v4/library?lang=" + oppositeLang + "&city.name=" + city + "&limit=1500", function(data) {
                     for (var i = 0; i < data.items.length; i++) {
                         // Ignore mobile libraries & other consortiums.
-                        if (data.items[i].branch_type !== "mobile" && data.items[i].consortium == consortium) {
-                            libListMultiLang.push(data.items[i].name);
+                        if (data.items[i].type !== "mobile" && data.items[i].consortium == consortium) {
+                            var index = findIndexInObjectArray(libListMultiLangHelper, "id", data.items[i].id);
+                            if (oppositeLang === "en") {
+                                libListMultiLang.push({nameFi: libListMultiLangHelper[index].nameFi, nameEn: encodeVal(data.items[i].name), id: data.items[i].id});
+                            }
+                            else {
+                                libListMultiLang.push({nameEn: libListMultiLangHelper[index].nameEn, nameFi: encodeVal(data.items[i].name), id: data.items[i].id});
+                            }
                         }
                     }
                     generateSelect();
@@ -233,19 +281,31 @@ $(document).ready(function() {
         $.getJSON("https://api.kirjastot.fi/v4/library?lang=" + lang + "&city.name=" + city, function(data) {
             for (var i=0; i<data.items.length; i++) {
                 // Ignore mobile libraries
-                if(data.items[i].branch_type !== "mobile") {
+                if(data.items[i].type !== "mobile") {
                     libraryList.push({id: data.items[i].id, text: data.items[i].name,
                         city: data.items[i].city.toString(),
                         street: data.items[i].address.street,
                         zipcode: data.items[i].address.zipcode,
                         coordinates: data.items[i].coordinates});
+                    if(lang === "fi") {
+                        libListMultiLangHelper.push({nameFi: encodeVal(data.items[i].name), id: data.items[i].id});
+                    }
+                    else {
+                        libListMultiLangHelper.push({nameEn: encodeVal(data.items[i].name), id: data.items[i].id});
+                    }
                 }
             }
             $.getJSON("https://api.kirjastot.fi/v4/library?lang=" + oppositeLang + "&city.name=" + city, function(data) {
                 for (var i = 0; i < data.items.length; i++) {
                     // Ignore mobile libraries & other consortiums.
-                    if (data.items[i].branch_type !== "mobile") {
-                        libListMultiLang.push(data.items[i].name);
+                    if (data.items[i].type !== "mobile") {
+                        var index = findIndexInObjectArray(libListMultiLangHelper, "id", data.items[i].id);
+                        if (oppositeLang === "en") {
+                            libListMultiLang.push({nameFi: libListMultiLangHelper[index].nameFi, nameEn: encodeVal(data.items[i].name), id: data.items[i].id});
+                        }
+                        else {
+                            libListMultiLang.push({nameEn: libListMultiLangHelper[index].nameEn, nameFi: encodeVal(data.items[i].name), id: data.items[i].id});
+                        }
                     }
                 }
                 generateSelect();
@@ -265,10 +325,22 @@ $(document).ready(function() {
                     zipcode: data.items[i].address.zipcode,
                     coordinates: data.items[i].coordinates
                 });
+                if(lang === "fi") {
+                    libListMultiLangHelper.push({nameFi: encodeVal(data.items[i].name), id: data.items[i].id});
+                }
+                else {
+                    libListMultiLangHelper.push({nameEn: encodeVal(data.items[i].name), id: data.items[i].id});
+                }
             }
             $.getJSON("https://api.kirjastot.fi/v4/library?lang=" + oppositeLang + "&consortium=" + consortium + "&limit=1500", function(data) {
                 for (var i = 0; i < data.items.length; i++) {
-                    libListMultiLang.push(data.items[i].name);
+                    var index = findIndexInObjectArray(libListMultiLangHelper, "id", data.items[i].id);
+                    if (oppositeLang === "en") {
+                        libListMultiLang.push({nameFi: libListMultiLangHelper[index].nameFi, nameEn: encodeVal(data.items[i].name), id: data.items[i].id});
+                    }
+                    else {
+                        libListMultiLang.push({nameEn: libListMultiLangHelper[index].nameEn, nameFi: encodeVal(data.items[i].name), id: data.items[i].id});
+                    }
                 }
                 generateSelect();
             });
