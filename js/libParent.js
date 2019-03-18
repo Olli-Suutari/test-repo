@@ -57,3 +57,6 @@ if(window.location.href.indexOf('keskikirjastot') > -1) {
         }
     });
 }
+
+var x = document.referrer;
+console.log("X: " + x);
