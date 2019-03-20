@@ -9,57 +9,35 @@ document.head.appendChild(css);
 var libList;
 window.addEventListener('message', function(event) {
     var data = event.data;
-
     if(data.type === "libList") {
+        console.log(data);
         libList = data.value;
         console.log(libList);
-
-
-
+        var currentLib = data.selectedLib;
         var lang = data.lang;
-
-
         var referrer = document.referrer;
-
-        //referrer = referrer + "?kannonkoski-library"
-
-        var taat = window.location.toString();
-        console.log("REFERRER: " + referrer + " URL: " + taat);
-
+        var currentUrl = window.location.toString();
+        console.log("REFERRER: " + referrer + " URL: " + currentUrl);
         if(lang === "fi") {
             for (var i = 0; i < libList.length; i++) {
-                // Ignore mobile libraries & other consortiums.
-                if (referrer.indexOf(libList[i].nameEn) > -1) {
-                    console.log("URL: " + taat);
+                if (referrer.indexOf(libList[i].nameEn) > -1 && libList[i].id != currentLib) {
                     var name = "?" + libList[i].nameFi;
-                    console.log("URLRET: " + taat);
-
-                    taat = taat.replace(/\?(.*)/g, name);
-                    console.log(taat);
-
-                    window.location.href = taat;
+                    currentUrl = currentUrl.replace(/\?(.*)/g, name);
+                    console.log("URLRET FI: " + currentUrl);
+                    window.location.href = currentUrl;
                 }
             }
         }
         else if(lang === "en") {
             for (var i = 0; i < libList.length; i++) {
-                // Ignore mobile libraries & other consortiums.
-                if (referrer.indexOf(libList[i].nameFi) > -1) {
-
-
-                        console.log("URL: " + taat);
-                        var name = "?" + libList[i].nameEn;
-                        console.log("URLRET: " + taat);
-
-                        taat = taat.replace(/\?(.*)/g, name);
-                        console.log(taat);
-
-                        window.location.href = taat;
-
+                if (referrer.indexOf(libList[i].nameFi) > -1 && libList[i].id != currentLib) {
+                    var name = "?" + libList[i].nameEn;
+                    currentUrl = currentUrl.replace(/\?(.*)/g, name);
+                    console.log("URLRET EN: " + currentUrl);
+                    window.location.href = currentUrl;
                 }
             }
         }
-
     }
     // Scroll to position
     else if(data.type === "scroll") {
