@@ -26,10 +26,6 @@ window.addEventListener('message', function(event) {
         var taat = window.location.toString();
         console.log("REFERRER: " + referrer + " URL: " + taat);
 
-
-        var browserHistory = window.history;
-        console.log(browserHistory);
-
         if(lang === "fi") {
             for (var i = 0; i < libList.length; i++) {
                 // Ignore mobile libraries & other consortiums.
