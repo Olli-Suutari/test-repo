@@ -32,8 +32,10 @@ window.addEventListener('message', function(event) {
                         needsRedirect = true;
                     }
                     if(needsRedirect) {
-                        console.log("URLRET FI: " + currentUrl);
-                        window.location.href = currentUrl;
+                        console.log("FI REDIRECT TO: " + currentUrl);
+                        setTimeout(function(){
+                            window.location.href = currentUrl;
+                        }, 7000);
                     }
                 }
             }
@@ -51,8 +53,11 @@ window.addEventListener('message', function(event) {
                         needsRedirect = true;
                     }
                     if(needsRedirect) {
-                        console.log("URLRET EN: " + currentUrl);
-                        window.location.href = currentUrl;
+                        console.log("EN REDIRECT TO: " + currentUrl);
+
+                        setTimeout(function(){
+                            window.location.href = currentUrl;
+                        }, 7000);
                     }
                 }
             }
