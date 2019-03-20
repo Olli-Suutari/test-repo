@@ -23,6 +23,9 @@ window.addEventListener('message', function(event) {
                 if (referrer.indexOf(libList[i].nameEn) > -1 && libList[i].id != currentLib) {
                     var name = "?" + libList[i].nameFi;
                     currentUrl = currentUrl.replace(/\?(.*)/g, name);
+                    if (referrer.indexOf("contacts") > -1) {
+                        currentUrl = currentUrl + "?yhteystiedot"
+                    }
                     console.log("URLRET FI: " + currentUrl);
                     window.location.href = currentUrl;
                 }
@@ -33,6 +36,9 @@ window.addEventListener('message', function(event) {
                 if (referrer.indexOf(libList[i].nameFi) > -1 && libList[i].id != currentLib) {
                     var name = "?" + libList[i].nameEn;
                     currentUrl = currentUrl.replace(/\?(.*)/g, name);
+                    if (referrer.indexOf("yhteystiedot") > -1) {
+                        currentUrl = currentUrl + "?contacts"
+                    }
                     console.log("URLRET EN: " + currentUrl);
                     window.location.href = currentUrl;
                 }
