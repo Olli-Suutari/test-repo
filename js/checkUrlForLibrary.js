@@ -16,28 +16,6 @@ function asyncCheckUrlForKeskiLibrary() {
             return;
         }
         var matchFound = false;
-
-        console.log(refUrl);
-        if(lang === "fi") {
-            for (var i = 0; i < libListMultiLang.length; i++) {
-                // Ignore mobile libraries & other consortiums.
-                if (refUrl.indexOf(libListMultiLang[i].nameEn) > -1) {
-                    library = libListMultiLang[i].id;
-                    adjustParentUrl(libListMultiLang[i].nameFi, 'library');
-                    matchFound = true;
-                }
-            }
-        }
-        else if(lang === "en") {
-            for (var i = 0; i < libListMultiLang.length; i++) {
-                // Ignore mobile libraries & other consortiums.
-                if (refUrl.indexOf(libListMultiLang[i].nameFi) > -1) {
-                    library = libListMultiLang[i].id;
-                    adjustParentUrl(libListMultiLang[i].nameEn, 'library');
-                    matchFound = true;
-                }
-            }
-        }
         if(!matchFound) {
             // Loop libraries and check if refUrl contains one of them and click if so.
             for (var i = 0; i < libraryList.length; i++) {
