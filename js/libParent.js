@@ -35,10 +35,9 @@ window.addEventListener('message', function(event) {
             }
             if(needsRedirect) {
                 console.log("FI REDIRECT TO: " + currentUrl);
-                window.location.href = currentUrl;
                 setTimeout(function(){
-                    //window.location.href = currentUrl;
-                }, 15000);
+                    window.location.href = currentUrl;
+                }, 5000);
             }
         }
         else if(lang === "en") {
@@ -57,11 +56,9 @@ window.addEventListener('message', function(event) {
             }
             if(needsRedirect) {
                 console.log("EN REDIRECT TO: " + currentUrl);
-                window.location.href = currentUrl;
-
                 setTimeout(function(){
                     window.location.href = currentUrl;
-                }, 15000);
+                }, 5000);
             }
         }
     }
