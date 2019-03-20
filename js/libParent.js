@@ -22,8 +22,9 @@ window.addEventListener('message', function(event) {
         if(lang === "fi") {
             for (var i = 0; i < libList.length; i++) {
                 if (referrer.indexOf(libList[i].nameEn) > -1 && libList[i].id != currentLib) {
-                    name = "?" + libList[i].nameFi
+                    name = "?" + libList[i].nameFi;
                     currentUrl = currentUrl.replace(/\?(.*)/g, name);
+                    console.log("FOUND LIB: " + currentUrl);
                     needsRedirect = true;
                 }
             }
@@ -36,7 +37,7 @@ window.addEventListener('message', function(event) {
                 console.log("FI REDIRECT TO: " + currentUrl);
                 setTimeout(function(){
                     window.location.href = currentUrl;
-                }, 7000);
+                }, 15000);
             }
         }
         else if(lang === "en") {
@@ -44,6 +45,7 @@ window.addEventListener('message', function(event) {
                 if (referrer.indexOf(libList[i].nameFi) > -1 && libList[i].id != currentLib) {
                     name = "?" + libList[i].nameEn;
                     currentUrl = currentUrl.replace(/\?(.*)/g, name);
+                    console.log("FOUND LIB: " + currentUrl);
                     needsRedirect = true;
                 }
             }
@@ -53,10 +55,10 @@ window.addEventListener('message', function(event) {
                 needsRedirect = true;
             }
             if(needsRedirect) {
-                console.log("FI REDIRECT TO: " + currentUrl);
+                console.log("EN REDIRECT TO: " + currentUrl);
                 setTimeout(function(){
                     window.location.href = currentUrl;
-                }, 7000);
+                }, 15000);
             }
         }
     }
