@@ -37,7 +37,7 @@ window.addEventListener('message', function(event) {
                 console.log("FI REDIRECT TO: " + currentUrl);
                 setTimeout(function(){
                     window.location.href = currentUrl;
-                }, 250);
+                }, 750);
             }
         }
         else if(lang === "en") {
@@ -58,7 +58,7 @@ window.addEventListener('message', function(event) {
                 console.log("EN REDIRECT TO: " + currentUrl);
                 setTimeout(function(){
                     window.location.href = currentUrl;
-                }, 250);
+                }, 750);
             }
         }
     }
