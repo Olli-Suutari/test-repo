@@ -18,29 +18,42 @@ window.addEventListener('message', function(event) {
         var referrer = document.referrer;
         var currentUrl = window.location.toString();
         console.log("REFERRER: " + referrer + " URL: " + currentUrl);
+        var needsRedirect = false;
         if(lang === "fi") {
             for (var i = 0; i < libList.length; i++) {
-                if (referrer.indexOf(libList[i].nameEn) > -1 && libList[i].id != currentLib) {
-                    var name = "?" + libList[i].nameFi;
-                    currentUrl = currentUrl.replace(/\?(.*)/g, name);
-                    if (referrer.indexOf("contacts") > -1) {
-                        currentUrl = currentUrl + "?yhteystiedot"
+                if (referrer.indexOf(libList[i].nameEn) > -1 || referrer.indexOf("contacts") > -1) {
+                    if(libList[i].id != currentLib) {
+                        var name = "?" + libList[i].nameFi;
+                        currentUrl = currentUrl.replace(/\?(.*)/g, name);
+                        needsRedirect = true;
                     }
-                    console.log("URLRET FI: " + currentUrl);
-                    window.location.href = currentUrl;
+                    if (referrer.indexOf("contacts") > -1) {
+                        currentUrl = currentUrl + "?yhteystiedot";
+                        needsRedirect = true;
+                    }
+                    if(needsRedirect) {
+                        console.log("URLRET FI: " + currentUrl);
+                        window.location.href = currentUrl;
+                    }
                 }
             }
         }
         else if(lang === "en") {
             for (var i = 0; i < libList.length; i++) {
-                if (referrer.indexOf(libList[i].nameFi) > -1 && libList[i].id != currentLib) {
-                    var name = "?" + libList[i].nameEn;
-                    currentUrl = currentUrl.replace(/\?(.*)/g, name);
-                    if (referrer.indexOf("yhteystiedot") > -1) {
-                        currentUrl = currentUrl + "?contacts"
+                if (referrer.indexOf(libList[i].nameFi) > -1 || referrer.indexOf("contacts") > -1) {
+                    if(libList[i].id != currentLib) {
+                        var name = "?" + libList[i].nameEn;
+                        currentUrl = currentUrl.replace(/\?(.*)/g, name);
+                        needsRedirect = true;
                     }
-                    console.log("URLRET EN: " + currentUrl);
-                    window.location.href = currentUrl;
+                    if (referrer.indexOf("yhteystiedot") > -1) {
+                        currentUrl = currentUrl + "?contacts";
+                        needsRedirect = true;
+                    }
+                    if(needsRedirect) {
+                        console.log("URLRET EN: " + currentUrl);
+                        window.location.href = currentUrl;
+                    }
                 }
             }
         }
