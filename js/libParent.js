@@ -24,7 +24,7 @@ window.addEventListener('message', function(event) {
                     var name = "?" + libList[i].nameFi;
                     currentUrl = currentUrl.replace(/\?(.*)/g, name);
                     console.log("URLRET FI: " + currentUrl);
-                    //window.location.href = currentUrl;
+                    window.location.href = currentUrl;
                 }
             }
         }
@@ -34,7 +34,7 @@ window.addEventListener('message', function(event) {
                     var name = "?" + libList[i].nameEn;
                     currentUrl = currentUrl.replace(/\?(.*)/g, name);
                     console.log("URLRET EN: " + currentUrl);
-                    //window.location.href = currentUrl;
+                    window.location.href = currentUrl;
                 }
             }
         }
