@@ -107,10 +107,8 @@ window.addEventListener('message', function(event) {
 
             if (navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1))
             {
-                var link = document.createElement('a');
-                link.href = data.value;
-                document.body.appendChild(link);
-                link.click();
+                history.pushState("*", "*", data.value);
+
             }
             else {
                 history.replaceState("", "", data.value);
