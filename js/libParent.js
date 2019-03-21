@@ -34,12 +34,6 @@ window.addEventListener('message', function(event) {
                 //currentUrl = currentUrl.replace(/(contacts)/g, "yhteystiedot");
                 needsRedirect = true;
             }
-            if(needsRedirect) {
-                console.log("FI REDIRECT TO: " + currentUrl);
-                setTimeout(function(){
-                    window.location.href = currentUrl;
-                }, 2500);
-            }
         }
         else if(lang === "en") {
             for (var i = 0; i < libList.length; i++) {
@@ -56,12 +50,24 @@ window.addEventListener('message', function(event) {
                 //currentUrl = currentUrl.replace(/(contacts)/g, "yhteystiedot");
                 needsRedirect = true;
             }
-            if(needsRedirect) {
-                console.log("EN REDIRECT TO: " + currentUrl);
-                setTimeout(function(){
+        }
+        if(needsRedirect) {
+            console.log(lang + " REDIRECT TO: " + currentUrl);
+            setTimeout(function(){
+                // https://blog.mathiaskunto.com/2012/02/20/internet-explorer-loses-referrer-when-redirecting-or-linking-with-javascript/
+                // https://stackoverflow.com/questions/24861073/detect-if-any-kind-of-ie-msie/24861307
+                if (navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1))
+                {
+                    var link = document.createElement('a');
+                    link.href = currentUrl;
+                    document.body.appendChild(link);
+                    link.click();
+                }
+                else {
                     window.location.href = currentUrl;
-                }, 2500);
-            }
+
+                }
+            }, 2500);
         }
     }
     // Scroll to position

@@ -99,8 +99,6 @@ if(refUrl.length === 0) {
     refUrl = window.location.href;
 }
 refUrl = decodeVal(refUrl);
-console.log("INIT refUrl: " + refUrl);
-
 // Navigate to contacts or services, if parameter is in the url.
 // Active tab: 0 = info, 1 = contact details, 3 = services.
 var activeTab = 0;
