@@ -94,6 +94,7 @@ window.addEventListener('message', function(event) {
     // Update the url
     else if(data.type === "url") {
         /*
+        https://developer.mozilla.org/en-US/docs/Web/API/History_API
         var r = Math.random().toString(36).substring(7);
         var t = Math.random().toString(36).substring(7);
         var stateObj = { foo: r };
@@ -131,6 +132,6 @@ window.addEventListener('popstate', function(e){
     //var currentUrl = window.location.toString();
     //window.location.href = window.location.toString();
     setTimeout(function(){
-        window.location.replace(window.location.toString());
-    }, 5050);
+        window.location.replace(window.location);
+    }, 50);
 });
