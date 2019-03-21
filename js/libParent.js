@@ -93,6 +93,13 @@ window.addEventListener('message', function(event) {
     }
     // Update the url
     else if(data.type === "url") {
+        /*
+        var r = Math.random().toString(36).substring(7);
+        var t = Math.random().toString(36).substring(7);
+        var stateObj = { foo: r };
+        history.pushState(stateObj, t, data.value);
+        console.log("random", r);
+        */
         try {
             if(data.value == window.location.toString()) {
                 console.log("REPLACE");
@@ -100,7 +107,7 @@ window.addEventListener('message', function(event) {
             }
             else {
                 console.log("PUSH");
-                history.replaceState("", "", data.value);
+                history.pushState("", "", data.value);
             }
         }
         catch (e) {
