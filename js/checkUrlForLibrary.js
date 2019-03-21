@@ -32,7 +32,6 @@ function asyncCheckUrlForKeskiLibrary() {
                 }
             }
         }
-
         // Custom names used for libraries of Jyväskylä.
         if(!matchFound) {
             if(refUrl.indexOf("halssila") > -1) {
@@ -175,6 +174,12 @@ function asyncCheckUrlForKeskiLibrary() {
             else if(lang === "en") {
                 adjustParentUrl('main-library-jyvaskyla', 'library');
             }
+        }
+        try {
+            parent.postMessage({value: libListMultiLang, lang: lang, selectedLib: library, type: 'libList'}, '*');
+        }
+        catch (e) {
+            console.log("Parent libList adjustment failed: " + e);
         }
         urlDeferred.resolve();
     }, 1 );
