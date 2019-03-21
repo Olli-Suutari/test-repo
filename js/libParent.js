@@ -60,7 +60,7 @@ window.addEventListener('message', function(event) {
                 // https://blog.mathiaskunto.com/2012/02/20/internet-explorer-loses-referrer-when-redirecting-or-linking-with-javascript/
                 */
                 window.location.href = currentUrl;
-            }, 500);
+            }, 50);
         }
     }
     // Scroll to position
