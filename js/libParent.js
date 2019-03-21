@@ -58,10 +58,15 @@ window.addEventListener('message', function(event) {
                 // https://stackoverflow.com/questions/24861073/detect-if-any-kind-of-ie-msie/24861307
                 if (navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1))
                 {
-                    var link = document.createElement('a');
-                    link.href = currentUrl;
-                    document.body.appendChild(link);
-                    link.click();
+                    console.log("IE REDIRECT:...");
+                    setTimeout(function(){
+
+                        var link = document.createElement('a');
+                        link.href = currentUrl;
+                        document.body.appendChild(link);
+                        link.click();
+                    }, 2500);
+
                 }
                 else {
                     window.location.href = currentUrl;
@@ -107,7 +112,7 @@ window.addEventListener('message', function(event) {
 
             if (navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1))
             {
-                history.pushState("*", "*", data.value);
+                history.pushState("", "", data.value);
 
             }
             else {
