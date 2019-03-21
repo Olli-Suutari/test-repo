@@ -21,7 +21,8 @@ window.addEventListener('message', function(event) {
         var name = "";
         if(lang === "fi") {
             for (var i = 0; i < libList.length; i++) {
-                if (referrer.indexOf(libList[i].nameEn) > -1 && libList[i].id != currentLib && libList[i].nameEn !== libList[i].nameFi) {
+                if (referrer.indexOf(libList[i].nameEn) > -1 && libList[i].id != currentLib &&
+                    libList[i].nameEn !== libList[i].nameFi) {
                     name = "?" + libList[i].nameFi;
                     currentUrl = currentUrl.replace(/\?(.*)/g, name);
                     console.log("FOUND LIB: " + currentUrl);
@@ -42,7 +43,8 @@ window.addEventListener('message', function(event) {
         }
         else if(lang === "en") {
             for (var i = 0; i < libList.length; i++) {
-                if (referrer.indexOf(libList[i].nameFi) > -1 && libList[i].id != currentLib) {
+                if (referrer.indexOf(libList[i].nameFi) > -1 && libList[i].id != currentLib &&
+                    libList[i].nameEn !== libList[i].nameFi) {
                     name = "?" + libList[i].nameEn;
                     currentUrl = currentUrl.replace(/\?(.*)/g, name);
                     console.log("FOUND LIB: " + currentUrl);
