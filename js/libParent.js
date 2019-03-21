@@ -65,7 +65,6 @@ window.addEventListener('message', function(event) {
                 }
                 else {
                     window.location.href = currentUrl;
-
                 }
             }, 2500);
         }
@@ -104,7 +103,20 @@ window.addEventListener('message', function(event) {
     // Update the url
     else if(data.type === "url") {
         try {
-            history.replaceState("", "", data.value);
+
+
+            if (navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1))
+            {
+                var link = document.createElement('a');
+                link.href = data.value;
+                document.body.appendChild(link);
+                link.click();
+            }
+            else {
+                history.replaceState("", "", data.value);
+            }
+
+
         }
         catch (e) {
             console.log("Url failed to update: " + e);
