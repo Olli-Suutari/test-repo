@@ -136,6 +136,12 @@ function generateSelect() {
                             }
                             counter = counter +1;
                             if(counter === data.items.length) {
+                                // Sort or the city listing wont be in  correct order...
+                                libraryList.sort(function(a, b){
+                                    if(a.city < b.city) { return -1; }
+                                    if(a.city > b.city) { return 1; }
+                                    return 0;
+                                });
                                 citiesDeferred.resolve();
                             }
                         }
