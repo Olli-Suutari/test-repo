@@ -10,13 +10,12 @@ var libList;
 window.addEventListener('message', function(event) {
     var data = event.data;
     if(data.type === "libList") {
-        console.log(data);
         libList = data.value;
         var currentLib = data.selectedLib;
         var lang = data.lang;
         var referrer = document.referrer;
         var currentUrl = window.location.toString();
-        console.log("REFERRER: " + referrer + " URL: " + currentUrl);
+        //console.log("REFERRER: " + referrer + " URL: " + currentUrl);
         var needsRedirect = false;
         var name = "";
         if(lang === "fi") {
@@ -25,7 +24,6 @@ window.addEventListener('message', function(event) {
                     libList[i].nameEn !== libList[i].nameFi) {
                     name = "?" + libList[i].nameFi;
                     currentUrl = currentUrl.replace(/\?(.*)/g, name);
-                    console.log("FOUND LIB: " + currentUrl);
                     needsRedirect = true;
                 }
             }
@@ -41,7 +39,6 @@ window.addEventListener('message', function(event) {
                     libList[i].nameEn !== libList[i].nameFi) {
                     name = "?" + libList[i].nameEn;
                     currentUrl = currentUrl.replace(/\?(.*)/g, name);
-                    console.log("FOUND LIB: " + currentUrl);
                     needsRedirect = true;
                 }
             }
@@ -52,7 +49,7 @@ window.addEventListener('message', function(event) {
             }
         }
         if(needsRedirect) {
-            console.log(lang + " REDIRECT TO: " + currentUrl);
+            //console.log(lang + " REDIRECT TO: " + currentUrl);
             setTimeout(function(){
                 /* IE does not update referrer if we use history.replaceState or .pushState , thus this wont work on ie.
                 https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/10474810/
@@ -97,7 +94,7 @@ window.addEventListener('message', function(event) {
     // Update the url
     else if(data.type === "url") {
         try {
-            history.replaceState("", "", data.value);
+            history.pushState("", "", data.value);
         }
         catch (e) {
             console.log("Url failed to update: " + e);
