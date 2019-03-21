@@ -54,24 +54,13 @@ window.addEventListener('message', function(event) {
         if(needsRedirect) {
             console.log(lang + " REDIRECT TO: " + currentUrl);
             setTimeout(function(){
+                /* IE does not update referrer if we use history.replaceState or .pushState , thus this wont work on ie.
+                https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/10474810/
+                Bonus: IE also loses referrer when using window.location.href = ...
                 // https://blog.mathiaskunto.com/2012/02/20/internet-explorer-loses-referrer-when-redirecting-or-linking-with-javascript/
-                // https://stackoverflow.com/questions/24861073/detect-if-any-kind-of-ie-msie/24861307
-                if (navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1))
-                {
-                    console.log("IE REDIRECT:...");
-                    setTimeout(function(){
-
-                        var link = document.createElement('a');
-                        link.href = currentUrl;
-                        document.body.appendChild(link);
-                        link.click();
-                    }, 2500);
-
-                }
-                else {
-                    window.location.href = currentUrl;
-                }
-            }, 2500);
+                */
+                window.location.href = currentUrl;
+            }, 500);
         }
     }
     // Scroll to position
@@ -108,18 +97,7 @@ window.addEventListener('message', function(event) {
     // Update the url
     else if(data.type === "url") {
         try {
-
-
-            if (navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1))
-            {
-                history.pushState("", "", data.value);
-
-            }
-            else {
-                history.replaceState("", "", data.value);
-            }
-
-
+            history.replaceState("", "", data.value);
         }
         catch (e) {
             console.log("Url failed to update: " + e);
