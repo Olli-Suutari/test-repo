@@ -123,5 +123,7 @@ window.addEventListener('popstate', function(e){
     console.log('url changed')
     //var currentUrl = window.location.toString();
     //window.location.href = window.location.toString();
-    window.location.replace(window.location.toString());
+    setTimeout(function(){
+        window.location.replace(window.location.toString());
+    }, 5050);
 });
