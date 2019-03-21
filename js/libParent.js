@@ -94,7 +94,14 @@ window.addEventListener('message', function(event) {
     // Update the url
     else if(data.type === "url") {
         try {
-            history.pushState("", "", data.value);
+            if(data.value == window.location.toString()) {
+                console.log("REPLACE");
+                history.replaceState("", "", data.value);
+            }
+            else {
+                console.log("PUSH");
+                history.replaceState("", "", data.value);
+            }
         }
         catch (e) {
             console.log("Url failed to update: " + e);
