@@ -37,7 +37,7 @@ window.addEventListener('message', function(event) {
                 console.log("FI REDIRECT TO: " + currentUrl);
                 setTimeout(function(){
                     window.location.href = currentUrl;
-                }, 750);
+                }, 1250);
             }
         }
         else if(lang === "en") {
@@ -58,7 +58,7 @@ window.addEventListener('message', function(event) {
                 console.log("EN REDIRECT TO: " + currentUrl);
                 setTimeout(function(){
                     window.location.href = currentUrl;
-                }, 750);
+                }, 1250);
             }
         }
     }
@@ -96,7 +96,7 @@ window.addEventListener('message', function(event) {
     // Update the url
     else if(data.type === "url") {
         try {
-            history.pushState("", "", data.value);
+            history.replaceState("", "", data.value);
         }
         catch (e) {
             console.log("Url failed to update: " + e);
