@@ -109,3 +109,29 @@ if(window.location.href.indexOf('keskikirjastot') > -1) {
         }
     });
 }
+
+// https://gist.github.com/sstephenson/739659
+var detectBackOrForward = function(onBack, onForward) {
+    hashHistory = [window.location.hash];
+    historyLength = window.history.length;
+    return function() {
+        var hash = window.location.hash, length = window.history.length;
+        if (hashHistory.length && historyLength == length) {
+            if (hashHistory[hashHistory.length - 2] == hash) {
+                hashHistory = hashHistory.slice(0, -1);
+                onBack();
+            } else {
+                hashHistory.push(hash);
+                onForward();
+            }
+        } else {
+            hashHistory.push(hash);
+            historyLength = length;
+        }
+    }
+};
+
+window.addEventListener("hashchange", detectBackOrForward(
+    function() { console.log("back") },
+    function() { console.log("forward") }
+));
