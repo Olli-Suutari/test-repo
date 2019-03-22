@@ -104,7 +104,7 @@ window.addEventListener('message', function(event) {
         console.log("random", r);
         try {
             var currentUrl = window.location.href;
-            if(data.value == window.location.toString() || !currentUrl.indexOf('?') > -1) {
+            if(data.value == window.location.toString() || !(currentUrl.indexOf('?') > -1)) {
                 console.log("REPLACE");
                 //history.replaceState("", "", data.value);
                 history.pushState(stateObj, t, data.value);
