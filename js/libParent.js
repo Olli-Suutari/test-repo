@@ -148,16 +148,17 @@ window.addEventListener('popstate', function(e){
 //this executes when you use the back button
 window.onpopstate = function(e) {
     //alert(e.state.urlValue);
+    console.log(e.state.urlValue  + " " + storedUrl);
+    console.log(e.state.urlValue !== storedUrl)
+    storedUrl = storedUrl.replace("")
     setTimeout(function(){
-        console.log(e.state.urlValue  + " " + storedUrl);
-        console.log(e.state.urlValue !== storedUrl)
-        storedUrl = storedUrl.replace("")
+
         if(e.state.urlValue !== storedUrl) {
             console.log("CHAANGE")
             //window.location.replace(e.state.urlValue);
             window.location.href = e.state.urlValue;
         }
-    }, 250);
+    }, 7050);
 
 
     //perhaps use an ajax call to update content based on the e.state.id
