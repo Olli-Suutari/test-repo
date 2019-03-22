@@ -149,9 +149,18 @@ window.addEventListener('popstate', function(e){
 window.onpopstate = function(e) {
     //alert(e.state.urlValue);
 
+    if(storedUrl.indexOf('?yhteystiedot') > -1) {
+        storedUrl = storedUrl.replace('?yhteystiedot', "");
+        storedUrl = storedUrl + '?yhteystiedot'
+    }
+    else if(storedUrl.indexOf('?contacts') > -1) {
+        storedUrl = storedUrl.replace('?contacts', "");
+        storedUrl = storedUrl + '?contacts'
+    }
     setTimeout(function(){
         console.log(e.state.urlValue  + " " + storedUrl);
         console.log(e.state.urlValue !== storedUrl)
+        storedUrl = storedUrl.replace("")
         if(e.state.urlValue !== storedUrl) {
             console.log("CHAANGE")
             //window.location.replace(e.state.urlValue);
