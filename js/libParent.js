@@ -160,7 +160,7 @@ window.onpopstate = function(e) {
             //window.location.replace(e.state.urlValue);
             window.location.href = e.state.urlValue;
         }
-    }, 200);
+    }, 1200);
 
 
     //perhaps use an ajax call to update content based on the e.state.id
