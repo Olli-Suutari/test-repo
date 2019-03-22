@@ -14,7 +14,7 @@ window.addEventListener('message', function(event) {
         var currentLib = data.selectedLib;
         var lang = data.lang;
         var referrer = document.referrer;
-        var currentUrl = window.location.toString();
+        var currentUrl = window.location.href;
         //console.log("REFERRER: " + referrer + " URL: " + currentUrl);
         var needsRedirect = false;
         var name = "";
@@ -49,7 +49,7 @@ window.addEventListener('message', function(event) {
             }
         }
         if(needsRedirect) {
-            //console.log(lang + " REDIRECT TO: " + currentUrl);
+            console.log(lang + " REDIRECT TO: " + currentUrl);
             setTimeout(function(){
                 /* IE does not update referrer if we use history.replaceState or .pushState , thus this wont work on ie.
                 https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/10474810/
@@ -102,7 +102,8 @@ window.addEventListener('message', function(event) {
         console.log("random", r);
         */
         try {
-            if(data.value == window.location.toString()) {
+            var currentUrl = window.location.href;
+            if(data.value == window.location.toString() || !currentUrl.indexOf('?') > -1) {
                 console.log("REPLACE");
                 history.replaceState("", "", data.value);
             }
