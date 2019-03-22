@@ -148,9 +148,11 @@ window.addEventListener('popstate', function(e){
 //this executes when you use the back button
 window.onpopstate = function(e) {
     //alert(e.state.urlValue);
-    console.log(e.state.urlValue  + " " + storedUrl);
-    console.log(e.state.urlValue !== storedUrl)
-    storedUrl = storedUrl.replace("")
+    setTimeout(function(){
+        console.log(e.state.urlValue  + " " + storedUrl);
+        console.log(e.state.urlValue !== storedUrl)
+    }, 750);
+
     setTimeout(function(){
 
         if(e.state.urlValue !== storedUrl) {
