@@ -7,7 +7,6 @@ css.innerHTML = '#libFrame { transition: height 800ms; }';
 document.head.appendChild(css);
 // Event listener for messages from the iframe.
 var libList;
-
 var storedUrl = window.location.href;
 window.addEventListener('message', function(event) {
     var data = event.data;
@@ -17,7 +16,6 @@ window.addEventListener('message', function(event) {
         var lang = data.lang;
         var referrer = document.referrer;
         var currentUrl = window.location.href;
-        //console.log("REFERRER: " + referrer + " URL: " + currentUrl);
         var needsRedirect = false;
         var name = "";
         if(lang === "fi") {
@@ -51,7 +49,6 @@ window.addEventListener('message', function(event) {
             }
         }
         if(needsRedirect) {
-            console.log(lang + " REDIRECT TO: " + currentUrl);
             setTimeout(function(){
                 /* IE does not update referrer if we use history.replaceState or .pushState , thus this wont work on ie.
                 https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/10474810/
@@ -96,31 +93,20 @@ window.addEventListener('message', function(event) {
     }
     // Update the url
     else if(data.type === "url") {
-        /*
-        https://developer.mozilla.org/en-US/docs/Web/API/History_API
-
-        var r = Math.random().toString(36).substring(7);
-        var t = Math.random().toString(36).substring(7);
-                console.log("random", r);
-           */
-
+        // https://developer.mozilla.org/en-US/docs/Web/API/History_API
         var stateObj = { urlValue: data.value };
-        console.log(data.stateTitle);
         try {
             var currentUrl = window.location.href;
             if(data.value == currentUrl || !(currentUrl.indexOf('?') > -1)) {
-                console.log("REPLACE " + data.value);
                 //history.replaceState("", "", data.value);
                 history.replaceState(stateObj, data.stateTitle, data.value);
 
             }
             else {
-                console.log("PUSH " + data.value);
                 //history.pushState("", "", data.value);
                 history.pushState(stateObj, data.stateTitle, data.value);
             }
             storedUrl = data.value;
-            console.log(history);
         }
         catch (e) {
             console.log("Url failed to update: " + e);
@@ -135,34 +121,11 @@ if(window.location.href.indexOf('keskikirjastot') > -1) {
         }
     });
 }
-
-
-// https://stackoverflow.com/questions/6390341/how-to-detect-url-change-in-javascript
-/*
-window.addEventListener('popstate', function(e){
-    console.log('url changed')
-    //var currentUrl = window.location.toString();
-    //window.location.href = window.location.toString();
-
-});*/
-
-//this executes when you use the back button
+// Handle history forward/back calls.
 window.onpopstate = function(e) {
-    //alert(e.state.urlValue);
     setTimeout(function(){
-        console.log(e.state.urlValue  + " " + storedUrl);
-        console.log(e.state.urlValue !== storedUrl)
-    }, 50);
-
-    setTimeout(function(){
-
         if(e.state.urlValue !== storedUrl) {
-            console.log("CHAANGE")
-            //window.location.replace(e.state.urlValue);
             window.location.href = e.state.urlValue;
         }
-    }, 1200);
-
-
-    //perhaps use an ajax call to update content based on the e.state.id
+    }, 1000);
 };

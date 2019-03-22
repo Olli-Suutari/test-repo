@@ -103,7 +103,6 @@ function initSelect(items) {
 function setSelectDefault() {
     $('.library-select').val(library).trigger('change');
     libName = $("#librarySelector option:selected").text();
-    console.log("SET");
 }
 
 function generateSelect() {
@@ -116,7 +115,6 @@ function generateSelect() {
             return 1;
         return 0; //default return value (no sorting)
     });
-
     // If we are fetching a consortium or a city.
     if(consortium !== undefined || city !== undefined) {
         var consortiumLibraries = [];

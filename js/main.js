@@ -365,7 +365,7 @@ function adjustParentHeight(delay, elementPosY) {
                 //console.log(newHeight);
                 if(newHeight < 200) {
                     newHeight = newHeight + 3000;
-                    console.log(newHeight)
+                    //console.log(newHeight)
                 }
             }
             if(newHeight !== height) {
@@ -394,7 +394,6 @@ function adjustParentUrl(toAdd, type) {
         }
         refUrl = decodeVal(refUrl);
     }
-    console.log("HERE WE ARE: " + toAdd + " " + refUrl);
     toAdd = encodeVal(toAdd);
     var stateTitle = libName;
     if(stateTitle === undefined) {
