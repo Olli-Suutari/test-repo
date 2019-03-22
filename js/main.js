@@ -386,6 +386,15 @@ function adjustParentUrl(toAdd, type) {
     refUrl = encodeVal(refUrl);
     console.log("HERE WE ARE: " + toAdd);
     toAdd = encodeVal(toAdd);
+    var stateTitle = libName;
+    if(stateTitle === undefined) {
+        if(lang == "fi") {
+            stateTitle = "Kirjastot"
+        }
+        else {
+            stateTitle = "Libraries"
+        }
+    }
     // Remove item from url, if it already exists.
     refUrl = refUrl.replace(new RegExp(toAdd,"i"), "");
     // Check for services.
@@ -395,6 +404,7 @@ function adjustParentUrl(toAdd, type) {
             var serviceName = encodeVal(serviceNames[i]);
             if(refUrl.indexOf(serviceName) > -1) {
                 refUrl = refUrl.replace(serviceName, "");
+                stateTitle = stateTitle + " | " + serviceNames[i];
             }
         }
     }
@@ -427,8 +437,6 @@ function adjustParentUrl(toAdd, type) {
     if(toAdd !== ''){
         refUrl = refUrl + "?" + toAdd;
     }
-
-
     refUrl = refUrl.replace(/(%3f)/g, "?");
     // Remove duplicated ?
     refUrl = refUrl.replace(/[?]{2,}/g, "?");
@@ -438,16 +446,18 @@ function adjustParentUrl(toAdd, type) {
     if(refUrl.indexOf('?yhteystiedot') > -1) {
         refUrl = refUrl.replace('?yhteystiedot', "");
         refUrl = refUrl + '?yhteystiedot'
+        stateTitle = stateTitle + " | Yhteystiedot"
     }
     else if(refUrl.indexOf('?contacts') > -1) {
         refUrl = refUrl.replace('?contacts', "");
         refUrl = refUrl + '?contacts'
+        stateTitle = stateTitle + " | Contacts"
     }
     // Remove ?, = if last character.
     refUrl = refUrl.replace(/\?$/, '');
     refUrl = refUrl.replace(/=$/, '');
     try {
-        parent.postMessage({value: refUrl, type: 'url'}, '*');
+        parent.postMessage({value: refUrl, stateTitle: stateTitle, type: 'url'}, '*');
     }
     catch (e) {
         console.log("Parent url adjustment failed: " + e);

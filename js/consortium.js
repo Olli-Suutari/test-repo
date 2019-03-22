@@ -103,6 +103,7 @@ function initSelect(items) {
 function setSelectDefault() {
     $('.library-select').val(library).trigger('change');
     libName = $("#librarySelector option:selected").text();
+    console.log("SET");
 }
 
 function generateSelect() {

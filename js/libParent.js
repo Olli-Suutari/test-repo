@@ -98,28 +98,29 @@ window.addEventListener('message', function(event) {
     else if(data.type === "url") {
         /*
         https://developer.mozilla.org/en-US/docs/Web/API/History_API
-                        */
+
         var r = Math.random().toString(36).substring(7);
         var t = Math.random().toString(36).substring(7);
-
+                console.log("random", r);
+           */
 
         var stateObj = { urlValue: data.value };
-        console.log("random", r);
+        console.log(data.stateTitle);
         try {
             var currentUrl = window.location.href;
             if(data.value == currentUrl || !(currentUrl.indexOf('?') > -1)) {
                 console.log("REPLACE " + data.value);
                 //history.replaceState("", "", data.value);
-                history.replaceState(stateObj, "", data.value);
+                history.replaceState(stateObj, data.stateTitle, data.value);
 
             }
             else {
                 console.log("PUSH " + data.value);
                 //history.pushState("", "", data.value);
-                history.pushState(stateObj, "", data.value);
-
+                history.pushState(stateObj, data.stateTitle, data.value);
             }
             storedUrl = data.value;
+            console.log(history);
         }
         catch (e) {
             console.log("Url failed to update: " + e);
