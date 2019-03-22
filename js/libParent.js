@@ -151,7 +151,7 @@ window.onpopstate = function(e) {
     setTimeout(function(){
         console.log(e.state.urlValue  + " " + storedUrl);
         console.log(e.state.urlValue !== storedUrl)
-    }, 750);
+    }, 50);
 
     setTimeout(function(){
 
@@ -160,7 +160,7 @@ window.onpopstate = function(e) {
             //window.location.replace(e.state.urlValue);
             window.location.href = e.state.urlValue;
         }
-    }, 7050);
+    }, 200);
 
 
     //perhaps use an ajax call to update content based on the e.state.id
