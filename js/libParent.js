@@ -110,13 +110,14 @@ window.addEventListener('message', function(event) {
             if(data.value == currentUrl || !(currentUrl.indexOf('?') > -1)) {
                 console.log("REPLACE");
                 //history.replaceState("", "", data.value);
-                history.pushState(stateObj, t, data.value);
+                history.pushState(stateObj,
+                    "", data.value);
 
             }
             else {
                 console.log("PUSH");
                 //history.pushState("", "", data.value);
-                history.pushState(stateObj, t, data.value);
+                history.pushState(stateObj, "", data.value);
 
             }
             storedUrl = data.value;
