@@ -384,7 +384,17 @@ function adjustParentHeight(delay, elementPosY) {
  */
 function adjustParentUrl(toAdd, type) {
     refUrl = encodeVal(refUrl);
-    console.log("HERE WE ARE: " + toAdd);
+    // Sometimes refurl is set to github when paging back or forwards, reset in case so...
+    if(refUrl.indexOf("github") >-1) {
+        refUrl = (window.location != window.parent.location)
+            ? document.referrer
+            : document.location.href;
+        if(refUrl.length === 0) {
+            refUrl = window.location.href;
+        }
+        refUrl = decodeVal(refUrl);
+    }
+    console.log("HERE WE ARE: " + toAdd + " " + refUrl);
     toAdd = encodeVal(toAdd);
     var stateTitle = libName;
     if(stateTitle === undefined) {
