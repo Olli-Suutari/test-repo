@@ -7,6 +7,8 @@ css.innerHTML = '#libFrame { transition: height 800ms; }';
 document.head.appendChild(css);
 // Event listener for messages from the iframe.
 var libList;
+
+var storedUrl = window.location.href;
 window.addEventListener('message', function(event) {
     var data = event.data;
     if(data.type === "libList") {
@@ -56,6 +58,7 @@ window.addEventListener('message', function(event) {
                 Bonus: IE also loses referrer when using window.location.href = ...
                 // https://blog.mathiaskunto.com/2012/02/20/internet-explorer-loses-referrer-when-redirecting-or-linking-with-javascript/
                 */
+                storedUrl = currentUrl;
                 window.location.href = currentUrl;
             }, 50);
         }
@@ -100,11 +103,11 @@ window.addEventListener('message', function(event) {
         var t = Math.random().toString(36).substring(7);
 
 
-        var stateObj = { foo: r };
+        var stateObj = { urlValue: data.value };
         console.log("random", r);
         try {
             var currentUrl = window.location.href;
-            if(data.value == window.location.toString() || !(currentUrl.indexOf('?') > -1)) {
+            if(data.value == currentUrl || !(currentUrl.indexOf('?') > -1)) {
                 console.log("REPLACE");
                 //history.replaceState("", "", data.value);
                 history.pushState(stateObj, t, data.value);
@@ -116,6 +119,7 @@ window.addEventListener('message', function(event) {
                 history.pushState(stateObj, t, data.value);
 
             }
+            storedUrl = data.value;
         }
         catch (e) {
             console.log("Url failed to update: " + e);
@@ -133,11 +137,28 @@ if(window.location.href.indexOf('keskikirjastot') > -1) {
 
 
 // https://stackoverflow.com/questions/6390341/how-to-detect-url-change-in-javascript
+/*
 window.addEventListener('popstate', function(e){
     console.log('url changed')
     //var currentUrl = window.location.toString();
     //window.location.href = window.location.toString();
+
+});*/
+
+//this executes when you use the back button
+window.onpopstate = function(e) {
+    //alert(e.state.urlValue);
+
     setTimeout(function(){
-        window.location.replace(window.location);
-    }, 50);
-});
+        console.log(e.state.urlValue  + " " + storedUrl);
+        console.log(e.state.urlValue !== storedUrl)
+        if(e.state.urlValue !== storedUrl) {
+            console.log("CHAANGE")
+            //window.location.replace(e.state.urlValue);
+            window.location.href = e.state.urlValue;
+        }
+    }, 250);
+
+
+    //perhaps use an ajax call to update content based on the e.state.id
+};
