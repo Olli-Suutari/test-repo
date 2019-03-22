@@ -127,5 +127,5 @@ window.onpopstate = function(e) {
         if(e.state.urlValue !== storedUrl) {
             window.location.href = e.state.urlValue;
         }
-    }, 1000);
+    }, 300);
 };
