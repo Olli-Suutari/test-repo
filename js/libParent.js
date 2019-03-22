@@ -148,15 +148,6 @@ window.addEventListener('popstate', function(e){
 //this executes when you use the back button
 window.onpopstate = function(e) {
     //alert(e.state.urlValue);
-
-    if(storedUrl.indexOf('?yhteystiedot') > -1) {
-        storedUrl = storedUrl.replace('?yhteystiedot', "");
-        storedUrl = storedUrl + '?yhteystiedot'
-    }
-    else if(storedUrl.indexOf('?contacts') > -1) {
-        storedUrl = storedUrl.replace('?contacts', "");
-        storedUrl = storedUrl + '?contacts'
-    }
     setTimeout(function(){
         console.log(e.state.urlValue  + " " + storedUrl);
         console.log(e.state.urlValue !== storedUrl)

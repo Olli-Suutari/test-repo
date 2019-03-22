@@ -427,11 +427,22 @@ function adjustParentUrl(toAdd, type) {
     if(toAdd !== ''){
         refUrl = refUrl + "?" + toAdd;
     }
+
+
     refUrl = refUrl.replace(/(%3f)/g, "?");
     // Remove duplicated ?
     refUrl = refUrl.replace(/[?]{2,}/g, "?");
     // Fix jkl redirects ?=? patterns.
     refUrl = refUrl.replace(/(\?=\?)/g, "?");
+    // Always place contacts at the end of the url.
+    if(refUrl.indexOf('?yhteystiedot') > -1) {
+        refUrl = refUrl.replace('?yhteystiedot', "");
+        refUrl = refUrl + '?yhteystiedot'
+    }
+    else if(refUrl.indexOf('?contacts') > -1) {
+        refUrl = refUrl.replace('?contacts', "");
+        refUrl = refUrl + '?contacts'
+    }
     // Remove ?, = if last character.
     refUrl = refUrl.replace(/\?$/, '');
     refUrl = refUrl.replace(/=$/, '');
