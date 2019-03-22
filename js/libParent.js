@@ -108,14 +108,13 @@ window.addEventListener('message', function(event) {
         try {
             var currentUrl = window.location.href;
             if(data.value == currentUrl || !(currentUrl.indexOf('?') > -1)) {
-                console.log("REPLACE");
+                console.log("REPLACE " + data.value);
                 //history.replaceState("", "", data.value);
-                history.pushState(stateObj,
-                    "", data.value);
+                history.replaceState(stateObj, "", data.value);
 
             }
             else {
-                console.log("PUSH");
+                console.log("PUSH " + data.value);
                 //history.pushState("", "", data.value);
                 history.pushState(stateObj, "", data.value);
 
