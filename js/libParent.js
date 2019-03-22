@@ -95,21 +95,26 @@ window.addEventListener('message', function(event) {
     else if(data.type === "url") {
         /*
         https://developer.mozilla.org/en-US/docs/Web/API/History_API
+                        */
         var r = Math.random().toString(36).substring(7);
         var t = Math.random().toString(36).substring(7);
+
+
         var stateObj = { foo: r };
-        history.pushState(stateObj, t, data.value);
         console.log("random", r);
-        */
         try {
             var currentUrl = window.location.href;
             if(data.value == window.location.toString() || !currentUrl.indexOf('?') > -1) {
                 console.log("REPLACE");
-                history.replaceState("", "", data.value);
+                //history.replaceState("", "", data.value);
+                history.pushState(stateObj, t, data.value);
+
             }
             else {
                 console.log("PUSH");
-                history.pushState("", "", data.value);
+                //history.pushState("", "", data.value);
+                history.pushState(stateObj, t, data.value);
+
             }
         }
         catch (e) {
