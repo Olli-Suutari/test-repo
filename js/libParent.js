@@ -100,7 +100,6 @@ window.addEventListener('message', function(event) {
             if(data.value == currentUrl || !(currentUrl.indexOf('?') > -1)) {
                 //history.replaceState("", "", data.value);
                 history.replaceState(stateObj, data.stateTitle, data.value);
-
             }
             else {
                 //history.pushState("", "", data.value);
@@ -124,8 +123,8 @@ if(window.location.href.indexOf('keskikirjastot') > -1) {
 // Handle history forward/back calls.
 window.onpopstate = function(e) {
     setTimeout(function(){
-        if(e.state.urlValue !== storedUrl) {
+        if(e.state.urlValue != null && e.state.urlValue !== storedUrl) {
             window.location.href = e.state.urlValue;
         }
-    }, 300);
+    }, 450);
 };

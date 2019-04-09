@@ -4,6 +4,8 @@ function generateScheduleInfo(data) {
     var holidayDescription;
     var isHoliday = false;
     var items = [];
+    var isWeekInfo = false;
+    var isSpecialInfo = false;
     // Turn object object array to object array.
     for (var key in data) {
         if (data.hasOwnProperty(key) && (typeof data[key] === "object")) {
@@ -50,24 +52,13 @@ function generateScheduleInfo(data) {
                     }
                     var mondayDate = moment().add(weekCounter, 'weeks').weekday(0).format("YYYY-MM-DD");
                     var sundayDate = moment().add(weekCounter, 'weeks').weekday(6).format("YYYY-MM-DD");
-                    //console.log(items[i].validFrom + "|"  + mondayDate);
-                    //console.log(items[i].validUntil + "|"  + sundayDate);
                     if(items[i].validFrom == mondayDate && items[i].validUntil == sundayDate) {
                         isSpecialWeek = true;
                         totalRows = totalRows +2;
-                        $('#specialInfo').replaceWith('<span id="specialInfo" class="info-span info-text"><i class="fa fa-info-circle" > </i> '
-                            + holidayDescription + '</span>');
-                    }
-                    else {
-                        totalRows = totalRows +2;
-                        //genericDescription = genericDescription + "<br><br>" + holidayDescription;
-                        $('#specialInfo').replaceWith('<span id="specialInfo" class="info-span info-text"><i class="fa fa-info-circle" > </i> '
-                            + holidayDescription + '</span>');
                     }
                 }
                 if(genericDescription !== undefined && !isSpecialWeek) {
-                    $('#scheduleInfo').replaceWith('<span id="scheduleInfo" class="info-span info-text"><i class="fa fa-info-circle" > </i> '
-                        + genericDescription + '</span>');
+                    console.log("HEY!");
                     // Add rows for infoscreen font-size calculations...
                     if (genericDescription.length < 40) {
                         totalRows = totalRows +1;
@@ -82,6 +73,7 @@ function generateScheduleInfo(data) {
                     else {
                         totalRows = totalRows +4;
                     }
+                    isWeekInfo = true;
                 }
                 else {
                     $('#scheduleInfo').replaceWith('<span id="scheduleInfo" style="display: none" class="info-span info-text"><i class="fa fa-info-circle" > </i></span>');
@@ -89,14 +81,38 @@ function generateScheduleInfo(data) {
                 if(holidayDescription === undefined) {
                     $('#specialInfo').replaceWith('<span id="specialInfo" style="display: none" class="info-span info-text"><i class="fa fa-info-circle" > </i></span>');
                 }
+                if(isWeekInfo || isSpecialInfo) {
+                    $('#scheduleInfos').css("display", "");
+                }
+                else {
+                    $('#scheduleInfos').css("display", "none");
+                }
+                if(isWeekInfo) {
+                    $('#scheduleInfo').replaceWith('<span id="scheduleInfo" class="info-span-lg info-text"><i class="fa fa-info-circle" > </i> ' + genericDescription + '</span>');
+                    $('#scheduleInfoRow').css("display", "");
+                }
+                else {
+                    $('#scheduleInfoRow').css("display", "none");
+                }
+                if(isSpecialInfo) {
+                    $('#specialInfo').replaceWith('<span id="specialInfo" class="info-span-lg info-text"><i class="fa fa-info-circle" > </i>' + holidayDescription + '</span>');
+                    $('#specialInfoRow').css("display", "");
+                }
+                else {
+                    $('#specialInfoRow').css("display", "none");
+                }
         }
 }
-
 var weekCounter = 0;
 var dateInSchedule;
 // totalRows is used to dynamically adjust font sizes for info-screens.
 var totalRows = 0;
+var schedulesAreAvailable = false;
 function getWeekSchelude(direction, lib) {
+    if(v4ApiBroken) {
+        getWeekScheludeV3(direction, lib);
+        return;
+    }
     totalRows = 0;
     // If no library is provided, use the default option.
     if (lib === undefined) {
@@ -111,25 +127,54 @@ function getWeekSchelude(direction, lib) {
         weekCounter = weekCounter + 1;
         return;
     }
-    // Do not allow going more than 10 weeks to the past or for more than 26 weeks.
+    // Do not allow going more than 8 weeks to the past or for more than 12 weeks.
     if (weekCounter < -10) {
         weekCounter = -10;
+        // Koningas
+        $('#lastWeek').attr('data-toggle', 'tooltip');
+        $('#lastWeek').attr('data-placement', 'top');
+        $('#lastWeek').attr('title', 'w00t');
+        $('#lastWeek').tooltip('show');
         return;
     }
-    if (weekCounter > 26) {
-        weekCounter = 26;
+    // Restrict to 12 weeks in to the future.
+    if (weekCounter > 12) {
+        weekCounter = 12;
+        $('#nextWeek').attr('data-toggle', 'tooltip');
+        $('#nextWeek').attr('data-placement', 'top');
+        $('#nextWeek').attr('title', 'w00t');
+        $('#nextWeek').tooltip('show');
         return;
     }
+    $('#lastWeek').tooltip('hide');
+    $('#nextWeek').tooltip('hide');
+
     // Display week number.
     $("#weekNumber").html(i18n.get("Week") + ' ' + weekNumber);
-    // Use &pretty: https://github.com/libraries-fi/kirkanta-api/issues/3
     $.getJSON("https://api.kirjastot.fi/v4/schedules?library=" + lib + "&lang=" + lang +
-        "&period.start=" + weekCounter + "w&period.end=" + weekCounter + "w&refs=period&limit=5000&pretty", function (data) {
+        "&period.start=" + weekCounter + "w&period.end=" + weekCounter + "w&refs=period&limit=5000", function (data) {
+        console.log(data);
         if (data.items.length === 0) {
-            $('#schedules').css('display', 'none');
+            // If we have not previously fetched the schedules succesfully.
+            if(!schedulesAreAvailable) {
+                $('#schedules').css('display', 'none');
+            }
+            else {
+                console.log("Oh yeah!")
+                $("#weekSchelude").replaceWith('<tbody id="weekSchelude" class="schedules-weekly">');
+
+                dayInfo = '<tr class="info-span info-text">' +
+                    '<td colspan="2"><span id="scheduleInfo" class="info-span info-text"><i class="fa fa-info-circle" > </i> ' + infoText + '</span></td>' +
+                    '</tr>';
+
+                $("#weekSchelude").append(dayInfo);
+
+                //$('#scheduleInfo').replaceWith('<span id="scheduleInfo" class="info-span info-text"><i class="fa fa-info-circle" > </i> "uh oh" + '</span>');
+            }
             isScheduleEmpty = true;
             return;
         }
+        schedulesAreAvailable = true;
         isScheduleEmpty = false;
         var date = moment().add(weekCounter, 'weeks');
         dateInSchedule = new Date();
@@ -172,7 +217,6 @@ function getWeekSchelude(direction, lib) {
                     isClosed = false;
                 }
             }
-
             // If schedules exists
             if (schedules != null) {
                 // Info row.
@@ -195,7 +239,7 @@ function getWeekSchelude(direction, lib) {
                         }
                     }
                     dayInfo = '<tr class="info-row time--sub isTodayClass">' +
-                        '<td colspan="2"><span class="info-text"><i class="fa fa-info-circle" > </i> ' + infoText + '</span></td>' +
+                        '<td colspan="2"><span class="info-span info-text"><i class="fa fa-info-circle" > </i> ' + infoText + '</span></td>' +
                         '</tr>';
                     increaseRowCount(true);
                 }

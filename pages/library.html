@@ -32,6 +32,7 @@
   <script src="../js/libDetails.js"></script>
   <script src="../js/main.js"></script>
   <script src="../js/scheduleCommon.js"></script>
+  <script src="../js/scheduleV3.js"></script>
   <script src="../js/schedule.js"></script>
   <script src="../js/lib/popper.min.js"></script>
   <script src="../js/lib/bootstrap.min.js"></script>
@@ -48,8 +49,8 @@
   <main id="pageContainer" class="container main content">
     <header>
       <nav class="nav nav-pills nav-library-page">
-        <a id="navInfo" class="nav-item nav-link active" style="display: none" href="#"></a>
-        <a id="navContacts" class="nav-item nav-link" style="display: none" href="#"></a>
+        <a id="navInfo" class="nav-item nav-link active" style="display: none" href="javascript:void(0);"></a>
+        <a id="navContacts" class="nav-item nav-link" style="display: none" href="javascript:void(0);"></a>
       </nav>
     </header>
     <div class="row esittely">
@@ -93,8 +94,6 @@
         <!-- Scheludes -->
         <section id="schedules" class="library-schedules normal-schedules">
           <h3 id="scheduleTitle" class="underlined-title" style="display: none"></h3>
-          <span id="specialInfo" style="display: none" class="info-text"><i class="fa fa-info-circle" > </i></span>
-          <span id="scheduleInfo" style="display: none" class="info-text"><i class="fa fa-info-circle" > </i></span>
           <table class="table table-sm">
             <thead class="thead-light">
             <tr>
@@ -109,6 +108,22 @@
               </td>
             </tr>
             </thead>
+            <tbody id="scheduleInfos" class="schedule-infos" style="display: none">
+            <tr id="scheduleInfoRow" style="display: none">
+              <td colspan="3">
+                <span id="scheduleInfo" class="">
+                  <i class="fa fa-info-circle" > </i>
+                </span>
+              </td>
+            </tr>
+            <tr id="specialInfoRow" style="display: none">
+              <td colspan="3">
+                <span id="specialInfo" class="info-span info-text">
+                  <i class="fa fa-info-circle" > </i>
+                </span>
+              </td>
+            </tr>
+            </tbody>
             <tbody id="weekSchelude" class="schedules-weekly">
             </tbody>
           </table>

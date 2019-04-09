@@ -189,7 +189,7 @@ function asyncFetchBuildingDetails() {
                 }
                 if (data.extra.building.building_architect != null) {
                     triviaIsEmpty = false;
-                    $("#triviaBody").append('<tr><td class="trivia-cell-title"><strong>' + i18n.get("Aritecht") + ': </strong></td>' +
+                    $("#triviaBody").append('<tr><td class="trivia-cell-title"><strong>' + i18n.get("Architect") + ': </strong></td>' +
                         '<td class="trivia-detail">' + data.extra.building.building_architect + '</td></tr>');
                 }
                 if (data.extra.building.interior_designer != null) {
@@ -262,10 +262,10 @@ function toggleModal(elementPosY) {
                         });
                         isModalCloseBinded = true;
                     }
-                    adjustParentHeight(50, elementPosY)
-
+                    adjustParentHeight(50, elementPosY);
                 }, 100);
-
+                // Bind the tooltips.
+                $('[data-toggle="tooltip"]').tooltip();
             }, delay);
         }
         showModal(delay);
@@ -314,7 +314,7 @@ function bindServiceClicks() {
                     escapedName = escapedName.replace(/-/g, " ");
                     if(textInside.indexOf(escapedName) > -1) {
                         var linkToService = reFindLinksExec[0].replace('<p>',
-                            '<a class="service-link-in-modal" data-name="' + serviceNames[i] + '" href="#">');
+                            '<a class="service-link-in-modal" data-name="' + serviceNames[i] + '" href="javascript:void(0);">');
                         linkToService = linkToService.replace('</p>', '</a>');
                         linksToServices.push({position: reFindLinksExec[0], iframe: linkToService});
                     }
@@ -734,6 +734,8 @@ function asyncLoadMap() {
                     iconSize:     [24, 24], // size of the icon
                 });
                 var counter = 0;
+                // coordinateErrorSet is used when a library is listed twice in the listing. (Mobile library of Wiitaunion)
+                var coordinateErrorSet = false;
                 for (var i = 0; i < libraryList.length; i++) {
                     var text = '<strong>' + libraryList[i].text + '</strong><br>' +
                         libraryList[i].street + ', <br>' + libraryList[i].zipcode + ', ' + libraryList[i].city +
@@ -743,9 +745,10 @@ function asyncLoadMap() {
                         text = '<strong>' + libraryList[i].text + '</strong><br>' +
                             libraryList[i].street + ', <br>' + libraryList[i].zipcode + ', ' + libraryList[i].city;
                         // Add a notification text about missing coordinates for map.
-                        if(libraryList[i].coordinates === null) {
+                        if(libraryList[i].coordinates === null && !coordinateErrorSet) {
                             $('#mapContainer').append('<div id="noCoordinates">' + i18n.get("Note") + '! ' +
                                 libraryList[i].text.toString() + i18n.get("No coordinates") + '</div>');
+                            coordinateErrorSet = true;
                         }
                     }
                     if (libraryList[i].coordinates != null) {
@@ -936,7 +939,10 @@ function asyncFetchStaff() {
                             }
                         }
                         if (!checkIfContactExists(staffList, contact) || !checkIfNameExists(staffList, name)){
-                            staffList.push({name: name, contact: contact});
+                            // Don't push if contact or name is empty.
+                            if(contact.length !== 0 && name.length !== 0) {
+                                staffList.push({name: name, contact: contact});
+                            }
                         }
                     }
                     counter = counter +1;
@@ -1078,20 +1084,46 @@ function fetchInformation(language, lib) {
                 }, 400);
             }
             else {
-                if(noServices && language === "fi") {
-                    $('#libraryServices').css('display', 'none');
-                    // If no content is provided for the left collumn.
-                    if (descriptionIsEmpty) {
+                if(language === "fi") {
+                    var noLeftCol = false;
+                    var noSidebar = false;
+                    if(noServices) {
+                        $('#libraryServices').css('display', 'none');
+                        // If no content is provided for the left column.
+                        if (descriptionIsEmpty) {
+                            if(slogan !== null) {
+                                if(slogan.length <2) {
+                                    noLeftCol = true;
+                                }
+                            }
+                            else {
+                                noLeftCol = true;
+                            }
+                        }
+                    }
+                    // Right bar is empty.
+                    if(isScheduleEmpty && noImages && triviaIsEmpty) {
+                        noSidebar = true;
+                    }
+                    if(noLeftCol) {
                         // Hide the content on left, make the sidebar 100% in width.
                         $(".details").css("display", "none");
                         $("#leftBar").css("display", "none");
-                        $("#introductionSidebar").addClass("col-md-12");
                         $("#introductionSidebar").removeClass("col-lg-5 col-xl-4 order-2 sidebar");
-                        if(isScheduleEmpty && noImages && triviaIsEmpty) {
-                            $("#introductionSidebar").append('<div id="noIntroContent"><h3>' +
-                                i18n.get("No content") + ' <i class="fa fa-frown-o"></i></h3></div>');
-
-                        }
+                        $("#introductionSidebar").addClass("col-md-12");
+                        $("#sliderBox").removeClass("small-slider");
+                        $("#expandSlider").css("display", "none");
+                    }
+                    if(noSidebar && !noLeftCol) {
+                        $(".introductionSidebar").css("display", "none");
+                        $("#leftBar").addClass("col-md-12");
+                        $("#leftBar").removeClass("col-lg-5 col-xl-4 order-2 col-sm-12 col-md-7 col-lg-7 col-xl-8 col-md-12");
+                        $("#leftBar").css("border", "none");
+                    }
+                    // No content at all.
+                    if(noLeftCol && noSidebar) {
+                        $("#introductionSidebar").append('<div id="noIntroContent"><h3>' +
+                            i18n.get("No content") + ' <i class="fa fa-frown-o"></i></h3></div>');
                     }
                 }
                 adjustParentHeight(200);

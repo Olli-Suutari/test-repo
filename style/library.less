@@ -92,7 +92,7 @@ header {
 
 /* Service listings */
 .cols li {
-    word-break: break-word!important;
+    word-break: break-all!important;
     padding-bottom: 5px;
 }
 
@@ -733,6 +733,7 @@ html {
     display: flex;
     font-weight: 400;
     margin-top: 10px;
+    word-break: break-all;
 }
 
 .service-info i {
@@ -764,4 +765,8 @@ html {
 
 .modal-small .service-info i {
     margin-right: 10px;
+}
+
+.tooltip {
+    z-index: 999999999999!important;
 }

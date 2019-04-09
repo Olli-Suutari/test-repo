@@ -62,6 +62,11 @@ function generatPrettyUrl(url) {
     return url;
 }
 
+// Capitalize the 1st letter of a string.
+function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 // Function for adding a new palvelut item.
 // Define accessibility count here, define other counts later on.
 var accessibilityCount = 0;
@@ -142,29 +147,37 @@ function addItem(item, listElement) {
             if (item.shortDescription != null && item.shortDescription.length != 0) {
                 description = '<p>' + item.shortDescription + '</p>';
             }
-            // Add "long" description where available.
-            if (item.description != null && item.description.length != 0) {
+            // Add "long" description where available && not equal to the short one.
+            if (item.description != null && item.description.length != 0 && item.description !== item.shortDescription) {
                 // Replace row splits with <br>
                 var longDescription = item.description.replace(/\r\n/g, "<br>");
                 description = '<p>' + description + '</p><p>' + longDescription + '</p>';
             }
+            // Accessible icons: https://fontawesome.com/how-to-use/on-the-web/other-topics/accessibility
             // Add price where available.
             if (isValue(item.price)) {
-                //description = description + '<p><strong>' + i18n.get("Price") + ':</strong> ' + item.price + '</p>';
-                description = description + '<p class="service-info service-price"><i class="fa fa-money"></i>' + item.price + '</p>';
+                description = description + '<p class="service-info service-price" aria-label="' + i18n.get("Price") + '">' +
+                    '<i class="fa fa-money" data-toggle="tooltip" title="' + i18n.get("Price") + '" data-placement="top" ' +
+                    'aria-hidden="true"></i>' + capitalize(item.price) + '</p>';
             }
             // Website
             if(isValue(item.website)) {
                 var prettyLink = generatPrettyUrl(item.website);
-                description = description + '<p class="service-info service-website"><i class="fa fa-globe"></i>' +
-                    '<a target="_blank" href="' + item.website + '">' + prettyLink + '</a></p>';
+                description = description + '<p class="service-info service-website" aria-label="' + i18n.get("Price") +
+                    '"><i class="fa fa-globe" data-toggle="tooltip" title="' + i18n.get("Website") + '" ' +
+                    'data-placement="top" aria-hidden="true"></i><a target="_blank" href="' + item.website + '">' +
+                    capitalize(prettyLink) + '</a></p>';
             }
             // Email & Phone
             if(isValue(item.email)) {
-                description = description + '<p class="service-info service-email"><i class="fa fa-envelope-square"></i>' + item.email + '</p>';
+                description = description + '<p class="service-info service-email" aria-label="' + i18n.get("Email") + '">' +
+                    '<i class="fa fa-envelope-square" data-toggle="tooltip" title="' + i18n.get("Email") + '" ' +
+                    'data-placement="top" aria-hidden="true"></i>' + capitalize(item.email) +'</p>';
             }
             if(isValue(item.phoneNumber)) {
-                description = description + '<p class="service-info service-phone"><i class="fa fa-phone-square"></i>' + item.phoneNumber + '</p>';
+                description = description + '<p class="service-info service-phone" aria-label="' + i18n.get("Phone") + '">' +
+                    '<i class="fa fa-phone-square" data-toggle="tooltip" title="' + i18n.get("Phone") + '" ' +
+                    'data-placement="top" aria-hidden="true"></i>' + capitalize(item.phoneNumber) + '</p>';
             }
             // Replace links from the description
             if (description.indexOf("<a href=") !== -1) {
@@ -202,9 +215,10 @@ function addItem(item, listElement) {
             description = description.replace(/["']/g, '&quot;');
 
 
-            // Add the item to a desired element.
+            // Add the item to a desired element. href javascript... prevents opening in new tab (iframe src is github)
+            // https://stackoverflow.com/questions/31472065/preventing-pages-being-open-in-a-new-tab-window
             $(listElement).append('<li> ' +
-                '<a class="index-item" data-name="' + name + '"  data-message="' + description + '" tabindex="0" href="#"' +
+                '<a class="index-item" data-name="' + name + '"  data-message="' + description + '" tabindex="0" href="javascript:void(0);"' +
                 ' role="button" aria-expanded="false"' +
                 ' title="' + name + '">' + name + '</a></li>');
         }
@@ -238,6 +252,11 @@ function bindActions() {
             activeTab = 0;
             adjustParentHeight(animationTime);
             adjustParentUrl('', 'introduction');
+            // Image slider goes black if we move from contacts, re-adding class with timeout fixes it.
+            $("#sliderBox").removeClass("small-slider");
+            setTimeout(function(){
+                $("#sliderBox").addClass("small-slider");
+            }, 600);
         }
     }
 
