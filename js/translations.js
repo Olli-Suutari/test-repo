@@ -31,9 +31,13 @@ var dict = {
         fi: "Linja-autot",
         en: "Buses",
     },
-    "Accesibility": {
+    "Accessibility": {
         fi: "Saavutettavuus",
-        en: "Accesibility",
+        en: "Accessibility",
+    },
+    "Accessibility details": {
+        fi: "Lisätietoja saavutettavuudesta",
+        en: "Additional accessibility information",
     },
     "Accessible entrance": {
         fi: "Esteetön sisäänpääsy",
@@ -82,6 +86,18 @@ var dict = {
     "Week": {
         fi: "Viikko",
         en: "Week",
+    },
+    "Max schedules": {
+        fi: "Aukioloaikojen hakua tulevaisuuteen on rajattu, jotta kirjastot ehtivät syöttää aikataulunsa palveluun. Huomaa myös, ettei poikkeusaukioloaikoja ole välttämättä syötetty näin pitkälle.",
+        en: "Fetching schedules beyond the selected date is not supported in order to give libraries more time to enter them.",
+    },
+    "Min schedules": {
+        fi: "Aukioloaikojen hakua taakseppäin on rajattu teknisistä syistä.",
+        en: "Fetching of past schedules is limited for technological reasons.",
+    },
+    "No schedules": {
+        fi: "Aukioloaikojen haku epäonnistui valitulle viikolle. Tämä voi johtua siitä, ettei niitä ole syötetty valtakunnalliseen kirjastohakemistoon.",
+        en: "Fetching of schedules for the selected week failed. This probably means the library has not entered them to the national library database.",
     },
     "Service time": {
         fi: "Palveluaika",

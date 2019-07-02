@@ -1,7 +1,7 @@
 // Variables
-var jsonp_url = "https://api.kirjastot.fi/v3/library/" + library + "?lang=" + lang;
-var jsonpUrlV4 = "https://api.kirjastot.fi/v4/library/" + library + "?lang=" + lang +
-    "&with=pictures,services,departments,mailAddress,links,phoneNumbers,primaryContactInfo,transitInfo&limit=1500";
+var withParams = "&with=pictures,services,buildingInfo,departments,mailAddress,links,phoneNumbers,primaryContactInfo," +
+    "persons,transitInfo&limit=1500";
+var jsonpUrlV4 = "https://api.kirjastot.fi/v4/library/" + library + "?lang=" + lang + withParams;
 var transitIsEmpty = true;
 var descriptionIsEmpty = true;
 var isReFetching = false;
@@ -20,11 +20,14 @@ var phoneNumbers = null;
 var pictures = null;
 var arrayOfServices = null;
 var slogan = null;
+var founded = null;
+var buildingInfo = null;
 var email = null;
 var description = null;
 var transitInfo = null;
 var lon;
 var lat;
+var persons = null;
 var contactlist = [];
 var numbersList = [];
 var staffList = [];
@@ -48,11 +51,11 @@ function checkIfContactExists(array, item) {
     }
     return false;
 }
-/* Fetch things via v4 api, expect persons & building details */
 function asyncFetchV4Data() {
     var genericDeferred = jQuery.Deferred();
     setTimeout(function() {
-        $.getJSON(jsonpUrlV4, function (data) {
+        // Disable caching: https://stackoverflow.com/questions/13391563/how-to-set-cache-false-for-getjson-in-jquery
+        $.getJSON(jsonpUrlV4, {_: new Date().getTime()}, function (data) {
             var data = data.data;
             address = data.address;
             mailAddress = data.mailAddress;
@@ -60,9 +63,12 @@ function asyncFetchV4Data() {
             departments = data.departments;
             links = data.links;
             phoneNumbers = data.phoneNumbers;
+            persons = data.persons;
             pictures = data.pictures;
             arrayOfServices = data.services;
             slogan = data.slogan;
+            founded = data.founded;
+            buildingInfo = data.buildingInfo;
             // libName is undefined if on a standalone lib page.
             if(libName === undefined) {
                 libName = data.name;
@@ -72,7 +78,7 @@ function asyncFetchV4Data() {
             }
             description = data.description;
             transitInfo = data.transitInfo;
-            genericDeferred.resolve()
+            genericDeferred.resolve();
         });
     }, 1 );
     // Return the Promise so caller can't change the Deferred
@@ -161,52 +167,6 @@ function asyncGenerateGenericDetails() {
     return genericDeferred.promise();
 }
 
-
-/* Fetch generic details and generate the UI */
-function asyncFetchBuildingDetails() {
-    var genericDeferred = jQuery.Deferred();
-    setTimeout(function() {
-        // Use v3 api since v4 does not have buildingDetails yet. https://github.com/libraries-fi/kirkanta-api/issues/5
-        $.getJSON(jsonp_url + "&with=extra", function (data) {
-            // Table
-            if (isEmpty($('#buildingDetails')) && !isReFetching) {
-                // If display none by default, colspan gets messed up.
-                $('#triviaTitle').append( i18n.get("Trivia"));
-                if (data.extra.founded != null) {
-                    triviaIsEmpty = false;
-                    $("#triviaBody").append('<tr><td class="trivia-cell-title"><strong>' + i18n.get("Founded") + ': </strong></td>' +
-                        '<td class="trivia-detail">' + data.extra.founded + '</td></tr>');
-                }
-                if (data.extra.building.building_name != null) {
-                    triviaIsEmpty = false;
-                    $("#triviaBody").append('<tr><td class="trivia-cell-title"><strong>' + i18n.get("Building") + ': </strong></td>' +
-                        '<td class="trivia-detail">' + data.extra.building.building_name + '</td></tr>');
-                }
-                if (data.extra.building.construction_year != null && data.extra.building.construction_year != 0) {
-                    triviaIsEmpty = false;
-                    $("#triviaBody").append('<tr><td class="trivia-cell-title"><strong>' + i18n.get("Year built") + ': </strong></td>' +
-                        '<td class="trivia-detail">' + data.extra.building.construction_year + '</td></tr>');
-                }
-                if (data.extra.building.building_architect != null) {
-                    triviaIsEmpty = false;
-                    $("#triviaBody").append('<tr><td class="trivia-cell-title"><strong>' + i18n.get("Architect") + ': </strong></td>' +
-                        '<td class="trivia-detail">' + data.extra.building.building_architect + '</td></tr>');
-                }
-                if (data.extra.building.interior_designer != null) {
-                    triviaIsEmpty = false;
-                    $("#triviaBody").append('<tr><td class="trivia-cell-title"><strong>' + i18n.get("Decoration") + ': </strong></td>' +
-                        '<td class="trivia-detail">' + data.extra.building.interior_designer + '</td></tr>');
-                }
-                if (!triviaIsEmpty) {
-                    $(".trivia-section").css("display", "block");
-                }
-            }
-            genericDeferred.resolve()
-        });
-    }, 1 );
-    // Return the Promise so caller can't change the Deferred
-    return genericDeferred.promise();
-}
 // CollectionCount is used with departments.
 var roomCount = 0;
 // Bind modal closing event only once.
@@ -535,7 +495,6 @@ function asyncFetchServices() {
 function asyncFetchDepartments() {
     var departmentsDeferred = jQuery.Deferred();
     setTimeout(function() {
-        // If no pictures found, hide the slider...
         if (departments.length === 0) {
             departmentsDeferred.resolve();
         }
@@ -564,7 +523,26 @@ function generateImages(data) {
             $(".rslides").append('<li><img src="' + pictures[i].files.medium.url + '" alt="' + altText + '"></li>');
             counter = counter +1;
             if(counter === data.length) {
-                imageListDeferred.resolve();
+                if(igImages.length !== 0) {
+                    for (var i = 0; i < igImages.length; i++) {
+                        var altText = i18n.get("Picture from the library") + ' (' + altCount + '/' + pictures.length + ')';
+                        var igHref = 'title="Instagram" target="_blank" href="https://www.instagram.com/p/' + igImages[i].shortcode + '/"';
+                        var igLogo = '<a class="slider-ig-logo"' + igHref + '><img class="no-borders" src="../images/icons/instagram.svg" alt="' +
+                        i18n.get("Librarys") + ' Instagram"/></a>';
+                        var igHeart = '<a class="ig-love-btn ig-love-btn-counter" ' + igHref +
+                            '><span>&#x2764;</span><span>' + igImages[i].likes + '</span></a>';
+                        var igCaption = '<figcaption class="ig-caption">' + igImages[i].caption + '</figcaption>';
+                        var igContainer = '<div class="ig-likes-logo-container">' + igHeart + igLogo + '</div>';
+                            $(".rslides").append('<li class="ig-img-container">' + igContainer  +
+                                '<img class="ig-img" src="' + igImages[i].url + '" alt="' + altText + '">' + igCaption + '</li>');
+                        counter = counter +1;
+                    }
+                    imageListDeferred.resolve();
+                }
+                else {
+                    imageListDeferred.resolve();
+
+                }
             }
         }
     }, 1 );
@@ -572,6 +550,53 @@ function generateImages(data) {
     return imageListDeferred.promise();
 }
 
+function asyncGenerateTrivia() {
+    var triviaDeferred = jQuery.Deferred();
+    setTimeout(function() {
+        if (isEmpty($('#buildingDetails')) && !isReFetching) {
+            // If display none by default, colspan gets messed up.
+            $('#triviaTitle').append( i18n.get("Trivia"));
+            if(buildingInfo == null && founded == null) {
+                triviaIsEmpty = true;
+                $(".trivia-section").css("display", "block");
+                triviaDeferred.resolve();
+            }
+            if (founded != null) {
+                triviaIsEmpty = false;
+                $("#triviaBody").append('<tr><td class="trivia-cell-title"><strong>' + i18n.get("Founded") + ': </strong></td>' +
+                    '<td class="trivia-detail">' + founded + '</td></tr>');
+            }
+            if (buildingInfo.buildingName != null) {
+                triviaIsEmpty = false;
+                $("#triviaBody").append('<tr><td class="trivia-cell-title"><strong>' + i18n.get("Building") + ': </strong></td>' +
+                    '<td class="trivia-detail">' + buildingInfo.buildingName + '</td></tr>');
+            }
+            if (buildingInfo.constructionYear != null && buildingInfo.constructionYear != 0) {
+                triviaIsEmpty = false;
+                $("#triviaBody").append('<tr><td class="trivia-cell-title"><strong>' + i18n.get("Year built") + ': </strong></td>' +
+                    '<td class="trivia-detail">' + buildingInfo.constructionYear + '</td></tr>');
+            }
+            if (buildingInfo.architect != null) {
+                triviaIsEmpty = false;
+                $("#triviaBody").append('<tr><td class="trivia-cell-title"><strong>' + i18n.get("Architect") + ': </strong></td>' +
+                    '<td class="trivia-detail">' + buildingInfo.architect + '</td></tr>');
+            }
+            if (buildingInfo.interiorDesigner != null) {
+                triviaIsEmpty = false;
+                $("#triviaBody").append('<tr><td class="trivia-cell-title"><strong>' + i18n.get("Decoration") + ': </strong></td>' +
+                    '<td class="trivia-detail">' + buildingInfo.interiorDesigner + '</td></tr>');
+            }
+            if (!triviaIsEmpty) {
+                $(".trivia-section").css("display", "block");
+            }
+            triviaDeferred.resolve();
+        }
+    }, 1 );
+    // Return the Promise so caller can't change the Deferred
+    return triviaDeferred.promise();
+}
+
+var sliderInitialized = false;
 function asyncFetchImages() {
     var imagesDeferred = jQuery.Deferred();
     setTimeout(function() {
@@ -584,13 +609,26 @@ function asyncFetchImages() {
                     function() {
                         noImages = false;
                         setTimeout(function() {
-                            $('#currentSlide').html(1);
-                            $('.top-left').append('/' + pictures.length);
+                            var combinedLenght = pictures.length + igImages.length;
+                            length = combinedLenght;
                             //$('.top-left').replaceWith('<i class="top-left"><span id="currentSlide"></span></i>/' + data.pictures.length);
-                            -
+                            if(!sliderInitialized) {
                                 $(".rslides").responsiveSlides({
                                     navContainer: "#sliderBox" // Selector: Where controls should be appended to, default is after the 'ul'
                                 });
+                                sliderInitialized = true;
+                            }
+                            else {
+                                $( ".rslides1_on" ).unbind();
+                                $( "#sliderBox" ).unbind();
+                                $("#sliderPlay").unbind();
+
+                                $(".rslides").responsiveSlides({
+                                    navContainer: "#sliderBox" // Selector: Where controls should be appended to, default is after the 'ul'
+                                });
+                            }
+
+                            $('.slider-counter').append('/' + combinedLenght);
                             // Exit fullscreen if clicking the .rslides and not within 75px range from the center.
                             $('.rslides').on('click', function () {
                                 if (!$("#sliderBox").hasClass("small-slider")) {
@@ -807,6 +845,8 @@ function asyncLoadMap() {
 }
 
 var noLinks = true;
+var igImages = [];
+var igName;
 function asyncFetchLinks() {
     var linksDeferred = jQuery.Deferred();
     setTimeout(function() {
@@ -818,7 +858,8 @@ function asyncFetchLinks() {
             if(links.length === 0) {
                 linksDeferred.resolve();
             }
-            links.forEach(function (element) {
+        var igExists = false;
+        links.forEach(function (element) {
                 // Get url.
                 var url = element.url;
                 if (url === null) {
@@ -827,16 +868,80 @@ function asyncFetchLinks() {
                 if (url.indexOf("facebook") !== -1) {
                     linkCount = linkCount +1;
                     $(".some-links").append('<a target="_blank" ' +
-                        'href="' + url + '" title="' + element.name + '"> <img src="../images/icons/facebook.svg" alt="' +
+                        'href="' + url + '" title="Facebook"> <img src="../images/icons/facebook.svg" alt="' +
                         i18n.get("Librarys") + ' Facebook"/>' +
                         '</a>');
                 }
                 else if (url.indexOf("instagram") !== -1) {
+                    igExists = true;
                     linkCount = linkCount +1;
-                    $(".some-links").append('<a target="_blank" ' +
-                        'href="' + url + '" title="' + element.name + '"> <img src="../images/icons/instagram.svg" alt="' +
+                    $(".some-links").append('<a target="_blank" title="Instagram"' +
+                        'href="' + url + '"> <img src="../images/icons/instagram.svg" alt="' +
                         i18n.get("Librarys") + ' Instagram"/>' +
                         '</a>');
+                    igName = url;
+                    if (igName.charAt(igName.length - 1) == '/') {
+                        igName = igName.substr(0, igName.length - 1);
+                    }
+                    var index = igName.lastIndexOf("/");
+                    var igName = igName.substr(index+1);
+                    // Fetch ig images (+ captions & likes) via the IG api.
+                    $.getJSON('https://www.instagram.com/' + igName + '/?__a=1', function (data) {
+                        var images = data.graphql.user.edge_owner_to_timeline_media.edges;
+                        for (var i=0; i<images.length; i++) {
+                            // Limit to 10 latest images.
+                            if(i===10) {
+                                linksDeferred.resolve();
+                                return;
+                            }
+                            var url = images[i].node.display_url;
+                            var shortcode = images[i].node.shortcode;
+                            var likes = images[i].node.edge_liked_by.count;
+                            var caption = images[i].node.edge_media_to_caption.edges[0].node.text;
+                            var tagsToReplace = [];
+                            var reFindTags = new RegExp(/#\S+\s*/g);
+                            var reFindTagsExec = reFindTags.exec(caption);
+                            while (reFindTagsExec != null) {
+                                var tagText = reFindTagsExec[0];
+                                tagText = tagText.replace(" ", "");
+                                var tagLink = tagText.substring(1);
+                                tagLink = '<a target="_blank" class="external-link" href="https://www.instagram.com/explore/tags/' + tagLink
+                                    + '/">' + tagText + '</a> ';
+                                //console.log(tagText + " " + tagLink);
+                                tagsToReplace.push({position: reFindTagsExec[0],
+                                    replacement: tagLink, type: "tag"});
+                                reFindTagsExec = reFindTags.exec(caption);
+                            }
+                            var reFindUsers = new RegExp(/@\S+\s*/g);
+                            var reFindUsersExec = reFindUsers.exec(caption);
+                            while (reFindUsersExec != null) {
+                                var tagText = reFindUsersExec[0];
+                                tagText = tagText.replace(" ", "");
+                                var tagLink = tagText.substring(1);
+                                tagLink = '<a target="_blank" class="external-link" href="https://www.instagram.com/' + tagLink
+                                    + '/">' + tagText + '</a> ';
+                                //console.log(tagText + " " + tagLink);
+                                tagsToReplace.push({position: reFindUsersExec[0],
+                                    replacement: tagLink, type: "user"});
+                                reFindUsersExec = reFindUsers.exec(caption);
+                            }
+                            for (var t = 0; t < tagsToReplace.length; t++) {
+                                // If we have tags #foobar & #foo, #foo would re-place #foobar incorrectly.
+                                if(tagsToReplace[t].type == "tag") {
+                                    caption = caption.replace(tagsToReplace[t].position,
+                                        tagsToReplace[t].replacement.replace("#", "%%%"));
+                                }
+                                else {
+                                    caption = caption.replace(tagsToReplace[t].position,
+                                        tagsToReplace[t].replacement.replace("@", "<<><<>"));
+                                }
+                            }
+                            caption = caption.replace(/%%%/g,'#');
+                            caption = caption.replace(/<<><<>/g,'@');
+                            igImages.push({url: url, shortcode: shortcode, likes: likes, caption: caption});
+                        }
+                        linksDeferred.resolve();
+                    });
                 }
                 else {
                     // Add the link to the contact details listing
@@ -865,7 +970,9 @@ function asyncFetchLinks() {
                     if(linkCount !== 0 ) {
                         noLinks = false;
                     }
-                    linksDeferred.resolve();
+                    if(!igExists){
+                        linksDeferred.resolve();
+                    }
                 }
             });
     }, 1 );
@@ -873,7 +980,7 @@ function asyncFetchLinks() {
     return linksDeferred.promise();
 }
 
-function asyncFetchNumbers() {
+function asyncGenerateNumbers() {
     var numbersDeferred = jQuery.Deferred();
     setTimeout(function() {
         var counter = 0;
@@ -911,63 +1018,60 @@ function asyncFetchNumbers() {
     return numbersDeferred.promise();
 }
 
-function asyncFetchStaff() {
+function asyncGenerateStaff() {
     var staffDeferred = jQuery.Deferred();
     setTimeout(function() {
         var counter = 0;
-        // Use v3 api since v4 also returns "hidden" persons. https://github.com/libraries-fi/kirkanta-api/issues/6
-        $.getJSON(jsonp_url + "&with=persons&limit=500", function (data) {
-            if(data.persons.length !== 0) {
-                for (var i = 0; i < data.persons.length; i++) {
-                    var name = data.persons[i].first_name + ' ' + data.persons[i].last_name;
-                    if (data.persons[i].job_title !== null) {
-                        name += ' – ' + data.persons[i].job_title;
-                    }
-                    // Do not include contacts with null emails.
-                    if(data.persons[i].email != null || data.persons[i].phone != null) {
-                        // Check if name or detail is unique.
-                        var contact = "";
-                        if(data.persons[i].email != null) {
-                            contact = contact + data.persons[i].email;
-                            if(data.persons[i].phone != null && data.persons[i].phone.length !== 0) {
-                                contact = contact + "<br>" + data.persons[i].phone;
-                            }
-                        }
-                        else {
-                            if(data.persons[i].phone.length !== 0) {
-                                contact = contact + data.persons[i].phone;
-                            }
-                        }
-                        if (!checkIfContactExists(staffList, contact) || !checkIfNameExists(staffList, name)){
-                            // Don't push if contact or name is empty.
-                            if(contact.length !== 0 && name.length !== 0) {
-                                staffList.push({name: name, contact: contact});
-                            }
+        if(persons.length !== 0) {
+            for (var i = 0; i < persons.length; i++) {
+                var name = persons[i].firstName + ' ' + persons[i].lastName;
+                if (persons[i].jobTitle !== null) {
+                    name += ' – ' + persons[i].jobTitle;
+                }
+                // Do not include contacts with null emails.
+                if(persons[i].email != null || persons[i].phone != null) {
+                    // Check if name or detail is unique.
+                    var contact = "";
+                    if(persons[i].email != null) {
+                        contact = contact + persons[i].email;
+                        if(persons[i].phone != null && persons[i].phone.length !== 0) {
+                            contact = contact + "<br>" + persons[i].phone;
                         }
                     }
-                    counter = counter +1;
+                    else {
+                        if(persons[i].phone.length !== 0) {
+                            contact = contact + persons[i].phone;
+                        }
+                    }
+                    if (!checkIfContactExists(staffList, contact) || !checkIfNameExists(staffList, name)){
+                        // Don't push if contact or name is empty.
+                        if(contact.length !== 0 && name.length !== 0) {
+                            staffList.push({name: name, contact: contact});
+                        }
+                    }
                 }
-                // If we have looped all, set as resolved, thus moving on.
-                if(counter === data.persons.length) {
-                    // Sort alphabetically. https://stackoverflow.com/questions/6712034/sort-array-by-firstname-alphabetically-in-javascript
-                    $.when(
-                        staffList.sort(function(a, b){
-                            var nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase();
-                            if (nameA < nameB) //sort string ascending
-                                return -1;
-                            if (nameA > nameB)
-                                return 1;
-                            return 0; //default return value (no sorting)
-                        })
-                    ).then  (
-                        staffDeferred.resolve()
-                    );
-                }
+                counter = counter +1;
             }
-            else {
-                staffDeferred.resolve()
+            // If we have looped all, set as resolved, thus moving on.
+            if(counter === persons.length) {
+                // Sort alphabetically. https://stackoverflow.com/questions/6712034/sort-array-by-firstname-alphabetically-in-javascript
+                $.when(
+                    staffList.sort(function(a, b){
+                        var nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase();
+                        if (nameA < nameB) //sort string ascending
+                            return -1;
+                        if (nameA > nameB)
+                            return 1;
+                        return 0; //default return value (no sorting)
+                    })
+                ).then  (
+                    staffDeferred.resolve()
+                );
             }
-        });
+        }
+        else {
+            staffDeferred.resolve()
+        }
     }, 1 );
     // Return the Promise so caller can't change the Deferred
     return staffDeferred.promise();
@@ -978,7 +1082,7 @@ function generateContacts() {
     var contactsDeferred = jQuery.Deferred();
     setTimeout(function() {
         if (isEmpty($('#contactsTbody'))) {
-            $.when( asyncFetchNumbers(), asyncFetchStaff() ).then  (
+            $.when( asyncGenerateNumbers(), asyncGenerateStaff() ).then  (
                 function() {
                     if(contactlist.length === 0 && staffList.length === 0 && numbersList.length === 0) {
                         contactlist.push({name: i18n.get("No contacts"), contact: ""});
@@ -1038,19 +1142,18 @@ function fetchInformation(language, lib) {
     if (lib === undefined) {
         lib = library; // Use default if none provided.
     }
-    jsonp_url = "https://api.kirjastot.fi/v3/library/" + lib + "?lang=" + language;
-    jsonpUrlV4 = "https://api.kirjastot.fi/v4/library/" + lib + "?lang=" + language +
-        "&with=pictures,services,departments,mailAddress,links,phoneNumbers,primaryContactInfo,transitInfo&limit=1500";
+    jsonpUrlV4 = "https://api.kirjastot.fi/v4/library/" + lib + "?lang=" + language + withParams;
     // Fetch generic details.
     function triggerFetch() {
         var fetchDeferred = jQuery.Deferred();
         setTimeout(function() {
             if(!isReFetching) {
-                $.when( asyncFetchBuildingDetails(), asyncFetchV4Data() ).then(
+                $.when( asyncFetchV4Data() ).then(
                     function() {
-                        $.when( asyncGenerateGenericDetails(), asyncFetchDepartments(), asyncFetchImages(), asyncFetchLinks(), asyncFetchLocation()).then(
+                        $.when( asyncGenerateGenericDetails(), asyncGenerateTrivia(), asyncFetchDepartments(),
+                            asyncFetchLinks(), asyncFetchLocation()).then(
                             function() {
-                                $.when( asyncFetchServices(), asyncLoadMap(), generateContacts()  ).then(
+                                $.when( asyncFetchImages(), asyncFetchServices(), asyncLoadMap(), generateContacts()  ).then(
                                     function() {
                                         // Generate links & contacts text based on if links were found or not.
                                         if(!noLinks) {
@@ -1101,8 +1204,11 @@ function fetchInformation(language, lib) {
                             }
                         }
                     }
+                    else {
+                        $("#closeModal").text(i18n.get("Close"));
+                    }
                     // Right bar is empty.
-                    if(isScheduleEmpty && noImages && triviaIsEmpty) {
+                    if(isScheduleEmpty && !schedulesAreAvailable && noImages && triviaIsEmpty) {
                         noSidebar = true;
                     }
                     if(noLeftCol) {

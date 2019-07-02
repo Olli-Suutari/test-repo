@@ -32,7 +32,6 @@
   <script src="../js/libDetails.js"></script>
   <script src="../js/main.js"></script>
   <script src="../js/scheduleCommon.js"></script>
-  <script src="../js/scheduleV3.js"></script>
   <script src="../js/schedule.js"></script>
   <script src="../js/lib/popper.min.js"></script>
   <script src="../js/lib/bootstrap.min.js"></script>
@@ -84,7 +83,6 @@
             </h3>
             <div class="accessibility-details">
               <div style="margin: 10px 0 10px 0" class="accessibility-images"></div>
-              <ul id="accessibilityList"></ul>
               <div style="margin: 10px 0 10px 0" id="accessibilityDetails"></div>
             </div>
           </div>
@@ -98,11 +96,13 @@
             <thead class="thead-light">
             <tr>
               <td colspan="3">
-                <button type="button" id="lastWeek" class="btn btn-sm btn-light btn-back btn-arrow" aria-hidden="true" onclick="getWeekSchelude(-1)">
+                <button type="button" id="lastWeek" data-placement="bottom"
+                        class="btn btn-sm btn-light btn-back btn-arrow" aria-hidden="true" onclick="getWeekSchelude(-1)">
                   ❮
                 </button>
                 <span id="weekNumber"></span>
-                <button type="button" id="nextWeek" class="btn btn-sm btn-light btn-next btn-arrow" aria-hidden="true" onclick="getWeekSchelude(1)">
+                <button type="button" id="nextWeek" data-placement="bottom"
+                        class="btn btn-sm btn-light btn-next btn-arrow" aria-hidden="true" onclick="getWeekSchelude(1)">
                   ❯
                 </button>
               </td>
@@ -131,8 +131,6 @@
         <section id="sliderBox" class="small-slider">
           <h3 class="sr-only" id="srPictures"></h3>
           <ul class="rslides"></ul>
-          <i id="expandSlider" class="fa fa-expand top-right" title="Toggle full-screen"></i>
-          <i class="top-left"><span id="currentSlide"></span></i>
         </section>
         <section class="trivia-section" style="display: none">
           <h3 id="triviaTitle"></h3>
@@ -199,7 +197,7 @@
         <div id="modalContent"></div>
       </div>
       <div class="modal-footer">
-        <button id="closeModal" type="button" class="btn btn-primary" data-dismiss="modal">Sulje</button>
+        <button id="closeModal" type="button" class="btn btn-primary" data-dismiss="modal"></button>
       </div>
     </div>
   </div>

@@ -132,7 +132,7 @@ function generateSelect() {
             setTimeout(function() {
                 try {
                     // Fetch names of all cities in kirkanta.
-                    $.getJSON("https://api.kirjastot.fi/v3/city?lang=fi&limit=1500", function(data) {
+                    $.getJSON("https://api.kirjastot.fi/v4/city?lang=fi&limit=1500", function(data) {
                         var counter = 0;
                         for (var i = 0; i < data.items.length; i++) {
                             // Check if libraryList contains the ID.
@@ -365,8 +365,18 @@ $(document).ready(function() {
                 accessibilityIsEmpty = true;
                 transitIsEmpty = true;
                 descriptionIsEmpty = true;
-                isScheduleEmpty = true;
+                isScheduleEmpty = false;
                 noImages = true;
+                igImages = [];
+                var interval_id = window.setInterval("", 9999); // Get a reference to the last
+                                                                // interval +1
+                for (var i = 1; i < interval_id; i++)
+                    window.clearInterval(i);
+//for clearing all intervals
+                sliderHasStopped = false;
+                sliderNeedsToRestart = true;
+                index = 0;
+                igName = "";
                 triviaIsEmpty = true;
                 mapLoaded = false;
                 contactsIsEmpty = true;
@@ -374,6 +384,7 @@ $(document).ready(function() {
                 isReFetching = false;
                 isModalCloseBinded = false;
                 isServiceClickBinded = false;
+                schedulesAreAvailable = true;
                 map = L.map('mapContainer');
                 mailAddress = null;
                 coordinates = null;
@@ -390,6 +401,8 @@ $(document).ready(function() {
                 contactlist = [];
                 numbersList = [];
                 staffList = [];
+                weekMinReached = false;
+                weekMaxReached = false;
                 fetchInformation(lang, library);
                 // Re-bind navigation and other stuff.
                 bindActions();

@@ -27,7 +27,7 @@ var height = 0;
 function adjustHomePageHeight(delay) {
     clearTimeout(clearTimer);
     isAdjustingHeight = true;
-    delay = delay + 150;
+    delay = delay + 250;
     setTimeout(function(){
         try {
             var newHeight = 0;
@@ -106,7 +106,6 @@ $(document).ready(function() {
 function generateScheduleInfo(data) {
     var genericDescription;
     var holidayDescription;
-    var isHoliday = false;
     var items = [];
     // Turn object object array to object array.
     for (var key in data) {
@@ -132,36 +131,22 @@ function generateScheduleInfo(data) {
                 }
                 else {
                     holidayDescription = items[i].description;
-                    isHoliday = true;
                 }
             }
         }
-        var isSpecialWeek = false;
         if(holidayDescription !== undefined) {
-            var mondayDate = moment().add(weekCounter, 'weeks').weekday(0).format("YYYY-MM-DD");
-            var sundayDate = moment().add(weekCounter, 'weeks').weekday(6).format("YYYY-MM-DD");
-            //console.log(items[i].validFrom + "|"  + mondayDate);
-            //console.log(items[i].validUntil + "|"  + sundayDate);
-            if(items[i].validFrom == mondayDate && items[i].validUntil == sundayDate) {
-                isSpecialWeek = true;
                 $('#specialInfo').replaceWith('<span id="specialInfo" class="info-span info-text"><i class="fa fa-info-circle" > </i> '
                     + holidayDescription + '</span>');
-            }
-            else {
-                //genericDescription = genericDescription + "<br><br>" + holidayDescription;
-                $('#specialInfo').replaceWith('<span id="specialInfo" class="info-span info-text"><i class="fa fa-info-circle" > </i> '
-                    + holidayDescription + '</span>');
-            }
         }
-        if(genericDescription !== undefined && !isSpecialWeek) {
+        else {
+            $('#specialInfo').replaceWith('<span id="specialInfo" style="display: none" class="info-span info-text"><i class="fa fa-info-circle" > </i></span>');
+        }
+        if(genericDescription !== undefined) {
             $('#scheduleInfo').replaceWith('<span id="scheduleInfo" class="info-span info-text"><i class="fa fa-info-circle" > </i> '
                 + genericDescription + '</span>');
         }
         else {
             $('#scheduleInfo').replaceWith('<span id="scheduleInfo" style="display: none" class="info-span info-text"><i class="fa fa-info-circle" > </i></span>');
-        }
-        if(holidayDescription === undefined) {
-            $('#specialInfo').replaceWith('<span id="specialInfo" style="display: none" class="info-span info-text"><i class="fa fa-info-circle" > </i></span>');
         }
     }
 }
@@ -169,38 +154,65 @@ function generateScheduleInfo(data) {
 var weekCounter = 0;
 var dateInSchedule;
 var selectedDate = new Date();
+var weekMinReached = false;
+var weekMaxReached = false;
 function getDaySchelude(direction, lib) {
     // If no library is provided, use the default option.
     if (lib === undefined) {
         lib = library;
     }
-    if(v4ApiBroken) {
-        getDayScheludeV3(direction, lib);
-        return;
-    }
     // +1 or -1;
     weekCounter = weekCounter + direction;
-    // Do not allow going more than 14 days to the past or 28 days to the future.
-    if (weekCounter < -14) {
-        weekCounter = -14;
+    // Do not allow going more than 30 days to the past or 60 days to the future.
+    if (weekCounter < -30) {
+        weekCounter = -30;
+        if(!weekMinReached) {
+            $('#lastWeek').attr('data-toggle', 'tooltip');
+            $('#lastWeek').attr('title', i18n.get("Min schedules"));
+            $("#lastWeek").tooltip("enable");
+            weekMinReached = true;
+        }
+        $('#lastWeek').tooltip('show');
         return;
     }
-    if (weekCounter > 28) {
-        weekCounter = 28;
+    if (weekCounter > 60) {
+        weekCounter = 60;
+        if(!weekMaxReached) {
+            $('#nextWeek').attr('data-toggle', 'tooltip');
+            $('#nextWeek').attr('title', i18n.get("Max schedules"));
+            $("#nextWeek").tooltip("enable");
+            weekMaxReached = true;
+        }
+        $('#nextWeek').tooltip('show');
         return;
     }
-
+    if(weekMinReached) {
+        // Hiding hides tooltip even if cursor is placed on it.
+        $("#lastWeek").tooltip("hide");
+        // Disable removes the bootstrap tooltip.
+        $("#lastWeek").tooltip("disable");
+        // Removing attributes removes the normal tooltip.
+        $("#lastWeek").removeAttr("data-toggle");
+        $("#lastWeek").removeAttr("title");
+        weekMinReached = false;
+    }
+    if(weekMaxReached) {
+        $("#nextWeek").tooltip("hide");
+        $("#nextWeek").tooltip("disable");
+        $("#nextWeek").removeAttr("data-toggle");
+        $("#nextWeek").removeAttr("title");
+        weekMaxReached = false;
+    }
     selectedDate.setDate(selectedDate.getDate() + direction);
     //console.log(selectedDate);
     var prettyDate = moment(selectedDate).format("DD.MM.YY");
     // Capitalize 1st letter of dayname.
     var dayName = moment(selectedDate).format("dddd");
     dayName = dayName[0].toUpperCase() + dayName.substr(1);
-
     $("#weekNumber").html(dayName + " " + prettyDate);
-    // Use &pretty: https://github.com/libraries-fi/kirkanta-api/issues/3
     $.getJSON("https://api.kirjastot.fi/v4/schedules?library=" + lib + "&lang=" + lang +
-        "&period.start=" + weekCounter + "d&period.end=" + weekCounter + "d&refs=period&limit=5000&pretty", function (data) {
+        "&period.start=" + weekCounter + "d&period.end=" + weekCounter + "d&refs=period&limit=5000",
+        {_: new Date().getTime()}, function (data) {
         if (data.items.length === 0) {
             //$('#schedules').css('display', 'none');
             $("#weekSchelude").replaceWith('<tbody id="weekSchelude" class="schedules-weekly">' + "<tr><td></td></tr>");
@@ -292,7 +304,7 @@ function getDaySchelude(direction, lib) {
                             '</tr>';
                     }
                     // self-service
-                    else {
+                    else if(time.status === 2) {
                         if (staffPresentStart === '') {
                             selfServiceBefore = '<tr class="time--sub time isTodayClass time--no-staff">' +
                                 '<td class="align-right"><i class="fa fa-level-up fa-rotate-90"></i> ' + i18n.get("Self-service") + '</td>' +

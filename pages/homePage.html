@@ -27,8 +27,8 @@
     <script src="../js/lib/select2SearchPlaceholder.js"></script>
     <script src="../js/consortium.js"></script>
     <script src="../js/scheduleCommon.js"></script>
-    <script src="../js/homePageV3.js"></script>
     <script src="../js/homePage.js"></script>
+    <script src="../js/lib/popper.min.js"></script>
     <script src="../js/lib/bootstrap.min.js"></script>
 </head>
 <body>
@@ -48,11 +48,13 @@
             <thead class="thead-light">
             <tr>
               <td colspan="3">
-                <button type="button" id="lastWeek" class="btn btn-sm btn-light btn-back btn-arrow" aria-hidden="true" onclick="getDaySchelude(-1)">
+                <button type="button" id="lastWeek" data-placement="bottom"
+                        class="btn btn-sm btn-light btn-back btn-arrow" aria-hidden="true" onclick="getDaySchelude(-1)">
                   ❮
                 </button>
                 <span id="weekNumber"></span>
-                <button type="button" id="nextWeek" class="btn btn-sm btn-light btn-next btn-arrow" aria-hidden="true" onclick="getDaySchelude(1)">
+                <button type="button" id="nextWeek" data-placement="bottom"
+                        class="btn btn-sm btn-light btn-next btn-arrow" aria-hidden="true" onclick="getDaySchelude(1)">
                   ❯
                 </button>
               </td>
@@ -62,7 +64,8 @@
             </tbody>
           </table>
           <span id="dayInfo" style="display: none" class="info-text"><i class="fa fa-info-circle" > </i></span>
-          <span id="scheduleInfo" style="display: none" class="info-text"><i class="fa fa-info-circle" > </i></span>
+            <span id="specialInfo" style="display: none" class="info-text"><i class="fa fa-info-circle" > </i></span>
+            <span id="scheduleInfo" style="display: none" class="info-text"><i class="fa fa-info-circle" > </i></span>
         </section>
         <button id="btnOpenLibryPage" class="btn btn-secondary"></button>
     </div>

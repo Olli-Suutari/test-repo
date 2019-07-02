@@ -30,22 +30,30 @@ function rebindClickPreventation() {
       $("#sliderBox").addClass('hovering');
     });
 }
-
 // Global variable, this will be set to true when changing the selected library.
 var sliderNeedsToRestart = false;
+// Once the slider is stopped, don't resume automatically.
+var sliderHasStopped = false;
+var index = 0;
+var length = 1;
+
+var cycleHasStarted = false;
+var isRotating = false;
+
 (function ($, window, i) {
   $.fn.responsiveSlides = function (options) {
 
     // Default settings
     var settings = $.extend({
+      "lazy": true,             // Boolean: Lazy Load Mode https://github.com/viljamis/ResponsiveSlides.js/pull/382/files
       "auto": true,             // Boolean: Animate automatically, true or false
       "speed": 0,               // Integer: Speed of the transition, in milliseconds
       "timeout": 6500,          // Integer: Time between slide transitions, in milliseconds
       "pager": false,           // Boolean: Show pager, true or false
       "nav": true,              // Boolean: Show navigation, true or false
       "random": false,          // Boolean: Randomize the order of the slides, true or false
-      "pause": true,            // Boolean: Pause on hover, true or false
-      "pauseControls": true,    // Boolean: Pause when hovering controls, true or false
+      "pause": false,            // Boolean: Pause on hover, true or false
+      "pauseControls": false,    // Boolean: Pause when hovering controls, true or false
       "prevText": "<",          // String: Text for the "previous" button
       "nextText": ">",          // String: Text for the "next" button
       "maxwidth": "",           // Integer: Max-width of the slideshow, in pixels
@@ -68,13 +76,12 @@ var sliderNeedsToRestart = false;
         selectTab,
         startCycle,
         restartCycle,
+        toggleAuto,
         rotate,
         $tabs,
 
         // Helpers
-        index = 0,
         $slide = $this.children(),
-        length = $slide.length,
         fadeTime = parseFloat(settings.speed),
         waitTime = parseFloat(settings.timeout),
         maxw = parseFloat(settings.maxwidth),
@@ -115,42 +122,61 @@ var sliderNeedsToRestart = false;
           }
           return false;
         })(),
-
-        // Fading animation
-        slideTo = function (idx) {
-          settings.before(idx);
+        slideToHelper = function(idx) {
+        if(isRotating) {
+          console.log("IS ROTATING; RETURN")
+          return;
+        }
+        isRotating = true;
+        console.log("SLIDE TO: " + idx + " "  + length)
           // If CSS3 transitions are supported
           if (supportsTransitions) {
             $slide
-              .removeClass(visibleClass)
-              .css(hidden)
-              .eq(idx)
-              .addClass(visibleClass)
-              .css(visible);
+                .removeClass(visibleClass)
+                .css(hidden)
+                .eq(idx)
+                .addClass(visibleClass)
+                .css(visible);
             index = idx;
             setTimeout(function () {
               settings.after(idx);
             }, fadeTime);
-          // If not, use jQuery fallback
+            // If not, use jQuery fallback
           } else {
             $slide
-              .stop()
-              .fadeOut(fadeTime, function () {
-                $(this)
-                  .removeClass(visibleClass)
-                  .css(hidden)
-                  .css("opacity", 1);
-              })
-              .eq(idx)
-              .fadeIn(fadeTime, function () {
-                $(this)
-                  .addClass(visibleClass)
-                  .css(visible);
-                settings.after(idx);
-                index = idx;
-              });
+                .stop()
+                .fadeOut(fadeTime, function () {
+                  $(this)
+                      .removeClass(visibleClass)
+                      .css(hidden)
+                      .css("opacity", 1);
+                })
+                .eq(idx)
+                .fadeIn(fadeTime, function () {
+                  $(this)
+                      .addClass(visibleClass)
+                      .css(visible);
+                  settings.after(idx);
+                  index = idx;
+                });
           }
+        isRotating = false;
         };
+
+      slideTo = function (idx) {
+        console.log("TRIGGEER HELPER: " + idx + " "  + length)
+        settings.before(idx);
+        if (settings.lazy) {
+          var imgSlide = $($($slide).find('img')[idx]);
+          var dataSrc = imgSlide.attr('src');
+          imgSlide.attr('src', dataSrc);
+          imgSlide.on('load', function() {
+            slideToHelper(idx);
+          })
+        } else {
+          slideToHelper(idx);
+        }
+      };
 
       // Random order
       if (settings.random) {
@@ -250,39 +276,64 @@ var sliderNeedsToRestart = false;
           };
         }
 
-        // Auto cycle
+        // Auto cycle, do-not re-init when changing the library.
         if (settings.auto) {
           startCycle = function () {
+            if(sliderHasStopped || cycleHasStarted) {
+              return;
+            }
             rotate = setInterval(function () {
+              //console.log(cycleHasStarted)
+              if(sliderHasStopped) {
+                $slide.stop(true, true);
+                return;
+              }
+        cycleHasStarted = true;
               // Clear the event queue
               $slide.stop(true, true);
               var idx = index + 1 < length ? index + 1 : 0;
               // Check if library has changed & if there is more than one image.
               if(sliderNeedsToRestart && $('.rslides li').length >= 2) {
                 // Clean the interval in order to avoid duplicate calls.
-                clearInterval(rotate);
+                //clearInterval(rotate);
                 sliderNeedsToRestart = false;
-                return;
+                console.log("NEEDED REST")
               }
               // Remove active state and set new if pager is set
               if (settings.pager || settings.manualControls) {
                 selectTab(idx);
               }
+              console.log($('.rslides li').length >= 2);
               if($('.rslides li').length >= 2) {
+                console.log("TRIGGER MOVE TO " + idx + " LEN: " + length);
+                if(idx > length) {
+                  idx = length;
+                }
                 $(".rslides1_on").off("click");
                 slideTo(idx);
                 $('#currentSlide').html(idx + 1);
                 rebindClickPreventation();
+                //console.log("NAVIGATE AUTO")
+                $('#sliderPlay').removeClass("progress");
+                setTimeout(function(){
+                  $('#sliderPlay').addClass("progress");
+                }, 50);
+                adjustParentHeight(50);
+                console.log("AUTO ROTATE")
               }
             }, waitTime);
           };
-
           // Init cycle
-            startCycle();
+          startCycle();
         }
 
         // Restarting cycle
         restartCycle = function () {
+          //console.log("DO RESTART " + sliderHasStopped);
+          // Do not restart the cycle if it has been stopped.
+          if(sliderHasStopped) {
+            return
+          }
           if (settings.auto) {
             // Stop
             clearInterval(rotate);
@@ -291,9 +342,40 @@ var sliderNeedsToRestart = false;
           }
         };
 
+         toggleAuto = function (stop) {
+           //console.log("IS: " + $("#sliderPlay i").hasClass("fa-play") + " " + stop);
+           if(stop === true) {
+             if(!sliderHasStopped) {
+               sliderHasStopped = true;
+               restartCycle();
+               $('#sliderPlay').removeClass("progress");
+               $('.fa-stop').addClass('fa-play').removeClass('fa-stop');
+             }
+           }
+           else {
+             if(sliderHasStopped) {
+               sliderHasStopped = false;
+               restartCycle();
+               $('#sliderPlay').addClass("progress");
+               $('.fa-play').addClass('fa-stop').removeClass('fa-play');
+             }
+           }
+        };
+
+       var hoverHasTriggered = false;
         // Pause on hover
         if (settings.pause) {
           $this.hover(function () {
+            if(hoverHasTriggered) {
+              return;
+            }
+            if(!sliderHasStopped) {
+              hoverHasTriggered = true;
+              toggleAuto(true);
+            }
+            else {
+              return;
+            }
             clearInterval(rotate);
           }, function () {
             restartCycle();
@@ -339,16 +421,45 @@ var sliderNeedsToRestart = false;
 
         // Navigation
         if (settings.nav) {
-          var navMarkup =
-            "<a href='#'id='sliderPrevious' class='centered-left " + navClass + " prev'>" + settings.prevText + "</a>" +
-            "<a href='#' id='sliderForward' class='centered-right " + navClass + " next'>" + settings.nextText + "</a>";
 
+
+          var progressBar = '<button id="sliderPlay" class="slider-btn progress blue">' +
+              '<span class="progress-left">' +
+              '<span class="progress-bar"></span>' +
+              '</span>' +
+              '<span class="progress-right">' +
+              '<span class="progress-bar"></span>' +
+              '</span>' +
+              '<div class="progress-value"><i class="fa fa-stop"></i></div>' +
+              '</button>';
+
+              //              "<button id='sliderPlay' class='slider-btn'> <i class='fa fa-stop title='" + i18n.get("Toggle full-screen") +
+          //               "'></i></button>" +
+
+
+          var navMarkup =
+            "<div class='slider-navigation'><button id='sliderPrevious' " +
+              "class='slider-btn " + navClass + " prev'>" + settings.prevText + "</button>" +
+              "<i class='slider-counter'><span id='currentSlide'>1</span></i>" +
+            "<button id='sliderForward' class='slider-btn " + navClass + " next'>" + settings.nextText + "</button>" +
+              progressBar +
+          "<button id='expandSlider' class='slider-btn'> <i class='fa fa-expand' title='" + i18n.get("Toggle full-screen") +
+              "'></i></button></div>";
           // Inject navigation
           if (options.navContainer) {
             $(settings.navContainer).append(navMarkup);
+            $('#sliderPlay').click(function() {
+              if($('#sliderPlay i').hasClass('fa-play')) {
+                toggleAuto();
+              }
+              else {
+                toggleAuto(true);
+              }
+          });
           } else {
             $this.after(navMarkup);
           }
+
 
           var $trigger = $("." + namespaceIdx + "_nav"),
             $prev = $trigger.filter(".prev");
@@ -399,6 +510,9 @@ var sliderNeedsToRestart = false;
               $('#currentSlide').html(nextIdx + 1);
               rebindClickPreventation();
             }
+            adjustParentHeight(750);
+            console.log("MANUAL N")
+            toggleAuto(true);
             if (settings.pager || settings.manualControls) {
               selectTab($(this)[0] === $prev[0] ? prevIdx : nextIdx);
             }
@@ -422,9 +536,10 @@ var sliderNeedsToRestart = false;
             });
           }
         }
-
       }
-
+      $( ".ig-caption" ).mouseover(function() {
+        toggleAuto(true);
+      });
       // Max-width fallback
       if (typeof document.body.style.maxWidth === "undefined" && options.maxwidth) {
         var widthSupport = function () {

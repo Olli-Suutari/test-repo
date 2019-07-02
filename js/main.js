@@ -48,8 +48,10 @@ function exitHandler() {
     if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
         // TO DO: this leaves a smallish black margin to the left of the 1st image after exiting the slider.
         $('#sliderBox').addClass("small-slider");
+
         $('#mapContainer').addClass("map-borders");
     }
+    adjustParentHeight(1500)
 }
 
 // Remove httml & www from url and / # from the end.
@@ -67,6 +69,22 @@ function capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+function generateAccessibilityImg(translationName, iconPath) {
+    translationName = i18n.get(translationName);
+    iconPath = "../images/accessibility/" + iconPath;
+    $(".accessibility-images").append(' <img alt="' + translationName + '" ' +
+        'src="' + iconPath + '" data-placement="bottom" title="' + translationName + '" data-toggle="accessibility-tooltip"  /> ');
+}
+
+function generateAccessibilityTextBlock(serviceName) {
+    var blockItem = '<span class="accessibility-text-block" role="img" alt="' + serviceName +'">' +
+        serviceName + ' </span>';
+    // Use timeout so actual icons are rendered first.
+    setTimeout(function(){
+        $(".accessibility-images").append(blockItem);
+    }, 100);
+}
+
 // Function for adding a new palvelut item.
 // Define accessibility count here, define other counts later on.
 var accessibilityCount = 0;
@@ -79,60 +97,58 @@ function addItem(item, listElement) {
         name = item.name;
     }
     if(listElement === "#accessibilityItems" && accessibilityIsEmpty) {
-        if (isEmpty($('#accessibilityDetails'))) {
-            // Description.
-            if (item.description != null && item.description.length != 0) {
-                accessibilityIsEmpty = false;
-                $(".accessibility-details").css("display", "block");
-                $("#accessibilityDetails").append('<p>' + item.description.replace(/(<a )+/g, '<a target="_blank" ') + '</p>');
-            }
-        }
         // List of values separated by "," in the short description.
-        if (item.shortDescription !== null && isEmpty($('#accessibility-images')) && isEmpty($('#accessibilityList'))) {
+        if (item.shortDescription !== null && isEmpty($('#accessibility-images'))) {
             accessibilityIsEmpty = false;
             $(".accessibility-details").css("display", "block");
             var splittedValues = item.shortDescription.split(",");
             $.each(splittedValues, function (index, value) {
                 accessibilityCount = accessibilityCount + 1;
                 if (value.toLocaleLowerCase().indexOf("esteetön sisäänpääsy") !== -1) {
-                    $(".accessibility-images").append(' <img alt="' + i18n.get("Accessible entrance") + '" src="../images/accessibility/Esteetön_kulku_saavutettavuus.png" /> ');
-                    $("#accessibilityList").append('<li>' + i18n.get("Accessible entrance") + '</li>');
+                    generateAccessibilityImg("Accessible entrance", "Esteetön_kulku_saavutettavuus.svg");
                 }
                 else if (value.toLocaleLowerCase().indexOf("invapysäköinti") !== -1) {
-                    $(".accessibility-images").append(' <img alt="' + i18n.get("Disabled parking") + '" src="../images/accessibility/Esteetön_parkki.png" /> ');
-                    $("#accessibilityList").append('<li>' + i18n.get("Disabled parking") + '</li>');
+                    generateAccessibilityImg("Disabled parking", "Esteetön_parkki.svg");
                 }
                 else if (value.toLocaleLowerCase().indexOf("esteetön wc") !== -1) {
-                    $(".accessibility-images").append(' <img alt="' + i18n.get("Accessible toilet") + '" src="../images/accessibility/Esteetön_wc.png" /> ');
-                    $("#accessibilityList").append('<li>' + i18n.get("Accessible toilet") + '</li>');
+                    generateAccessibilityImg("Accessible toilet", "Esteetön_wc.svg");
                 }
                 else if (value.toLocaleLowerCase().indexOf("hissi") !== -1) {
-                    $(".accessibility-images").append(' <img alt="' + i18n.get("Elevator") + '" src="../images/accessibility/Esteetön_hissi.png" /> ');
-                    $("#accessibilityList").append('<li>' + i18n.get("Elevator") + '</li>');
+                    generateAccessibilityImg("Elevator", "Esteetön_hissi.svg");
                 }
                 else if (value.toLocaleLowerCase().indexOf("pyörätuoliluiska") !== -1) {
-                    $(".accessibility-images").append(' <img alt="' + i18n.get("Wheelchar ramp") + '" src="../images/accessibility/Esteetön_ramppi.png" /> ');
-                    $("#accessibilityList").append('<li>' + i18n.get("Wheelchar ramp") + '</li>');
+                    generateAccessibilityImg("Wheelchar ramp", "Esteetön_ramppi.svg");
                 }
                 else if (value.toLocaleLowerCase().indexOf("induktiosilmukka") !== -1) {
-                    $(".accessibility-images").append(' <img alt="' + i18n.get("Induction loop") + '" src="../images/accessibility/Esteetön_induktiosilmukka.png" /> ');
-                    $("#accessibilityList").append('<li>' + i18n.get("Induction loop") + '</li>');
+                    generateAccessibilityImg("Induction loop", "Esteetön_induktiosilmukka.svg");
                 }
                 else if (value.toLocaleLowerCase().indexOf("suuren kirjasinkoon kokoelma") !== -1) {
-                    $("#accessibilityList").append('<li>' + i18n.get("Collection of books with large fonts") + '</li>');
+                    generateAccessibilityTextBlock(i18n.get("Collection of books with large fonts"));
                 }
                 else {
                     if (value != null && value.length != 0) {
-                        $("#accessibilityList").append('<li>' + value + '</li>');
+                        generateAccessibilityTextBlock(value);
                     }
                 }
             });
         }
+        if (isEmpty($('#accessibilityDetails'))) {
+            // Description.
+            if (item.description != null && item.description.length != 0) {
+                accessibilityIsEmpty = false;
+                $(".accessibility-details").css("display", "block");
+                if(accessibilityCount !== 0) {
+                    $("#accessibilityDetails").append('<h4>' + i18n.get("Accessibility details") + '</h4>')
+                }
+                $("#accessibilityDetails").append(item.description.replace(/(<a )+/g, '<a target="_blank" '));
+            }
+        }
         if (accessibilityCount != 0 || !accessibilityIsEmpty) {
             $("#accessibility").css('display', 'block');
-            $("#accessibilityTitle").prepend(i18n.get("Accesibility"));
+            $("#accessibilityTitle").prepend(i18n.get("Accessibility"));
             if(accessibilityCount !== 0) {
                 $("#accessibilityBadge").append('(' + accessibilityCount + ')');
+                $('[data-toggle="accessibility-tooltip"]').tooltip();
             }
             noServices = false;
         }
@@ -141,11 +157,17 @@ function addItem(item, listElement) {
         // serviceNames list is used to navigate to the service via url.
         serviceNames.push(name);
         // Add popup link if additional details are available.
-        if (item.shortDescription != null && item.shortDescription.length != 0 ||
-            item.description != null && item.description.length != 0) {
+        if (isValue(item.shortDescription) || isValue(item.description) || isValue(item.website) ||
+        isValue(item.email) || isValue(item.phoneNumber)) {
             var description = "";
-            if (item.shortDescription != null && item.shortDescription.length != 0) {
-                description = '<p>' + item.shortDescription + '</p>';
+            if (item.shortDescription != null && item.shortDescription.length != 0 &&
+                !strippedValueEquals(item.shortDescription, item.name)) {
+                var shortDescription = item.shortDescription;
+                var lastChar = shortDescription[shortDescription.length -1];
+                if(lastChar != "." && lastChar != "!" && lastChar != "?") {
+                    shortDescription = shortDescription + ".";
+                }
+                description = '<p>' + shortDescription + '</p>';
             }
             // Add "long" description where available && not equal to the short one.
             if (item.description != null && item.description.length != 0 && item.description !== item.shortDescription) {
@@ -156,9 +178,13 @@ function addItem(item, listElement) {
             // Accessible icons: https://fontawesome.com/how-to-use/on-the-web/other-topics/accessibility
             // Add price where available.
             if (isValue(item.price)) {
+                var priceText = capitalize(item.price);
+                if(priceText == "Ilmainen" && lang == "en") {
+                    priceText = "Free"
+                }
                 description = description + '<p class="service-info service-price" aria-label="' + i18n.get("Price") + '">' +
                     '<i class="fa fa-money" data-toggle="tooltip" title="' + i18n.get("Price") + '" data-placement="top" ' +
-                    'aria-hidden="true"></i>' + capitalize(item.price) + '</p>';
+                    'aria-hidden="true"></i>' + priceText + '</p>';
             }
             // Website
             if(isValue(item.website)) {
@@ -380,11 +406,8 @@ function adjustParentHeight(delay, elementPosY) {
                 }*/
             }
             if (navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1)) {
-                //alert("Please dont use IE.");
-                //console.log(newHeight);
                 if(newHeight < 200) {
                     newHeight = newHeight + 3000;
-                    //console.log(newHeight)
                 }
             }
             if(newHeight !== height) {
@@ -510,7 +533,6 @@ $(document).ready(function() {
     $('#transitTitle').append(i18n.get("Transit details"));
     $('#socialMediaSr').append(i18n.get("Social media"));
     $('#srPictures').append(i18n.get("Pictures from the library"));
-    document.getElementById('expandSlider').title = i18n.get("Toggle full-screen");
     // Yhteystiedot UI texts.
     document.getElementById('expandMap').title = i18n.get("Toggle full-screen");
     $('#locationTitle').append(i18n.get("Location"));

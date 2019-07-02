@@ -4,52 +4,35 @@ var isLibaryList = false;
 var isScheduleEmpty = false;
 moment.locale(lang);
 var HHmmFormat = 'HH:mm';
-
-
-// V3 api is sometimes more reliable than V4 api when fetching schedules.
-var v4ApiBroken = false;
-function getTuesdayDate(week) {
-    var dayINeed = 2; // for Tuesday.
-    var d = new Date();
-    d.setHours(0,0,0,0);
-    var today = moment(d).add(week, 'weeks').isoWeekday();
-    if (today <= dayINeed) {
-        // then just give me this week's instance of that day
-        return moment(d).add(week, 'weeks').isoWeekday(dayINeed);
+// Check that generic and special descriptions are not the same.
+function strippedValueEquals(valueA, valueB) {
+    /*if(valueA == null && valueB == null) {
+        return true;
+    }*/
+    if(valueA == null || valueB == null) {
+        return false;
+    }
+    valueA = valueA.replace(/\r?\n|\r/g, "");
+    valueA = valueA.replace(/\./g, "");
+    valueA = valueA.replace(/,/g, "");
+    valueA = valueA.replace(/ /g, "");
+    valueA = valueA.replace(/-/g, "");
+    valueA = valueA.replace(/–/g, "");
+    valueA = valueA.toLowerCase();
+    valueB = valueB.replace(/\r?\n|\r/g, "");
+    valueB = valueB.replace(/\./g, "");
+    valueB = valueB.replace(/,/g, "");
+    valueB = valueB.replace(/ /g, "");
+    valueB = valueB.replace(/-/g, "");
+    valueB = valueB.replace(/–/g, "");
+    valueB = valueB.toLowerCase();
+    if(valueA == valueB) {
+        return true;
     }
     else {
-        // otherwise, give me *next week's* instance of that same day
-        return moment(d).add(week, 'weeks').moment().add(1, 'weeks').isoWeekday(dayINeed);
+        return false;
     }
 }
-
-function checkIfV4ApiIsBroken() {
-    // Check if Jyväskylä main library returns Tuesdays schedule info as Sunday and set flag to true if so.
-    $.getJSON("https://api.kirjastot.fi/v4/schedules?library=85159&lang=fi" +
-        "&period.start=0w&period.end=3w&refs=period&limit=5000", function (data) {
-        var tuesdayOne = moment(getTuesdayDate(0));
-        var tuesdayTwo = getTuesdayDate(1);
-        var tuesdayThree = getTuesdayDate(2);
-        for (var i = 0; i < data.items.length; i++) {
-            var dateFormatted = moment(data.items[i].date);
-            if(tuesdayOne._d.toString() == dateFormatted._d.toString() ||
-                tuesdayTwo._d.toString() == dateFormatted._d.toString() ||
-                tuesdayThree._d.toString() == dateFormatted._d.toString()) {
-                if(data.items[i].info.toString() == "Vain 1. kerros") {
-                    v4ApiBroken = true;
-                    console.log("Due to issues in kirkanta v4 api, fetch schedules via the v3 api.")
-                }
-            }
-        }
-        // Trigger schedule fetching, if no library list, otherwise trigger in consortium.js
-        if(!isLibaryList && !homePage) {
-            setTimeout(function() {
-                getWeekSchelude(0, library);
-            }, 50 );
-        }
-    });
-}
-checkIfV4ApiIsBroken();
 
 function isBefore(timeOne, timeTwo) {
     return !!moment(timeOne, HHmmFormat).isBefore(moment(timeTwo, HHmmFormat));
@@ -174,6 +157,12 @@ function swipeNavigation(el,d) {
 }
 
 $(document).ready(function() {
+    // Trigger schedule fetching, if no library list, otherwise trigger in consortium.js
+    if(!isLibaryList && !homePage) {
+        setTimeout(function() {
+            getWeekSchelude(0, library);
+        }, 50 );
+    }
     // UI texts.
     $('#scheludesSr').append(i18n.get("Opening hours")); // Standalone schedules.
     bindScheduleKeyNavigation();

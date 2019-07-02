@@ -1,9 +1,10 @@
-/* Generic styling */
 @charset "UTF-8";
+/* Generic styling */
 @font-face {
     font-family: Verdana;
-    src: url(font/Verdana.eot);
-    src: url(font/Verdana.eot?#iefix) format('embedded-opentype'), url(font/Verdana.woff2) format('woff2'), url(font/Verdana.woff) format('woff'), url(font/Verdana.ttf) format('truetype'), url(font/Verdana.svg#Verdana) format('svg');
+    /* Use ../style/ in path so iut works in main.js as well */
+    src: url(../style/font/Verdana.eot);
+    src: url(../style/font/Verdana.eot?#iefix) format('embedded-opentype'), url(../style/font/Verdana.woff2) format('woff2'), url(../style/font/Verdana.woff) format('woff'), url(../style/font/Verdana.ttf) format('truetype'), url(../style/font/Verdana.svg#Verdana) format('svg');
     font-weight: 400;
     font-style: normal
 }
@@ -45,12 +46,12 @@ a:hover {
     color: @linksHover;
 }
 
-a[target=_blank]:not([href*="instagram"]):not([href*="facebook"]):after{
+a[target=_blank]:not([title*="Instagram"]):not([title*="Facebook"]):after{
     font-family: "FontAwesome";
     content: "\f08e";
-    font-size: 0.85em;
+    font-size: 0.7em;
     color: @linksExternal;
-    padding-left: 5px;
+    padding-left: 3px;
 }
 
 .hidden {
@@ -82,7 +83,6 @@ a[target=_blank]:not([href*="instagram"]):not([href*="facebook"]):after{
         width: 100%!important;
     }
 }
-
 
 .select-lite .select2-container {
     width: 100%!important;
