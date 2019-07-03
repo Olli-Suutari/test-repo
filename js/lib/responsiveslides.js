@@ -291,14 +291,12 @@ var isRotating = false;
               console.log("CLEAR INTERVAL CUZ LIB CHANGED?")
               $slide.stop(true, true);
               clearInterval(rotate);
-              return;
             }
             rotate = setInterval(function () {
               //console.log(cycleHasStarted)
               if(sliderHasStopped) {
                 $slide.stop(true, true);
                 clearInterval(rotate);
-                return;
               }
           cycleHasStarted = true;
               // Clear the event queue
