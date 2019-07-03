@@ -170,12 +170,18 @@ var isRotating = false;
         settings.before(idx);
         // Lazy loading crashes the slider for iOS...
         if (settings.lazy && !isIOS) {
-          var imgSlide = $($($slide).find('img')[idx]);
-          var dataSrc = imgSlide.attr('src');
-          imgSlide.attr('src', dataSrc);
-          imgSlide.on('load', function() {
+          try {
+            var imgSlide = $($($slide).find('img')[idx]);
+            var dataSrc = imgSlide.attr('src');
+            imgSlide.attr('src', dataSrc);
+            imgSlide.on('load', function() {
+              slideToHelper(idx);
+            })
+          }
+          catch (e) {
+            console.log("LOADING OF IMG FAILED.");
             slideToHelper(idx);
-          })
+          }
         } else {
           slideToHelper(idx);
         }
@@ -288,6 +294,7 @@ var isRotating = false;
               $slide.stop(true, true);
               clearInterval(rotate);
               sliderHasStopped = false;
+              cycleHasStarted = false;
             }
             rotate = setInterval(function () {
               //console.log(cycleHasStarted)
@@ -353,13 +360,13 @@ var isRotating = false;
 
          toggleAuto = function (stop) {
            //console.log("IS: " + $("#sliderPlay i").hasClass("fa-play") + " " + stop);
-           if(stop === true) {
+           if(stop === true && !sliderHasStopped) {
              sliderHasStopped = true;
              restartCycle();
              $('#sliderPlay').removeClass("progress");
              $('.fa-stop').addClass('fa-play').removeClass('fa-stop');
            }
-           else {
+           else if (sliderHasStopped){
              sliderHasStopped = false;
              restartCycle();
              $('#sliderPlay').addClass("progress");
@@ -454,8 +461,8 @@ var isRotating = false;
 
             if(isIOS || isIE) {
               $('#expandSlider').css('display', 'none');
-              $('#sliderPlay').css('margin-top', '25px');
-              alert("HIDE SLIDER EXPANSER")
+              $('#sliderPlay').css('margin-top', '20px');
+              $('.slider-navigation').css('padding-right', '2em');
             }
             $('#sliderPlay').click(function() {
               if($('#sliderPlay i').hasClass('fa-play')) {
@@ -468,7 +475,6 @@ var isRotating = false;
           } else {
             $this.after(navMarkup);
           }
-
 
           var $trigger = $("." + namespaceIdx + "_nav"),
             $prev = $trigger.filter(".prev");

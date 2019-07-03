@@ -8,6 +8,7 @@ function toggleFullScreen(target) {
     if(target === "#sliderBox") {
         $('#sliderBox').toggleClass("small-slider");
         $('#sliderBox').toggleClass("full-screen-slider");
+        adjustParentHeight(500)
     }
     else if(target === "#mapContainer") {
         $('#mapContainer').toggleClass("map-borders");
