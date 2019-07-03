@@ -527,7 +527,8 @@ function generateImages(data) {
                     for (var i = 0; i < igImages.length; i++) {
                         var altText = i18n.get("Picture from the library") + ' (' + altCount + '/' + pictures.length + ')';
                         var igHref = 'title="Instagram" target="_blank" href="https://www.instagram.com/p/' + igImages[i].shortcode + '/"';
-                        var igLogo = '<a class="slider-ig-logo"' + igHref + '><img class="no-borders" src="../images/icons/instagram.svg" alt="' +
+                        var igLogo = '<a class="slider-ig-logo"' + igHref + '>' +
+                            '<img width="42" height="42" class="no-borders" src="../images/icons/instagram.svg" alt="' +
                         i18n.get("Librarys") + ' Instagram"/></a>';
                         var igHeart = '<a class="ig-love-btn ig-love-btn-counter" ' + igHref +
                             '><span>&#x2764;</span><span>' + igImages[i].likes + '</span></a>';
@@ -677,6 +678,7 @@ function asyncFetchImages() {
 }
 
 function expandedSliderToggler() {
+    /* TO DO: Implement expanded slider for IE iOS.
     if(isIOS || isIE) {
         $('#sliderBox').toggleClass("small-slider");
         var sliderPos = $("#sliderBox").position().top -50;
@@ -694,10 +696,10 @@ function expandedSliderToggler() {
         }
         adjustParentHeight(500);
     }
-    else {
+    else {*/
         $('#sliderBox').toggleClass("full-screen-slider");
         toggleFullScreen("#sliderBox");
-    }
+    //}
 }
 
 function asyncFetchLocation() {

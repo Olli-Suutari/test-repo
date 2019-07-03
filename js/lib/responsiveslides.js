@@ -23,6 +23,7 @@
   - nextText: >
 */
 
+
 function rebindClickPreventation() {
     // Ignore clicks on selected image.
     $(".rslides1_on").click(function(event){
@@ -65,6 +66,8 @@ var isRotating = false;
     }, options);
 
     return this.each(function () {
+      clearInterval(rotate);
+
 
       // Index for namespacing
       i++;
@@ -78,6 +81,7 @@ var isRotating = false;
         restartCycle,
         toggleAuto,
         rotate,
+        selectedLib,
         $tabs,
 
         // Helpers
@@ -86,6 +90,7 @@ var isRotating = false;
         waitTime = parseFloat(settings.timeout),
         maxw = parseFloat(settings.maxwidth),
 
+        selectedLib = library;
         // Namespacing
         namespace = settings.namespace,
         namespaceIdx = namespace + i,
@@ -123,7 +128,9 @@ var isRotating = false;
           return false;
         })(),
         slideToHelper = function(idx) {
-        if(isRotating) {
+          console.log(selectedLib);
+
+          if(isRotating) {
           console.log("IS ROTATING; RETURN")
           return;
         }
@@ -279,26 +286,32 @@ var isRotating = false;
         // Auto cycle, do-not re-init when changing the library.
         if (settings.auto) {
           startCycle = function () {
-            if(sliderHasStopped || cycleHasStarted) {
-              console.log("RETURN BEFORE REOTATE")
+            console.log(cycleHasStarted);
+            if(cycleHasStarted) {
+              console.log("CLEAR INTERVAL CUZ LIB CHANGED?")
+              $slide.stop(true, true);
+              clearInterval(rotate);
               return;
             }
             rotate = setInterval(function () {
               //console.log(cycleHasStarted)
               if(sliderHasStopped) {
                 $slide.stop(true, true);
+                clearInterval(rotate);
                 return;
               }
-        cycleHasStarted = true;
+          cycleHasStarted = true;
               // Clear the event queue
               $slide.stop(true, true);
               var idx = index + 1 < length ? index + 1 : 0;
               // Check if library has changed & if there is more than one image.
               if(sliderNeedsToRestart && $('.rslides li').length >= 2) {
                 // Clean the interval in order to avoid duplicate calls.
-                //clearInterval(rotate);
+                $slide.stop(true, true);
+                clearInterval(rotate);
                 sliderNeedsToRestart = false;
                 console.log("NEEDED REST")
+                return;
               }
               // Remove active state and set new if pager is set
               if (settings.pager || settings.manualControls) {
