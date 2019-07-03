@@ -162,10 +162,14 @@ var isRotating = false;
         isRotating = false;
         };
 
+      var isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
+          navigator.userAgent &&
+          navigator.userAgent.indexOf('CriOS') == -1 &&
+          navigator.userAgent.indexOf('FxiOS') == -1;
       slideTo = function (idx) {
-        console.log("TRIGGEER HELPER: " + idx + " "  + length)
+        console.log("TRIGGEER HELPER: " + idx + " "  + length);
         settings.before(idx);
-        if (settings.lazy) {
+        if (settings.lazy && !isSafari && !/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
           var imgSlide = $($($slide).find('img')[idx]);
           var dataSrc = imgSlide.attr('src');
           imgSlide.attr('src', dataSrc);
