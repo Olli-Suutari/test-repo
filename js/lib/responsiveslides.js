@@ -177,6 +177,7 @@ var isRotating = false;
             slideToHelper(idx);
           })
         } else {
+          alert("This is working as intended.");
           slideToHelper(idx);
         }
       };

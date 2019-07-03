@@ -688,8 +688,11 @@ function asyncFetchImages() {
 }
 
 function expandedSliderToggler() {
+    var sliderPos = $("#sliderBox").position().top -50;
     $('#sliderBox').toggleClass("small-slider");
     $('#sliderBox').toggleClass("expanded-slider");
+    $('.expanded-slider').css("top", sliderPos);
+
 
 }
 
