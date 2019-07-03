@@ -186,7 +186,8 @@ header {
     object-position: 50% 50%;
     /* default value: image is centered*/
     object-fit: fill;
-    max-width: 100%;
+    width: 100%;
+    max-height: 100%;
     height: auto;
     border: solid 2px @primary;
 }
@@ -198,7 +199,6 @@ header {
 
 .small-slider {
     /*height: 260px; */
-    min-height: 260px;
     margin-left: -.75em;
     margin-right: -.75em;
 }
@@ -214,18 +214,16 @@ header {
 /* Scale image width up to 150% on 'small' slider, thus cropping sides in order to fill vertically (eq. 16:9 images). */
 
 .small-slider img {
-    height: 280px;
     max-width: 150%;
 }
 
-.ig-img {
+.ig-img, .rslides img {
     display: block;
     object-position: 50% 50%;
     /* default value: image is centered*/
     object-fit: contain;
     max-width: 100%;
     max-height: 100%;
-    width: 100%!important;
 }
 
 .ig-img-container {
@@ -381,31 +379,27 @@ header {
 
 
 .full-screen-slider img {
-    max-height: 100% !important;
     width: auto;
-    height: 100%!important;
-}
-
-.full-screen-slider .ig-img {
-    width: auto !important;
-    max-width: 75%;
-    height: 100% !important;
-    margin-left: auto!important;
-    margin-right: auto!important;
 }
 
 .full-screen-slider .ig-caption {
-    padding-top: 5em;
+    padding-top: 2em;
     padding-bottom: 3em!important;
-    padding-left: 2em;
-    padding-right: 1.5em;
+    padding-left: 3em;
+    padding-right: 3em;
     background: #efebe9;
-    box-sizing: border-box;
 }
+
+.full-screen-slider .ig-img {
+    width: 100%;
+    height: auto;
+}
+
 
 /* Screen width must be at least 1081 to fit description next to the image. */
 @media screen and (min-width: 1081px) {
-    .ig-caption {
+
+    .full-screen-slider .ig-caption {
         border-color: #bbb;
         position: absolute;
         top: 0px;
@@ -414,6 +408,25 @@ header {
         width: 25%;
         padding: 20px;
         overflow: auto!important;
+        height: 100%!important;
+        padding-top: 5em;
+        padding-bottom: 3em!important;
+        padding-left: 2em;
+        padding-right: 1.5em;
+        box-sizing: border-box;
+    }
+
+    .full-screen-slider .ig-img {
+        width: auto !important;
+        max-width: 75%;
+        height: 100% !important;
+        margin-left: auto!important;
+        margin-right: auto!important;
+    }
+
+    .full-screen-slider img {
+        max-height: 100% !important;
+        width: auto;
         height: 100%!important;
     }
 }

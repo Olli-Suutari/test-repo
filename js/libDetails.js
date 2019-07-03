@@ -697,7 +697,6 @@ function expandedSliderToggler() {
         adjustParentHeight(500);
     }
     else {*/
-        $('#sliderBox').toggleClass("full-screen-slider");
         toggleFullScreen("#sliderBox");
     //}
 }

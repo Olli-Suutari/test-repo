@@ -7,6 +7,7 @@ function toggleFullScreen(target) {
     // If slider, toggle small-slider class.
     if(target === "#sliderBox") {
         $('#sliderBox').toggleClass("small-slider");
+        $('#sliderBox').toggleClass("full-screen-slider");
     }
     else if(target === "#mapContainer") {
         $('#mapContainer').toggleClass("map-borders");

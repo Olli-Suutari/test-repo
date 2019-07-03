@@ -283,10 +283,11 @@ var isRotating = false;
         if (settings.auto) {
           startCycle = function () {
             console.log(cycleHasStarted);
-            if(cycleHasStarted) {
+            if(cycleHasStarted || sliderHasStopped) {
               console.log("CLEAR INTERVAL CUZ LIB CHANGED?")
               $slide.stop(true, true);
               clearInterval(rotate);
+              sliderHasStopped = false;
             }
             rotate = setInterval(function () {
               //console.log(cycleHasStarted)
@@ -311,8 +312,8 @@ var isRotating = false;
               if (settings.pager || settings.manualControls) {
                 selectTab(idx);
               }
-              console.log($('.rslides li').length >= 2);
-              if($('.rslides li').length >= 2) {
+              console.log($('.rslides li').length >= 2 + " sliderHasStopped "+ sliderHasStopped);
+              if($('.rslides li').length >= 2 && !sliderHasStopped) {
                 console.log("TRIGGER MOVE TO " + idx + " LEN: " + length);
                 if(idx > length) {
                   idx = length;
@@ -353,20 +354,17 @@ var isRotating = false;
          toggleAuto = function (stop) {
            //console.log("IS: " + $("#sliderPlay i").hasClass("fa-play") + " " + stop);
            if(stop === true) {
-             if(!sliderHasStopped) {
-               sliderHasStopped = true;
-               restartCycle();
-               $('#sliderPlay').removeClass("progress");
-               $('.fa-stop').addClass('fa-play').removeClass('fa-stop');
-             }
+             sliderHasStopped = true;
+             restartCycle();
+             $('#sliderPlay').removeClass("progress");
+             $('.fa-stop').addClass('fa-play').removeClass('fa-stop');
            }
            else {
-             if(sliderHasStopped) {
-               sliderHasStopped = false;
-               restartCycle();
-               $('#sliderPlay').addClass("progress");
-               $('.fa-play').addClass('fa-stop').removeClass('fa-play');
-             }
+             sliderHasStopped = false;
+             restartCycle();
+             $('#sliderPlay').addClass("progress");
+             $('.fa-play').addClass('fa-stop').removeClass('fa-play');
+
            }
         };
 
