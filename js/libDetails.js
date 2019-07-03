@@ -634,7 +634,8 @@ function asyncFetchImages() {
                                 if (!$("#sliderBox").hasClass("small-slider")) {
                                     var centerPos = $(window).scrollTop() + $(window).height() / 2;
                                     if (!(event.clientY >= centerPos - 75 && event.clientY <= centerPos + 75)) {
-                                        toggleFullScreen("#sliderBox");
+                                        //toggleFullScreen("#sliderBox");
+                                        //expandedSliderToggler();
                                     }
                                 }
                             });
@@ -663,7 +664,19 @@ function asyncFetchImages() {
                                 }
                             });
                             $( "#expandSlider" ).on('click', function () {
-                                toggleFullScreen('#sliderBox');
+                                var cloneSlider = $('#sliderBox').clone();
+
+                                //console.log(cloneSlider)
+                                //var $button = $('#sliderBox').clone();
+                                //$('#modalContent').html($button);
+                                //$('#sliderModalContent').append(cloneSlider);
+                                //$("#modalContent").replaceWith('<div id="modalContent">' + cloneSlider.clone() + '</div>');
+
+
+                                //$('#sliderBox').removeClass("small-slider");
+
+                                expandedSliderToggler();
+                                //toggleFullScreen('#sliderBox');
                             });
                             imagesDeferred.resolve()
                         }, 250 );
@@ -672,6 +685,12 @@ function asyncFetchImages() {
     }, 1 );
     // Return the Promise so caller can't change the Deferred
     return imagesDeferred.promise();
+}
+
+function expandedSliderToggler() {
+    $('#sliderBox').toggleClass("small-slider");
+    $('#sliderBox').toggleClass("expanded-slider");
+
 }
 
 function asyncFetchLocation() {

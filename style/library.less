@@ -313,7 +313,10 @@ header {
     background-image: url("https://www.transparenttextures.com/patterns/diagonal-waves.png");}
 
 .small-slider .ig-img {
-    width: 100%!important;
+    height: auto!important;
+    max-width: 100%!important;
+    max-height: 100% !important;
+    width: auto!important;
     position: relative;
     overflow: hidden!important;
 }
@@ -1128,4 +1131,19 @@ html {
 
 .no-borders {
     border: none!important;
+}
+
+#sliderModal {
+    z-index: 999999999999999;
+}
+
+.expanded-slider {
+    position: fixed!important;
+    top: 10%;
+    left: 10%;
+    min-width: 60%!important;
+    max-width: 80% !important;
+    max-height: 70% !important;
+    width: auto!important;
+    height: auto!important;
 }
