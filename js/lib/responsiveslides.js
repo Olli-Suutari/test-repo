@@ -81,7 +81,6 @@ var isRotating = false;
         restartCycle,
         toggleAuto,
         rotate,
-        selectedLib,
         $tabs,
 
         // Helpers
@@ -90,8 +89,7 @@ var isRotating = false;
         waitTime = parseFloat(settings.timeout),
         maxw = parseFloat(settings.maxwidth),
 
-        selectedLib = library;
-        // Namespacing
+          // Namespacing
         namespace = settings.namespace,
         namespaceIdx = namespace + i,
 
@@ -128,8 +126,6 @@ var isRotating = false;
           return false;
         })(),
         slideToHelper = function(idx) {
-          console.log(selectedLib);
-
           if(isRotating) {
           console.log("IS ROTATING; RETURN")
           return;
@@ -568,7 +564,12 @@ var isRotating = false;
         });
       }
     });
-
   };
+  if(isIOS || isIE) {
+    $('#expandSlider').css('display', 'none');
+    $('#sliderPlay').css('margin-top', '25px');
+
+    alert("HIDE SLIDER EXPANSER")
+  }
 })(jQuery, this, 0);
 
