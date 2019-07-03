@@ -429,8 +429,6 @@ var isRotating = false;
 
         // Navigation
         if (settings.nav) {
-
-
           var progressBar = '<button id="sliderPlay" class="slider-btn progress blue">' +
               '<span class="progress-left">' +
               '<span class="progress-bar"></span>' +
@@ -444,7 +442,6 @@ var isRotating = false;
               //              "<button id='sliderPlay' class='slider-btn'> <i class='fa fa-stop title='" + i18n.get("Toggle full-screen") +
           //               "'></i></button>" +
 
-
           var navMarkup =
             "<div class='slider-navigation'><button id='sliderPrevious' " +
               "class='slider-btn " + navClass + " prev'>" + settings.prevText + "</button>" +
@@ -456,6 +453,12 @@ var isRotating = false;
           // Inject navigation
           if (options.navContainer) {
             $(settings.navContainer).append(navMarkup);
+
+            if(isIOS || isIE) {
+              $('#expandSlider').css('display', 'none');
+              $('#sliderPlay').css('margin-top', '25px');
+              alert("HIDE SLIDER EXPANSER")
+            }
             $('#sliderPlay').click(function() {
               if($('#sliderPlay i').hasClass('fa-play')) {
                 toggleAuto();
@@ -565,11 +568,4 @@ var isRotating = false;
       }
     });
   };
-  if(isIOS || isIE) {
-    $('#expandSlider').css('display', 'none');
-    $('#sliderPlay').css('margin-top', '25px');
-
-    alert("HIDE SLIDER EXPANSER")
-  }
 })(jQuery, this, 0);
-
