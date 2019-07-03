@@ -128,7 +128,6 @@ var isRotating = false;
           return;
         }
         isRotating = true;
-        console.log("SLIDE TO: " + idx + " "  + length)
           // If CSS3 transitions are supported
           if (supportsTransitions) {
             $slide
@@ -280,6 +279,7 @@ var isRotating = false;
         if (settings.auto) {
           startCycle = function () {
             if(sliderHasStopped || cycleHasStarted) {
+              console.log("RETURN BEFORE REOTATE")
               return;
             }
             rotate = setInterval(function () {
@@ -486,7 +486,7 @@ var isRotating = false;
 
             // Determine where to slide
             var idx = $slide.index($visibleClass),
-              prevIdx = idx - 1,
+              prevIdx = idx - 1 < 0 ? length - 1 : idx - 1, // Fix for prevIdx going < 0 https://github.com/viljamis/ResponsiveSlides.js/pull/212/files
               nextIdx = idx + 1 < length ? index + 1 : 0;
 
             // Go to slide
