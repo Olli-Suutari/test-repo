@@ -561,6 +561,7 @@ $(document).ready(function() {
     }
     if(isIOS || isIE) {
         $('#expandSlider').css('display', 'none');
+        alert("HIDE SLIDER EXPANSER")
     }
     if(isIOS) {
         $('#expandMap').css('display', 'none');
