@@ -664,17 +664,6 @@ function asyncFetchImages() {
                                 }
                             });
                             $( "#expandSlider" ).on('click', function () {
-                                var cloneSlider = $('#sliderBox').clone();
-
-                                //console.log(cloneSlider)
-                                //var $button = $('#sliderBox').clone();
-                                //$('#modalContent').html($button);
-                                //$('#sliderModalContent').append(cloneSlider);
-                                //$("#modalContent").replaceWith('<div id="modalContent">' + cloneSlider.clone() + '</div>');
-
-
-                                //$('#sliderBox').removeClass("small-slider");
-
                                 expandedSliderToggler();
                                 //toggleFullScreen('#sliderBox');
                             });
@@ -688,12 +677,27 @@ function asyncFetchImages() {
 }
 
 function expandedSliderToggler() {
-    var sliderPos = $("#sliderBox").position().top -50;
-    $('#sliderBox').toggleClass("small-slider");
-    $('#sliderBox').toggleClass("expanded-slider");
-    $('.expanded-slider').css("top", sliderPos);
-
-
+    if(isIOS || isIE) {
+        $('#sliderBox').toggleClass("small-slider");
+        var sliderPos = $("#sliderBox").position().top -50;
+        $('#sliderBox').toggleClass("expanded-slider");
+        var sliderHeight = $("#sliderBox").height();
+        var bodyHeight = $("body").height();
+        var newBodyHeight = sliderHeight + bodyHeight - sliderPos;
+        if($('#sliderBox').hasClass("expanded-slider")) {
+            $('#sliderBox').css("top", sliderPos);
+            $('body').css("height", newBodyHeight);
+        }
+        else {
+            $('#sliderBox').css("top", "");
+            $('body').css("height", "");
+        }
+        adjustParentHeight(500);
+    }
+    else {
+        $('#sliderBox').toggleClass("full-screen-slider");
+        toggleFullScreen("#sliderBox");
+    }
 }
 
 function asyncFetchLocation() {
@@ -898,7 +902,7 @@ function asyncFetchLinks() {
                     igExists = true;
                     linkCount = linkCount +1;
                     $(".some-links").append('<a target="_blank" title="Instagram"' +
-                        'href="' + url + '"> <img src="../images/icons/instagram.svg" alt="' +
+                        'href="' + url + '"> <img width="42" height="42" src="../images/icons/instagram.svg" alt="' +
                         i18n.get("Librarys") + ' Instagram"/>' +
                         '</a>');
                     igName = url;

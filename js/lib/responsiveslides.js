@@ -162,14 +162,11 @@ var isRotating = false;
         isRotating = false;
         };
 
-      var isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
-          navigator.userAgent &&
-          navigator.userAgent.indexOf('CriOS') == -1 &&
-          navigator.userAgent.indexOf('FxiOS') == -1;
       slideTo = function (idx) {
         console.log("TRIGGEER HELPER: " + idx + " "  + length);
         settings.before(idx);
-        if (settings.lazy && !isSafari && !/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+        // Lazy loading crashes the slider for iOS...
+        if (settings.lazy && !isIOS) {
           var imgSlide = $($($slide).find('img')[idx]);
           var dataSrc = imgSlide.attr('src');
           imgSlide.attr('src', dataSrc);
@@ -177,7 +174,6 @@ var isRotating = false;
             slideToHelper(idx);
           })
         } else {
-          alert("This is working as intended.");
           slideToHelper(idx);
         }
       };
@@ -515,7 +511,7 @@ var isRotating = false;
               $('#currentSlide').html(nextIdx + 1);
               rebindClickPreventation();
             }
-            adjustParentHeight(750);
+            adjustParentHeight(750, 300);
             console.log("MANUAL N")
             toggleAuto(true);
             if (settings.pager || settings.manualControls) {

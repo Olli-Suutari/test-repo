@@ -1,3 +1,6 @@
+var isIOS = false;
+var isIE = false;
+
 function toggleFullScreen(target) {
     // if already full screen; exit
     // else go fullscreen
@@ -405,7 +408,7 @@ function adjustParentHeight(delay, elementPosY) {
                     newHeight = newHeight + popoverHeight;
                 }*/
             }
-            if (navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1)) {
+            if (isIE) {
                 if(newHeight < 200) {
                     newHeight = newHeight + 3000;
                 }
@@ -544,12 +547,19 @@ $(document).ready(function() {
     // Hide fullscreen toggler & increase slider/map sizes a bit on larger screens to compensate the lack of full screen.
     // Since navigation buttons on slider do not apparently work either, hide them too... we got swiping after all!
     // https://stackoverflow.com/questions/7944460/detect-safari-browser
-    var isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
+    var testSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
         navigator.userAgent &&
         navigator.userAgent.indexOf('CriOS') == -1 &&
         navigator.userAgent.indexOf('FxiOS') == -1;
-    if(isSafari || /^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
-        $('#expandSlider').css('display', 'none');
+
+    if(testSafari || /^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+        isIOS = true;
+    }
+
+    if(navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1)) {
+        isIE = true;
+    }
+    if(isIOS) {
         $('#expandMap').css('display', 'none');
         if($(window).width() > 767) {
             $('.small-slider').css('height', '330px');

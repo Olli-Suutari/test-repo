@@ -187,9 +187,8 @@ header {
     /* default value: image is centered*/
     object-fit: fill;
     max-width: 100%;
-    max-height: 100%;
+    height: auto;
     border: solid 2px @primary;
-
 }
 
 #sliderBox {
@@ -262,31 +261,6 @@ header {
 }
 
 
-/* Screen width must be at least 1081 to fit description next to the image. */
-@media screen and (min-width: 1081px) {
-    .ig-img {
-        width: auto !important;
-        max-width: 75%;
-        height: 100% !important;
-        margin-left: auto!important;
-        margin-right: 26% !important;
-        /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
-    }
-    .ig-caption {
-        /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
-        background-color: #FAFAFA;
-        border-color: #bbb;
-        position: absolute;
-        top: 70px;
-        right: 5px;
-        z-index: 999999999;
-        width: 25%;
-        padding: 20px;
-        overflow:  auto!important;
-        max-height: 90%;
-    }
-}
-
 
 .ig-caption {
     /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
@@ -300,9 +274,20 @@ header {
     padding: .3em 1em 1em 2.3em!important;
 }
 
+#sliderPlay {
+    height: 40px;
+    width: 40px;
+}
+
+.no-borders {
+    border: none!important;
+    padding: 0!important;
+}
+
+
 .rslides {
-    background-image: url("https://www.transparenttextures.com/patterns/diagonal-waves.png");
-    background-color: #fdfdfd;
+    //background-image: url("https://www.transparenttextures.com/patterns/diagonal-waves.png");
+    background-color: #FAFAFA;
 }
 
 .small-slider .ig-caption {
@@ -324,11 +309,121 @@ header {
 .slider-ig-logo {
     width: 42px;
     height: 42px;
-    border-radius: 50%;
-    border: solid 6px #D83275;
 }
 
-/* Based on: https://codepen.io/Idered/pen/qLoGE */
+/* Use full-screen slider for Chromium + FF, use expanded for IE + iOS. */
+
+.expanded-slider {
+    position: fixed!important;
+    left: 10%;
+    max-width: 85% !important;
+    max-height: 65% !important;
+    width: 85%!important;
+    height: auto!important;
+    margin: 6% auto 6%; /* 15% from the top and centered */
+    background-color: #efebe9;
+    transition: all .5s linear!important;
+    border: solid salmon 2px;
+}
+
+.expanded-slider .slider-navigation {
+    margin-top: 1.5em;
+    margin-left: 1.75em;
+}
+
+.expanded-slider img {
+    width: 100% !important;
+    max-height: 100% !important;
+    height: auto;
+}
+
+.expanded-slider .ig-img {
+    position: relative;
+    top: 0!important;
+    left: 0!important;
+    width: auto !important;
+    max-width: 75%;
+    margin-right: 26% !important;
+    min-width: 65% !important;
+    margin-left: auto!important;
+    align-content: center!important;
+
+}
+
+.expanded-slider .ig-likes-logo-container {
+    margin-top: 1.5em;
+    right: 1.75em;
+    z-index: 9999999999999999999999999!important;
+}
+
+.expanded-slider .ig-caption {
+    padding-top: 5em;
+    /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+    background-color: #FAFAFA;
+    border-color: #bbb;
+    position: absolute;
+    top: 70px;
+    right: 5px;
+    z-index: 999999999;
+    width: 25%;
+    overflow:  auto!important;
+    max-height: 90%;
+}
+
+.full-screen-slider {
+
+    height: 100%!important;
+}
+
+.full-screen-slider .ig-img-container {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+
+.full-screen-slider img {
+    max-height: 100% !important;
+    width: auto;
+    height: 100%!important;
+}
+
+.full-screen-slider .ig-img {
+    width: auto !important;
+    max-width: 75%;
+    height: 100% !important;
+    margin-left: auto!important;
+    margin-right: 26% !important;
+}
+
+.full-screen-slider .ig-caption {
+    padding-top: 4em;
+    padding-bottom: 3em!important;
+    background: #efebe9;
+    box-sizing: border-box;
+}
+
+/* Screen width must be at least 1081 to fit description next to the image. */
+@media screen and (min-width: 1081px) {
+    .ig-caption {
+        border-color: #bbb;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        z-index: 999999999;
+        width: 25%;
+        padding: 20px;
+        overflow: auto!important;
+        height: 100%!important;
+    }
+}
+
+.full-screen-slider .ig-likes-logo-container {
+    z-index: 999999999999999999999999999999!important;
+    margin-right: 2em;
+}
+
+
+    /* Based on: https://codepen.io/Idered/pen/qLoGE */
 .ig-love-btn {
     box-shadow: 1px 1px 0 rgba(255,255,255,0.5) inset;
     border-radius: 3px;
@@ -823,7 +918,7 @@ ul.cols {
 /* Modal */
 /* Fix modal being clipped from the bottom */
 html {
-    overflow-y: scroll!important;
+    overflow-y: scroll;
 }
 
 /* Fix modal scrolling on Safari on iPads & iPhones: https://stackoverflow.com/questions/44082430/in-ios-iframe-in-a-bootstrap-modal-can-not-scroll TO DO: Still broken? */
@@ -1122,28 +1217,4 @@ html {
 }
 @media only screen and (max-width: 990px){
     .progress{ margin-bottom: 20px; }
-}
-
-#sliderPlay {
-    height: 40px;
-    width: 40px;
-}
-
-.no-borders {
-    border: none!important;
-}
-
-#sliderModal {
-    z-index: 999999999999999;
-}
-
-.expanded-slider {
-    position: fixed!important;
-    top: 10%;
-    left: 10%;
-    min-width: 60%!important;
-    max-width: 80% !important;
-    max-height: 70% !important;
-    width: auto!important;
-    height: auto!important;
 }
