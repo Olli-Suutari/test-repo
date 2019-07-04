@@ -152,23 +152,18 @@ var length = 1;
               }
           }, waitTime);
         };
-        // Init cycle
-        startCycle();
-
         stopAuto = function () {
           clearInterval(rotate);
           sliderHasStopped = true;
           $('#sliderPlay').removeClass("progress");
           $('.fa-stop').addClass('fa-play').removeClass('fa-stop');
         };
-
         startAuto = function () {
           console.log("STARTAUTO")
           sliderHasStopped = false;
           $('.fa-play').addClass('fa-stop').removeClass('fa-play');
           startCycle();
         };
-
         // Navigation
         var progressBar = '<div class="slider-play-container"> <button id="sliderPlay" class="slider-btn progress blue">' +
             '<span class="progress-left">' +
@@ -196,12 +191,9 @@ var length = 1;
         }
         $('#sliderPlay').click(function() {
           if($('#sliderPlay i').hasClass('fa-play')) {
-            console.log("CLICKED PLAY")
             startAuto();
           }
           else {
-            console.log("CLICKED STOP")
-
             stopAuto();
           }
       });
@@ -210,9 +202,7 @@ var length = 1;
         // Click event handler
         $trigger.bind("click", function (e) {
           e.preventDefault();
-
           var $visibleClass = $("." + visibleClass);
-
           // Prevent clicking if currently animated
           if ($visibleClass.queue('fx').length) {
             return;
@@ -221,7 +211,6 @@ var length = 1;
           var idx = $slide.index($visibleClass),
             prevIdx = idx - 1 < 0 ? length - 1 : idx - 1, // Fix for prevIdx going < 0 https://github.com/viljamis/ResponsiveSlides.js/pull/212/files
             nextIdx = idx + 1 < length ? index + 1 : 0;
-
           // Go to slide
           if ($(this)[0] === $prev[0]) {
             $(".rslides1_on").off("click");
@@ -248,6 +237,8 @@ var length = 1;
       $( ".ig-caption" ).mouseover(function() {
         stopAuto();
       });
+      // Init cycle
+      startCycle();
     });
   };
 })(jQuery, this, 0);
