@@ -8,7 +8,7 @@
 
 /*jslint browser: true, sloppy: true, vars: true, plusplus: true, indent: 2 */
 
-/* Modifications by Olli Suutari 
+/* Modifications by Olli Suutari
 - Custom styling for prev/next buttons.
 - Current slide is displayed in top left corner
 - Added clickevent preventation for selected image (close fullscreen when clicking background)
@@ -23,7 +23,6 @@
   - nextText: >
 */
 
-
 function rebindClickPreventation() {
     // Ignore clicks on selected image.
     $(".rslides1_on").click(function(event){
@@ -31,8 +30,19 @@ function rebindClickPreventation() {
       $("#sliderBox").addClass('hovering');
     });
 }
+
 // Global variable, this will be set to true when changing the selected library.
 var sliderNeedsToRestart = false;
+function resetSliderAfterLibChange() {
+  sliderNeedsToRestart = true;
+  sliderHasStopped = false;
+  index = 0;
+  setTimeout(function() {
+    sliderNeedsToRestart = false;
+  }, 6499 );
+}
+
+
 // Once the slider is stopped, don't resume automatically.
 var sliderHasStopped = false;
 var index = 0;
@@ -288,39 +298,29 @@ var isRotating = false;
         // Auto cycle, do-not re-init when changing the library.
         if (settings.auto) {
           startCycle = function () {
-            console.log(cycleHasStarted);
-            if(cycleHasStarted || sliderHasStopped) {
+            console.log("sliderNeedsToRestart is: " + sliderNeedsToRestart);
+            if(sliderNeedsToRestart) {
               console.log("CLEAR INTERVAL CUZ LIB CHANGED?")
               $slide.stop(true, true);
               clearInterval(rotate);
-              sliderHasStopped = false;
-              cycleHasStarted = false;
+              return;
+            }
+            if(sliderHasStopped) {
+              return;
             }
             rotate = setInterval(function () {
-              //console.log(cycleHasStarted)
-              if(sliderHasStopped) {
-                $slide.stop(true, true);
-                clearInterval(rotate);
+              console.log("sliderNeedsToRestart in rotate is: " + sliderNeedsToRestart);
+              if(sliderNeedsToRestart || sliderHasStopped) {
+                return;
               }
-          cycleHasStarted = true;
               // Clear the event queue
               $slide.stop(true, true);
               var idx = index + 1 < length ? index + 1 : 0;
-              // Check if library has changed & if there is more than one image.
-              if(sliderNeedsToRestart && $('.rslides li').length >= 2) {
-                // Clean the interval in order to avoid duplicate calls.
-                $slide.stop(true, true);
-                clearInterval(rotate);
-                sliderNeedsToRestart = false;
-                console.log("NEEDED REST")
-                return;
-              }
               // Remove active state and set new if pager is set
               if (settings.pager || settings.manualControls) {
                 selectTab(idx);
               }
-              console.log($('.rslides li').length >= 2 + " sliderHasStopped "+ sliderHasStopped);
-              if($('.rslides li').length >= 2 && !sliderHasStopped) {
+              if($('.rslides li').length >= 2) {
                 console.log("TRIGGER MOVE TO " + idx + " LEN: " + length);
                 if(idx > length) {
                   idx = length;
@@ -333,9 +333,8 @@ var isRotating = false;
                 $('#sliderPlay').removeClass("progress");
                 setTimeout(function(){
                   $('#sliderPlay').addClass("progress");
-                }, 50);
+                }, 75);
                 adjustParentHeight(50);
-                console.log("AUTO ROTATE")
               }
             }, waitTime);
           };
@@ -351,6 +350,7 @@ var isRotating = false;
             return
           }
           if (settings.auto) {
+            $slide.stop(true, true);
             // Stop
             clearInterval(rotate);
             // Restart
@@ -360,7 +360,9 @@ var isRotating = false;
 
          toggleAuto = function (stop) {
            //console.log("IS: " + $("#sliderPlay i").hasClass("fa-play") + " " + stop);
-           if(stop === true && !sliderHasStopped) {
+           if(stop === true) {
+             console.log("STOP CALLED!")
+
              sliderHasStopped = true;
              restartCycle();
              $('#sliderPlay').removeClass("progress");
@@ -434,7 +436,7 @@ var isRotating = false;
 
         // Navigation
         if (settings.nav) {
-          var progressBar = '<button id="sliderPlay" class="slider-btn progress blue">' +
+          var progressBar = '<div class="slider-play-container"> <button id="sliderPlay" class="slider-btn progress blue">' +
               '<span class="progress-left">' +
               '<span class="progress-bar"></span>' +
               '</span>' +
@@ -442,18 +444,19 @@ var isRotating = false;
               '<span class="progress-bar"></span>' +
               '</span>' +
               '<div class="progress-value"><i class="fa fa-stop"></i></div>' +
-              '</button>';
+              '</button></div>';
 
               //              "<button id='sliderPlay' class='slider-btn'> <i class='fa fa-stop title='" + i18n.get("Toggle full-screen") +
           //               "'></i></button>" +
 
           var navMarkup =
-            "<div class='slider-navigation'><button id='sliderPrevious' " +
+            "<div class='slider-navigation slider-counter-container'><button id='sliderPrevious' " +
               "class='slider-btn " + navClass + " prev'>" + settings.prevText + "</button>" +
               "<i class='slider-counter'><span id='currentSlide'>1</span></i>" +
-            "<button id='sliderForward' class='slider-btn " + navClass + " next'>" + settings.nextText + "</button>" +
-              progressBar +
-          "<button id='expandSlider' class='slider-btn'> <i class='fa fa-expand' title='" + i18n.get("Toggle full-screen") +
+            "<button id='sliderForward' class='slider-btn " + navClass + " next'>" + settings.nextText + "</button></div>" +
+              "<div class='slider-navigation slider-play-expand-container'> " + progressBar +
+          "<button id='expandSlider' class='slider-btn'> " +
+              "<i class='fa fa-expand' title='" + i18n.get("Toggle full-screen") +
               "'></i></button></div>";
           // Inject navigation
           if (options.navContainer) {

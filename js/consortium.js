@@ -368,9 +368,7 @@ $(document).ready(function() {
                 isScheduleEmpty = false;
                 noImages = true;
                 igImages = [];
-                sliderHasStopped = false;
-                sliderNeedsToRestart = true;
-                index = 0;
+                resetSliderAfterLibChange();
                 igName = "";
                 triviaIsEmpty = true;
                 mapLoaded = false;
