@@ -564,7 +564,7 @@ $(document).ready(function() {
     if(isIOS) {
         $('#expandMap').css('display', 'none');
         if($(window).width() > 767) {
-            $('.small-slider').css('height', '330px');
+            //$('.small-slider').css('height', '330px');
             $('#contactsFirstCol').addClass("col-md-12");
             $('#contactsFirstCol').removeClass("col-md-8");
             $('#contactsMapCol').addClass("col-md-12");
