@@ -119,6 +119,18 @@ var dict = {
         fi: "Kuva kirjastolta",
         en: "Picture from the library",
     },
+    "Open in instagram": {
+        fi: "Avaa kuva Instagrammissa.",
+        en: "Open the photo in Instagram.",
+    },
+    "Likes on Instagam": {
+        fi: "tykkääjää instagrammissa - linkki avaa kuvan Instagrammissa.",
+        en: "likes on instagram - the link opens in Instagram.",
+    },
+    "Likes on Instagam singular": {
+        fi: "tykkääjä instagrammissa - linkki avaa kuvan Instagrammissa.",
+        en: "like on instagram. - the link opens in Instagram.",
+    },
     "Closed": {
         fi: "Suljettu",
         en: "Closed",

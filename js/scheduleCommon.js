@@ -170,9 +170,15 @@ $(document).ready(function() {
     $(document).keydown(function(e) {
         switch(e.key) {
             case "Escape":
-                if($("#sliderBox").hasClass("expanded-slider")) {
-                    expandedSliderToggler();
-                }
+                setTimeout(function() {
+                    if($("#sliderBox").hasClass("full-screen-slider")) {
+                        $("#sliderBox").removeClass("full-screen-slider");
+                    }
+                    else if($("#sliderBox").hasClass("expanded-slider")) {
+                        expandedSliderToggler();
+                    }
+                }, 350 );
+
                 break;
             case "ArrowLeft": // left
                 if($(".library-schedules").hasClass("hovering")

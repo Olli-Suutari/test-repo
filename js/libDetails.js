@@ -525,17 +525,20 @@ function generateImages(data) {
             if(counter === data.length) {
                 if(igImages.length !== 0) {
                     for (var i = 0; i < igImages.length; i++) {
-                        var altText = i18n.get("Picture from the library") + ' (' + altCount + '/' + pictures.length + ')';
-                        var igHref = 'title="Instagram" target="_blank" href="https://www.instagram.com/p/' + igImages[i].shortcode + '/"';
-                        var igLogo = '<a class="slider-ig-logo"' + igHref + '>' +
+                        var igHref = 'target="_blank" href="https://www.instagram.com/p/' + igImages[i].shortcode + '/"';
+                        var igLogo = '<a title="' + i18n.get("Open in instagram") + '" class="slider-ig-logo no-external-icon"' + igHref + '>' +
                             '<img width="42" height="42" class="no-borders" src="../images/icons/instagram.svg" alt="' +
-                        i18n.get("Librarys") + ' Instagram"/></a>';
-                        var igHeart = '<a class="ig-love-btn ig-love-btn-counter" ' + igHref +
+                        i18n.get("Open in instagram") + '"/></a>';
+                        var likesAlt = igImages[i].likes + " " + i18n.get("Likes on Instagam");
+                        if(igImages[i].likes == 1) {
+                            likesAlt = igImages[i].likes + " " + i18n.get("Likes on Instagram singular");
+                        }
+                        var igHeart = '<a title="' + likesAlt + '" class="ig-love-btn ig-love-btn-counter" ' + igHref +
                             '><span>&#x2764;</span><span>' + igImages[i].likes + '</span></a>';
                         var igCaption = '<figcaption class="ig-caption">' + igImages[i].caption + '</figcaption>';
                         var igContainer = '<div class="ig-likes-logo-container">' + igHeart + igLogo + '</div>';
                             $(".rslides").append('<li class="ig-img-container">' + igContainer  +
-                                '<img class="ig-img" src="' + igImages[i].url + '" alt="' + altText + '">' + igCaption + '</li>');
+                                '<figure><img class="ig-img" src="' + igImages[i].url + '">' + igCaption + '</figure></li>');
                         counter = counter +1;
                     }
                     imageListDeferred.resolve();
@@ -614,9 +617,7 @@ function asyncFetchImages() {
                             length = combinedLenght;
                             //$('.top-left').replaceWith('<i class="top-left"><span id="currentSlide"></span></i>/' + data.pictures.length);
                             if(!sliderInitialized) {
-                                $(".rslides").responsiveSlides({
-                                    navContainer: "#sliderBox" // Selector: Where controls should be appended to, default is after the 'ul'
-                                });
+                                $(".rslides").responsiveSlides({});
                                 sliderInitialized = true;
                             }
                             else {
@@ -624,9 +625,7 @@ function asyncFetchImages() {
                                 $( "#sliderBox" ).unbind();
                                 $("#sliderPlay").unbind();
 
-                                $(".rslides").responsiveSlides({
-                                    navContainer: "#sliderBox" // Selector: Where controls should be appended to, default is after the 'ul'
-                                });
+                                $(".rslides").responsiveSlides({});
                             }
 
                             $('.slider-counter').append('/' + combinedLenght);
