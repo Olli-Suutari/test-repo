@@ -1246,6 +1246,7 @@ function fetchInformation(language, lib) {
                         $("#introductionSidebar").addClass("col-md-12");
                         $("#sliderBox").removeClass("small-slider");
                         $("#expandSlider").css("display", "none");
+                        $('.slider-play-container').css('margin-left', '-10px');
                     }
                     if(noSidebar && !noLeftCol) {
                         $(".introductionSidebar").css("display", "none");
