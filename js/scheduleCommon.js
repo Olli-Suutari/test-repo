@@ -96,7 +96,7 @@ function bindScheduleKeyNavigation() {
 function detectswipe(el,func) {
     var swipe_det = new Object();
     swipe_det.sX = 0; swipe_det.sY = 0; swipe_det.eX = 0; swipe_det.eY = 0;
-    var min_x = 30;  // min x swipe for horizontal swipe
+    var min_x = 35;  // min x swipe for horizontal swipe
     var max_x = 1;  // max x difference for vertical swipe (ignored)
     var min_y = 1;  // min y swipe for vertical swipe (ignored)
     var max_y = 60;  // max y difference for horizontal swipe
@@ -127,6 +127,9 @@ function detectswipe(el,func) {
         }
         // Call the swipeNavigation function with the right direction.
         if (direc != "") {
+            if(el == "#sliderbox") {
+                document.activeElement.blur();
+            }
             if(typeof func == 'function') func(el,direc);
         }
         direc = "";
