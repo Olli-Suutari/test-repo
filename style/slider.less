@@ -75,20 +75,8 @@ Z-indexes:
 }
 
 .small-slider {
-    /*height: 260px; */
     margin-left: -.75em;
     margin-right: -.75em;
-}
-
-.small-slider li {
-    transition: opacity 2s ease-in-out 0s;
-    height: auto;
-}
-
-/* Scale image width up to 150% on 'small' slider, thus cropping sides in order to fill vertically (eq. 16:9 images). */
-
-.small-slider img {
-    max-width: 150%;
 }
 
 .ig-img, .rslides img {
@@ -174,7 +162,7 @@ Z-indexes:
     height: 42px;
 }
 
-/* Use full-screen slider for Chromium + FF, use expanded for IE + iOS. */
+/* Use full-screen slider for Chromium + FF, use expanded for IE + iOS.
 .expanded-slider {
     position: fixed;
     left: 10%;
@@ -182,10 +170,9 @@ Z-indexes:
     max-height: 65% ;
     width: 85%;
     height: auto;
-    margin: 6% auto 6%; /* 15% from the top and centered */
+    margin: 6% auto 6%;
     background-color: #efebe9;
     transition: all .5s linear;
-    border: solid salmon 2px;
 }
 
 .expanded-slider .slider-navigation {
@@ -226,6 +213,7 @@ Z-indexes:
     overflow:  auto;
     max-height: 90%;
 }
+*/
 
 .full-screen-slider {
     height: 100%;
@@ -249,10 +237,7 @@ Z-indexes:
 }
 
 .full-screen-slider .ig-caption {
-    padding-top: 2em;
-    padding-bottom: 3em;
-    padding-left: 3em;
-    padding-right: 3em;
+    padding: 2em 3em 3em;
 }
 
 .full-screen-slider .ig-img {
@@ -266,17 +251,12 @@ Z-indexes:
     .full-screen-slider .ig-caption {
         border-color: #bbb;
         position: absolute;
-        top: 0px;
-        right: 0px;
+        top: 0;
+        right: 0;
         width: 25%;
-        padding: 20px;
         overflow: auto;
         height: 100%;
-        padding-top: 5em;
-        padding-bottom: 3em;
-        padding-left: 2em;
-        padding-right: 1.5em;
-        box-sizing: border-box;
+        padding: 5em 1.5em 3em 2em;
     }
 
     .full-screen-slider .ig-img {
@@ -328,6 +308,7 @@ Z-indexes:
     text-shadow: 0 1px 0 #b12f27;
     background-color: #f64136;
     border-color: #b12f27;
+    text-decoration: none;
 }
 .ig-love-btn:active { box-shadow: 0 0 5px 3px rgba(0,0,0,0.2) inset; }
 .ig-love-btn span { color: #f64136; }
@@ -359,7 +340,6 @@ Z-indexes:
     top: 0;
     justify-content: center;
 }
-
 
 .slider-btn {
     background: none;
@@ -462,7 +442,7 @@ Z-indexes:
     border-right: 0;
     -webkit-transform-origin: center right;
     transform-origin: center right;
-    animation: loading-1 3.25s linear forwards;
+    animation: loading-1 3.23s linear forwards;
 }
 
 .progress .progress-value {
@@ -483,26 +463,22 @@ Z-indexes:
     color: #fdfdfd;
 }
 
-.progress-value i:hover {
-    color: skyblue!important;
-}
-
 .progress .progress-value:hover {
     color: skyblue;
 }
 
-.progress.blue .progress-bar{
+.progress.blue .progress-bar {
     border-color: #049dff;
 }
 .progress.blue .progress-value{
     color: #049dff;
 }
 
-.progress.blue .progress-left .progress-bar{
-    animation: loading-2 3.25s linear forwards 3.25s;
+.progress.blue .progress-left .progress-bar {
+    animation: loading-2 3.23s linear forwards 3.23s;
 }
 
-@keyframes loading-1{
+@keyframes loading-1 {
     0%{
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg);
@@ -512,7 +488,7 @@ Z-indexes:
         transform: rotate(180deg);
     }
 }
-@keyframes loading-2{
+@keyframes loading-2 {
     0%{
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg);
@@ -522,7 +498,7 @@ Z-indexes:
         transform: rotate(180deg);
     }
 }
-@keyframes loading-3{
+@keyframes loading-3 {
     0%{
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg);
@@ -532,7 +508,7 @@ Z-indexes:
         transform: rotate(90deg);
     }
 }
-@keyframes loading-4{
+@keyframes loading-4 {
     0%{
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg);
@@ -542,7 +518,7 @@ Z-indexes:
         transform: rotate(36deg);
     }
 }
-@keyframes loading-5{
+@keyframes loading-5 {
     0%{
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg);

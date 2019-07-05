@@ -5,7 +5,6 @@
  * Copyright (c) 2011-2012 @viljamis
  * Available under the MIT license
  */
-
 // Global variable, this will be set to true when changing the selected library.
 var sliderNeedsToRestart = false;
 var rotate;
@@ -19,19 +18,16 @@ function resetSliderAfterLibChange() {
     sliderHasStopped = false;
   }, 6490 );
 }
-
-
 // Once the slider is stopped, don't resume automatically.
 var sliderHasStopped = false;
 var index = 0;
 var length = 1;
-
 (function ($, window, i) {
   $.fn.responsiveSlides = function (options) {
     // Default settings
     var settings = $.extend({
       'lazy': true,             // Boolean: Lazy Load Mode https://github.com/viljamis/ResponsiveSlides.js/pull/382/files
-      'speed': 1500,               // Integer: Speed of the transition, in milliseconds
+      'speed': 1500,            // Integer: Speed of the transition, in milliseconds
       'timeout': 6500,          // Integer: Time between slide transitions, in milliseconds
       'prevText': '<',          // String: Text for the 'previous' button
       'nextText': '>',          // String: Text for the 'next' button
@@ -75,7 +71,6 @@ var length = 1;
         };
 
       slideTo = function (idx) {
-        console.log('TRIGGEER HELPER: ' + idx + ' '  + length);
         settings.before(idx);
         // Lazy loading crashes the slider for iOS...
         if (settings.lazy && !isIOS) {
@@ -88,7 +83,6 @@ var length = 1;
             })
           }
           catch (e) {
-            console.log('LOADING OF IMG FAILED.');
             slideToHelper(idx);
           }
         } else {
@@ -121,7 +115,6 @@ var length = 1;
         }
         // Auto cycle, do-not re-init when changing the library.
         startCycle = function () {
-          console.log('START ROTATE!')
           $("#sliderPlay").removeClass('progress');
           setTimeout(function(){
             $("#sliderPlay").addClass('progress');
@@ -139,9 +132,7 @@ var length = 1;
               $("#sliderPlay").addClass('progress');
             }, 75);
               var idx = index + 1 < length ? index + 1 : 0;
-              console.log(sliderHasStopped + ' ' + sliderNeedsToRestart);
               if(!sliderHasStopped && !sliderNeedsToRestart) {
-                console.log('TRIGGER MOVE TO ' + idx + ' LEN: ' + length);
                 if(idx > length) {
                   idx = length;
                 }
@@ -269,7 +260,6 @@ var length = 1;
             $("#currentSlide").html(nextIdx + 1);
           }
           adjustParentHeight(750);
-          console.log('MANUAL N')
           stopAuto();
         });
       }
