@@ -127,7 +127,9 @@ function detectswipe(el,func) {
         }
         // Call the swipeNavigation function with the right direction.
         if (direc != "") {
+            // Hide/inactivate any tooltips when swiping the slider.
             if(el == "#sliderbox") {
+                $('.tooltip').hide();
                 document.activeElement.blur();
             }
             if(typeof func == 'function') func(el,direc);
