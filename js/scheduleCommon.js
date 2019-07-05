@@ -169,17 +169,6 @@ $(document).ready(function() {
     // Detect left/right on schedules or move backwards/forwards in slider if in fullscreen mode or when hovering small slider..
     $(document).keydown(function(e) {
         switch(e.key) {
-            case "Escape":
-                setTimeout(function() {
-                    if($("#sliderBox").hasClass("full-screen-slider")) {
-                        $("#sliderBox").removeClass("full-screen-slider");
-                    }
-                    else if($("#sliderBox").hasClass("expanded-slider")) {
-                        expandedSliderToggler();
-                    }
-                }, 350 );
-
-                break;
             case "ArrowLeft": // left
                 if($(".library-schedules").hasClass("hovering")
                     || $("#lastWeek").is(":focus") || $("#nextWeek").is(":focus")) {

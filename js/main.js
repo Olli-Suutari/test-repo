@@ -53,6 +53,7 @@ function exitHandler() {
     if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
         // TO DO: this leaves a smallish black margin to the left of the 1st image after exiting the slider.
         $('#sliderBox').addClass("small-slider");
+        $('#sliderBox').removeClass("full-screen-slider");
 
         $('#mapContainer').addClass("map-borders");
     }
