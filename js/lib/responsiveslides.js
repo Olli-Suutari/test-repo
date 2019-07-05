@@ -31,7 +31,7 @@ var length = 1;
     // Default settings
     var settings = $.extend({
       'lazy': true,             // Boolean: Lazy Load Mode https://github.com/viljamis/ResponsiveSlides.js/pull/382/files
-      'speed': 0,               // Integer: Speed of the transition, in milliseconds
+      'speed': 1500,               // Integer: Speed of the transition, in milliseconds
       'timeout': 6500,          // Integer: Time between slide transitions, in milliseconds
       'prevText': '<',          // String: Text for the 'previous' button
       'nextText': '>',          // String: Text for the 'next' button
@@ -238,6 +238,14 @@ var length = 1;
           if ($visibleClass.queue("fx").length) {
             return;
           }
+          /*  Adds active class during slide animation
+          $(this)
+              .addClass(namespace + "_active")
+              .delay(fadeTime)
+              .queue(function (next) {
+              $(this).removeClass(namespace + "_active");
+              next();
+          }); */
           // Determine where to slide
           var idx = $slide.index($visibleClass),
             prevIdx = idx - 1 < 0 ? length - 1 : idx - 1, // Fix for prevIdx going < 0 https://github.com/viljamis/ResponsiveSlides.js/pull/212/files
