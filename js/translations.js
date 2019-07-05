@@ -111,6 +111,22 @@ var dict = {
         fi: "Omatoimiaika",
         en: "Self-service",
     },
+    "Previous slide": {
+        fi: "Siirry edelliseen kuvaan.",
+        en: "Slide to the previous picture.",
+    },
+    "Next slide": {
+        fi: "Siirry seuraavaan kuvaan.",
+        en: "Slide to the next picture.",
+    },
+    "Stop automatic playback": {
+        fi: "Pysäytä kuvien automaattinen toisto.",
+        en: "Stop the automatic playback of pictures.",
+    },
+    "Start automatic playback": {
+        fi: "Käynnistä kuvien automaattinen toisto.",
+        en: "Start the automatic playback of pictures.",
+    },
     "Pictures from the library": {
         fi: "Kuvia kirjastolta",
         en: "Pictures from the library",

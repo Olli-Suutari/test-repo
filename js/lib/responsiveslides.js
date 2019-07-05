@@ -30,14 +30,14 @@ var length = 1;
   $.fn.responsiveSlides = function (options) {
     // Default settings
     var settings = $.extend({
-      "lazy": true,             // Boolean: Lazy Load Mode https://github.com/viljamis/ResponsiveSlides.js/pull/382/files
-      "speed": 0,               // Integer: Speed of the transition, in milliseconds
-      "timeout": 6500,          // Integer: Time between slide transitions, in milliseconds
-      "prevText": "<",          // String: Text for the "previous" button
-      "nextText": ">",          // String: Text for the "next" button
-      "namespace": "rslides",   // String: change the default namespace used
-      "before": $.noop,         // Function: Before callback
-      "after": $.noop           // Function: After callback
+      'lazy': true,             // Boolean: Lazy Load Mode https://github.com/viljamis/ResponsiveSlides.js/pull/382/files
+      'speed': 0,               // Integer: Speed of the transition, in milliseconds
+      'timeout': 6500,          // Integer: Time between slide transitions, in milliseconds
+      'prevText': '<',          // String: Text for the 'previous' button
+      'nextText': '>',          // String: Text for the 'next' button
+      'namespace': 'rslides',   // String: change the default namespace used
+      'before': $.noop,         // Function: Before callback
+      'after': $.noop           // Function: After callback
     }, options);
 
     return this.each(function () {
@@ -56,11 +56,11 @@ var length = 1;
         namespace = settings.namespace,
         namespaceIdx = namespace + i,
         // Classes
-        navClass = namespace + "_nav " + namespaceIdx + "_nav",
-        visibleClass = namespaceIdx + "_on",
+        navClass = namespace + '_nav ' + namespaceIdx + '_nav',
+        visibleClass = namespaceIdx + '_on',
         // Styles for visible and hidden slides
-        visible = {"float": "left", "position": "relative", "opacity": 1, "zIndex": 2},
-        hidden = {"float": "none", "position": "absolute", "opacity": 0, "zIndex": 1},
+        visible = {'float': 'left', 'position': 'relative', 'opacity': 1, 'zIndex': 2},
+        hidden = {'float': 'none', 'position': 'absolute', 'opacity': 0, 'zIndex': 1},
         slideToHelper = function(idx) {
           $slide
               .removeClass(visibleClass)
@@ -75,20 +75,20 @@ var length = 1;
         };
 
       slideTo = function (idx) {
-        console.log("TRIGGEER HELPER: " + idx + " "  + length);
+        console.log('TRIGGEER HELPER: ' + idx + ' '  + length);
         settings.before(idx);
         // Lazy loading crashes the slider for iOS...
         if (settings.lazy && !isIOS) {
           try {
-            var imgSlide = $($($slide).find('img')[idx]);
-            var dataSrc = imgSlide.attr('src');
-            imgSlide.attr('src', dataSrc);
-            imgSlide.on('load', function() {
+            var imgSlide = $($($slide).find("img")[idx]);
+            var dataSrc = imgSlide.attr("src");
+            imgSlide.attr("src", dataSrc);
+            imgSlide.on("load", function() {
               slideToHelper(idx);
             })
           }
           catch (e) {
-            console.log("LOADING OF IMG FAILED.");
+            console.log('LOADING OF IMG FAILED.');
             slideToHelper(idx);
           }
         } else {
@@ -96,7 +96,7 @@ var length = 1;
         }
       };
       // Add max-width and classes
-      $this.addClass(namespace + " " + namespaceIdx);
+      $this.addClass(namespace + ' ' + namespaceIdx);
       // Hide all slides, then show first one
       $slide
         .hide()
@@ -108,12 +108,12 @@ var length = 1;
       $slide
           .show()
           .css({
-            "-webkit-transition": "opacity " + fadeTime + "ms ease-in-out",
-            "-moz-transition": "opacity " + fadeTime + "ms ease-in-out",
-            "-o-transition": "opacity " + fadeTime + "ms ease-in-out",
-            "transition": "opacity " + fadeTime + "ms ease-in-out"
+            '-webkit-transition': 'opacity ' + fadeTime + 'ms ease-in-out',
+            '-moz-transition': 'opacity ' + fadeTime + 'ms ease-in-out',
+            '-o-transition': 'opacity ' + fadeTime + 'ms ease-in-out',
+            'transition': 'opacity ' + fadeTime + 'ms ease-in-out'
           });
-      // Only run if there's more than one slide
+      // Only run if there"s more than one slide
       if ($slide.length > 1) {
         // Make sure the timeout is at least 100ms longer than the fade
         if (waitTime < fadeTime + 100) {
@@ -121,51 +121,62 @@ var length = 1;
         }
         // Auto cycle, do-not re-init when changing the library.
         startCycle = function () {
-          console.log("START ROTATE!")
-          $('#sliderPlay').removeClass("progress");
+          console.log('START ROTATE!')
+          $("#sliderPlay").removeClass('progress');
           setTimeout(function(){
-            $('#sliderPlay').addClass("progress");
+            $("#sliderPlay").addClass('progress');
           }, 75);
           clearInterval(rotate);
           rotate = setInterval(function () {
             // Clear the event queue
             $slide.stop(true, true);
-            if($('.rslides li').length < 2) {
+            if($(".rslides li").length < 2) {
               clearInterval(rotate);
               return
             }
-            $('#sliderPlay').removeClass("progress");
+            $("#sliderPlay").removeClass('progress');
             setTimeout(function(){
-              $('#sliderPlay').addClass("progress");
+              $("#sliderPlay").addClass('progress');
             }, 75);
               var idx = index + 1 < length ? index + 1 : 0;
-              console.log(sliderHasStopped + " " + sliderNeedsToRestart);
+              console.log(sliderHasStopped + ' ' + sliderNeedsToRestart);
               if(!sliderHasStopped && !sliderNeedsToRestart) {
-                console.log("TRIGGER MOVE TO " + idx + " LEN: " + length);
+                console.log('TRIGGER MOVE TO ' + idx + ' LEN: ' + length);
                 if(idx > length) {
                   idx = length;
                 }
-                $(".rslides1_on").off("click");
+                $('.rslides1_on').off('click');
                 slideTo(idx);
-                $('#currentSlide').html(idx + 1);
+                $("#currentSlide").html(idx + 1);
                 adjustParentHeight(50);
               }
           }, waitTime);
         };
-        stopAuto = function () {
+        stopAuto = function (playButton) {
           clearInterval(rotate);
           sliderHasStopped = true;
-          $('#sliderPlay').removeClass("progress");
+          $('#sliderPlay').removeClass('progress');
           $('.fa-stop').addClass('fa-play').removeClass('fa-stop');
+          if(playButton) {
+            $('.slider-play-container').tooltip('hide')
+                .attr('data-original-title', i18n.get('Start automatic playback'))
+                .tooltip('show');
+          }
+
         };
-        startAuto = function () {
-          console.log("STARTAUTO")
+        startAuto = function (playButton) {
           sliderHasStopped = false;
           $('.fa-play').addClass('fa-stop').removeClass('fa-play');
+          if(playButton) {
+            $('.slider-play-container').tooltip('hide')
+                .attr('data-original-title', i18n.get('Stop automatic playback'))
+                .tooltip('show');
+          }
           startCycle();
         };
         // Navigation
-        var progressBar = '<div class="slider-play-container"> <button id="sliderPlay" class="slider-btn progress blue">' +
+        var progressBar = '<div data-original-title="' + i18n.get("Stop automatic playback") + '" data-placement="bottom" ' +
+            'data-toggle="navigation-tooltip" class="slider-play-container"> <button id="sliderPlay" class="slider-btn progress blue">' +
             '<span class="progress-left">' +
             '<span class="progress-bar"></span>' +
             '</span>' +
@@ -175,14 +186,18 @@ var length = 1;
             '<div class="progress-value"><i class="fa fa-stop"></i></div>' +
             '</button></div>';
         var navMarkup =
-          "<div class='slider-navigation slider-counter-container'><button id='sliderPrevious' " +
-            "class='slider-btn " + navClass + " prev'>" + settings.prevText + "</button>" +
-            "<i class='slider-counter'><span id='currentSlide'>1</span></i>" +
-          "<button id='sliderForward' class='slider-btn " + navClass + " next'>" + settings.nextText + "</button></div>" +
-            "<div class='slider-navigation slider-play-expand-container'> " + progressBar +
-        "<button id='expandSlider' class='slider-btn'> " +
-            "<i class='fa fa-expand' title='" + i18n.get("Toggle full-screen") +
-            "'></i></button></div>";
+            '<div class="slider-navigation-container">' +
+            '<div class="slider-navigation slider-counter-container">' +
+            '<button title="' + i18n.get("Previous slide") +  '" data-placement="bottom" ' +
+            'data-toggle="navigation-tooltip" id="sliderPrevious" ' +
+            'class="slider-btn ' + navClass + ' prev">' + settings.prevText + '</button>' +
+            '<i class="slider-counter"><span id="currentSlide">1</span></i>' +
+            '<button title="' + i18n.get("Next slide") + '" data-placement="right" data-toggle="navigation-tooltip" ' +
+            'id="sliderForward" class="slider-btn ' + navClass + ' next">' + settings.nextText + '</button></div>' +
+            '<div class="slider-navigation slider-play-expand-container"> ' + progressBar +
+            '<button id="expandSlider" title="' + i18n.get('Toggle full-screen') + '" data-placement="right" ' +
+            ' data-toggle="navigation-tooltip" class="slider-btn test"> ' +
+            '<i class="fa fa-expand"></i></button></div></div>';
         // Inject navigation
         $('#sliderBox').append(navMarkup);
         if(isIOS || isIE) {
@@ -191,20 +206,36 @@ var length = 1;
         }
         $('#sliderPlay').click(function() {
           if($('#sliderPlay i').hasClass('fa-play')) {
-            startAuto();
+            startAuto(true);
           }
           else {
-            stopAuto();
+            stopAuto(true);
           }
-      });
-        var $trigger = $("." + namespaceIdx + "_nav"),
-          $prev = $trigger.filter(".prev");
+        });
+        $('[data-toggle="navigation-tooltip"]').tooltip({
+          // Unless container is specified, tooltips won't work in full screen.
+          container: '.slider-navigation-container',
+        });
+        // De-focus all other buttons
+        $( '.slider-btn' ).mouseover(function() {
+          $(this).focus()
+        });
+        // Defocus any active elements when leaving navigation container.
+        $( '.slider-navigation-container' ).mouseleave(function() {
+          document.activeElement.blur();
+        });
+        // Defocus any active elements when hovering over slide counter.
+        $('.slider-counter').mouseover(function() {
+          document.activeElement.blur();
+        });
+        var $trigger = $('.' + namespaceIdx + '_nav'),
+          $prev = $trigger.filter('.prev');
         // Click event handler
-        $trigger.bind("click", function (e) {
+        $trigger.bind('click', function (e) {
           e.preventDefault();
-          var $visibleClass = $("." + visibleClass);
+          var $visibleClass = $('.' + visibleClass);
           // Prevent clicking if currently animated
-          if ($visibleClass.queue('fx').length) {
+          if ($visibleClass.queue("fx").length) {
             return;
           }
           // Determine where to slide
@@ -213,28 +244,28 @@ var length = 1;
             nextIdx = idx + 1 < length ? index + 1 : 0;
           // Go to slide
           if ($(this)[0] === $prev[0]) {
-            $(".rslides1_on").off("click");
+            $('.rslides1_on').off('click');
             slideTo(prevIdx);
             if(prevIdx == -1) {
               // If we move from 0 to previous (last slide), ui text would be -1.
               // $slide.length is the amount of slides.
-              $('#currentSlide').html($slide.length);
+              $("#currentSlide").html($slide.length);
             }
             else {
-              $('#currentSlide').html(prevIdx + 1);
+              $("#currentSlide").html(prevIdx + 1);
             }
           }
           else {
-            $(".rslides1_on").off("click");
+            $('.rslides1_on').off('click');
             slideTo(nextIdx);
-            $('#currentSlide').html(nextIdx + 1);
+            $("#currentSlide").html(nextIdx + 1);
           }
           adjustParentHeight(750);
-          console.log("MANUAL N")
+          console.log('MANUAL N')
           stopAuto();
         });
       }
-      $( ".ig-caption" ).mouseover(function() {
+      $( '.ig-caption' ).mouseover(function() {
         stopAuto();
       });
       // Init cycle
