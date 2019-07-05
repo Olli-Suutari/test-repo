@@ -526,15 +526,17 @@ function generateImages(data) {
                 if(igImages.length !== 0) {
                     for (var i = 0; i < igImages.length; i++) {
                         var igHref = 'target="_blank" href="https://www.instagram.com/p/' + igImages[i].shortcode + '/"';
-                        var igLogo = '<a title="' + i18n.get("Open in instagram") + '" class="slider-ig-logo no-external-icon"' + igHref + '>' +
+                        var igLogo = '<a title="' + i18n.get("Open in instagram") + '" data-placement="bottom" ' +
+                            'data-toggle="navigation-tooltip" class="slider-ig-logo no-external-icon"' + igHref + '>' +
                             '<img width="42" height="42" class="no-borders" src="../images/icons/instagram.svg" alt="' +
                         i18n.get("Open in instagram") + '"/></a>';
                         var likesAlt = igImages[i].likes + " " + i18n.get("Likes on Instagam");
                         if(igImages[i].likes == 1) {
                             likesAlt = igImages[i].likes + " " + i18n.get("Likes on Instagram singular");
                         }
-                        var igHeart = '<a title="' + likesAlt + '" class="ig-love-btn ig-love-btn-counter" ' + igHref +
-                            '><span>&#x2764;</span><span>' + igImages[i].likes + '</span></a>';
+                        var igHeart = '<a title="' + likesAlt + '" data-placement="bottom" ' +
+                            'data-toggle="navigation-tooltip" class="ig-love-btn ig-love-btn-counter no-external-icon" '
+                            + igHref + '><span>&#x2764;</span><span>' + igImages[i].likes + '</span></a>';
                         var igCaption = '<figcaption class="ig-caption">' + igImages[i].caption + '</figcaption>';
                         var igContainer = '<div class="ig-likes-logo-container">' + igHeart + igLogo + '</div>';
                             $(".rslides").append('<li class="ig-img-container">' + igContainer  +
@@ -545,7 +547,6 @@ function generateImages(data) {
                 }
                 else {
                     imageListDeferred.resolve();
-
                 }
             }
         }

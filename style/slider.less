@@ -105,8 +105,8 @@ Z-indexes:
 
 .ig-likes-logo-container {
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 12px;
+    right: 12px;
     display: flex;
     Z-index: 12;
 }
@@ -114,7 +114,6 @@ Z-indexes:
 .small-slider .ig-img-container, .small-slider .ig-caption {
     overflow: hidden;
 }
-
 
 .ig-caption {
     background: #efebe9;
@@ -256,7 +255,7 @@ Z-indexes:
         width: 25%;
         overflow: auto;
         height: 100%;
-        padding: 5em 1.5em 3em 2em;
+        padding: 6em 1.5em 3em 2em;
     }
 
     .full-screen-slider .ig-img {
@@ -360,6 +359,13 @@ Z-indexes:
     margin-top: auto;
     align-content: center;
     margin-bottom: auto;
+}
+
+/* Media query for IE 10-11. Float schedule infos to left. */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    .slider-counter {
+        margin-top: 8px;
+    }
 }
 
 #expandSlider {

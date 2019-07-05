@@ -140,8 +140,8 @@ var dict = {
         en: "Open the photo in Instagram.",
     },
     "Likes on Instagam": {
-        fi: "tykkääjää instagrammissa - linkki avaa kuvan Instagrammissa.",
-        en: "likes on instagram - the link opens in Instagram.",
+        fi: "tykkääjää instagrammissa. Linkki avaa kuvan Instagrammissa.",
+        en: "likes on instagram. The link opens in Instagram.",
     },
     "Likes on Instagam singular": {
         fi: "tykkääjä instagrammissa - linkki avaa kuvan Instagrammissa.",
