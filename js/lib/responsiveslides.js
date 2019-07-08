@@ -8,7 +8,7 @@
 // Global variable, this will be set to true when changing the selected library.
 var sliderNeedsToRestart = false;
 var rotate;
-
+// This is called from consortium.js, after lib has changed. It stops the rotation interval within the interval.
 function resetSliderAfterLibChange() {
   sliderNeedsToRestart = true;
   sliderHasStopped = true;
@@ -143,16 +143,14 @@ var length = 1;
               }
           }, waitTime);
         };
-        stopAuto = function (playButton) {
+        stopAuto = function () {
           clearInterval(rotate);
           sliderHasStopped = true;
           $('#sliderPlay').removeClass('progress');
           $('.fa-stop').addClass('fa-play').removeClass('fa-stop');
-          if(playButton) {
-            $('.slider-play-container').tooltip('hide')
-                .attr('data-original-title', i18n.get('Start automatic playback'))
-                .tooltip('show');
-          }
+          $('.slider-play-container').tooltip('hide')
+              .attr('data-original-title', i18n.get('Start automatic playback'))
+              //.tooltip('show');
 
         };
         startAuto = function (playButton) {
@@ -260,14 +258,16 @@ var length = 1;
             $("#currentSlide").html(nextIdx + 1);
           }
           adjustParentHeight(750);
-          stopAuto();
+          stopAuto(true);
         });
       }
       $( '.ig-caption' ).mouseover(function() {
-        stopAuto();
+        stopAuto(true);
       });
       // Init cycle
-      startCycle();
+      if ($slide.length > 1) {
+        startCycle();
+      }
     });
   };
 })(jQuery, this, 0);

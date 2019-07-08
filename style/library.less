@@ -180,12 +180,18 @@ header {
     top: 7%;
     right: 20px;
     z-index: 9999;
-    padding-top: 6px;
-    padding-bottom: 6px;
+    padding: .4em .6em;
+    color: #fdfdfd;
+    /*  Fallback bg */
+    background-color: rgb(99, 99, 99);
+    /* RGBa with 0.45 opacity */
+    background-color: rgba(99, 99, 99, 0.45);
+    font-size: 1.6em;
 }
 
 .top-right:hover {
     cursor: pointer;
+    color: skyblue;
 }
 
 .top-left {
@@ -641,14 +647,15 @@ html {
 
 .service-info {
     display: flex;
-    font-weight: 400;
+    font-weight: 600;
+    font-size: 1.1rem;
     margin-top: 10px;
     word-break: break-all;
 }
 
 .service-info i {
-    font-size: 1.5em!important;
-    font-weight: 500;
+    font-size: 1.6em!important;
+    font-weight: 400;
     margin-right: 25px;
 }
 // Service price goes more to the right than the other icons... why?
@@ -678,5 +685,5 @@ html {
 }
 
 .tooltip {
-    z-index: 999999!important;
+    z-index: 999999999!important;
 }
