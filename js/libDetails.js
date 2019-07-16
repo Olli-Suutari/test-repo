@@ -898,7 +898,7 @@ function generateFbWidgets() {
     var fbWidth = "500px";
     if(leftBarWidth < 500) {
         adaptWidth = "false";
-        fbWidth = Math.round($('body').width()) + 15 + "px";
+        fbWidth = Math.round($('body').width()) + 25 + "px";
     }
     if(fbPageNames.length == 1) {
         var descriptionHeight = $('.news-description').height();
@@ -937,7 +937,7 @@ function generateFbWidgets() {
                 feedOne = '<div class="fb-page col-xl-6 col-md-12" data-href="https://www.facebook.com/' + fbPageNames[0] + '" data-tabs="timeline,events" data-width="' + fbWidth + '" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="' + adaptWidth + '" data-hide-cover="false" data-show-facepile="false"></div>';
             }
             if(i == 1) {
-                feedTwo = '<div class="fb-page col-xl-6 col-md-12" data-href="https://www.facebook.com/' + fbPageNames[1] + '" data-tabs="events,timeline" data-width="' + fbWidth + '" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="' + adaptWidth + '" data-hide-cover="false" data-show-facepile="false"></div>';
+                feedTwo = '<div class="fb-page col-xl-6 col-md-12" data-href="https://www.facebook.com/' + fbPageNames[1] + '" data-tabs="timeline,events" data-width="' + fbWidth + '" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="' + adaptWidth + '" data-hide-cover="false" data-show-facepile="false"></div>';
             }
         }
         fbHTML = '<div class="row" style="width: 100vmin; margin-bottom: 2em;">' + feedOne + feedTwo + '</div>';
@@ -967,7 +967,6 @@ function generateFbWidgets() {
         });
     }
     adjustParentHeight();
-
 }
 
 function asyncFetchLinks() {
