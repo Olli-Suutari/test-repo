@@ -88,11 +88,7 @@ header {
     }
 }
 
-.fb-page {
-    padding: 20px 15px 50px 15px;
-}
-
-    /* #introductionTab row contains #leftBar and #introductionSidebar */
+/* #introductionTab row contains #leftBar and #introductionSidebar */
 #introductionTab {
     padding-top: 2em;
     padding-left: 1.5em;
@@ -114,6 +110,19 @@ header {
         padding-left: 2.5em;
     }
 }
+
+.fb-page {
+    padding: 20px 0 20px 10px;
+}
+
+@media screen and (max-width: 499px) {
+    #leftBar {
+        margin-left: calc(50% - 45vw);
+        margin-right: calc(50% - 45vw);
+        width: 100vmin;
+    }
+}
+
 
 /* Service listings */
 .main>.row:last-child {
