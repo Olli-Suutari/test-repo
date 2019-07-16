@@ -451,9 +451,10 @@ function adjustParentHeight(delay, elementPosY) {
             // Adjust FB widget width if we are resizing horizontally.
             if(fbPageNames.length == 1 && !isEmpty($('#introContent'))) {
                 // When navigating to/from contacts, the width is negative.
-                if(descriptionWidth < 1) {
-                    descriptionWidth = Math.round($('#leftBar').width());
+                if(leftBarWidth < 1) {
+                    leftBarWidth = Math.round($('#leftBar').width());
                     if(!fbWidgetHeightSet && fbPageNames.length == 1) {
+                        console.log("DO THE INTI!")
                         $('.fb-page').attr("data-height", Math.round($('.news-description').height() - 50));
                         fbWidgetHeightSet = true;
                         FB.init({
@@ -463,8 +464,15 @@ function adjustParentHeight(delay, elementPosY) {
                         });
                     }
                 }
-                if(leftBarWidth != Math.round($('#leftBarWidth').width())) {
-                    leftBarWidth = Math.round($('#leftBarWidth').width());
+                console.log("leftBarWidth " + leftBarWidth + " Math.round($('#leftBar').width() " + Math.round($('#leftBar').width()))
+                var leftBarNewWidth =  Math.round($('#leftBar').width());
+
+                // The width increases randomly by 5px... TO DO: De-bug.
+                if(leftBarWidth != leftBarNewWidth && leftBarWidth + 5 != leftBarNewWidth) {
+                    console.log("INIT leftBarWidth " + leftBarWidth)
+
+                    leftBarWidth = Math.round($('#leftBar').width());
+
                     FB.init({
                         status     : true,
                         xfbml      : true,
