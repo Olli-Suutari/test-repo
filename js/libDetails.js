@@ -894,13 +894,11 @@ function generateFbWidgets() {
     leftBarWidth = Math.round($('#leftBar').width());
     var fbHTML = "";
     console.log(leftBarWidth)
-    var minWidth = "";
     var adaptWidth = "true";
     var fbWidth = "500px";
     if(leftBarWidth < 500) {
-        minWidth = "min-width: " + leftBarWidth + "px";
         adaptWidth = "false";
-        fbWidth = Math.round($('body').width()) + 30 + "px";
+        fbWidth = Math.round($('body').width()) + 15 + "px";
     }
     if(fbPageNames.length == 1) {
         var descriptionHeight = $('.news-description').height();
@@ -927,7 +925,7 @@ function generateFbWidgets() {
         }
 
         // If we use smaller than xl, event calendar date icons are lost because the frame gets too small.
-        fbHTML =  '<div class="fb-page col-xl-6 col-md-12" style="margin-bottom: 2em; ' + minWidth + '" data-href="https://www.facebook.com/' + fbPageNames[0] + '" data-tabs="timeline,events" data-width="" data-height="' + descriptionHeight + 'px" data-small-header="' + adaptWidth + '" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false"></div>';
+        fbHTML =  '<div class="fb-page col-xl-6 col-md-12" style="100vmin; margin-bottom: 2em;" data-href="https://www.facebook.com/' + fbPageNames[0] + '" data-tabs="timeline,events" data-width="' + fbWidth + '" data-height="' + descriptionHeight + 'px" data-small-header="' + adaptWidth + '" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false"></div>';
         $('.news-description').after(fbHTML);
     }
     else {
