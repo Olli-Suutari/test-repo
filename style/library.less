@@ -112,7 +112,7 @@ header {
 }
 
 .fb-page {
-    padding: 20px 0 20px 0;
+    padding-top: 20px;
 }
 
 @media screen and (max-width: 499px) {
@@ -120,9 +120,16 @@ header {
         margin-left: calc(50% - 45vw);
         margin-right: calc(50% - 45vw);
         width: 100vmin;
+        align-content: center;
+    }
+    .fb-page {
+        margin: 0;
+        padding: 0;
+        /* Adding negative zoom actually makes the widgets larger... TO DO: Why + better work around. */
+        zoom: 0.76;
+        -moz-transform: scale(0.76);
     }
 }
-
 
 /* Service listings */
 .main>.row:last-child {

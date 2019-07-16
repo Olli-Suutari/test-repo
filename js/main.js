@@ -452,7 +452,7 @@ function adjustParentHeight(delay, elementPosY) {
             if(fbPageNames.length == 1 && !isEmpty($('#introContent'))) {
                 // When navigating to/from contacts, the width is negative.
                 if(descriptionWidth < 1) {
-                    descriptionWidth = Math.round($('.news-description').width());
+                    descriptionWidth = Math.round($('#leftBar').width());
                     if(!fbWidgetHeightSet && fbPageNames.length == 1) {
                         $('.fb-page').attr("data-height", Math.round($('.news-description').height() - 50));
                         fbWidgetHeightSet = true;
@@ -463,9 +463,8 @@ function adjustParentHeight(delay, elementPosY) {
                         });
                     }
                 }
-                if(descriptionWidth != Math.round($('.news-description').width())) {
-                    descriptionWidth = Math.round($('.news-description').width());
-                    console.log(descriptionWidth);
+                if(leftBarWidth != Math.round($('#leftBarWidth').width())) {
+                    leftBarWidth = Math.round($('#leftBarWidth').width());
                     FB.init({
                         status     : true,
                         xfbml      : true,
