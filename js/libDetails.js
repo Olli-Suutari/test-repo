@@ -922,10 +922,10 @@ function generateFbWidgets() {
         for (var i = 0; i < fbPageNames.length; i++) {
             // Max 2 feeds.
             if(i == 0) {
-                feedOne = '<div class="fb-page col-md-6" data-href="https://www.facebook.com/' + fbPageNames[0] + '" data-tabs="timeline,events" data-width="" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false"></div>';
+                feedOne = '<div class="fb-page col-lg-6" data-href="https://www.facebook.com/' + fbPageNames[0] + '" data-tabs="timeline,events" data-width="" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false"></div>';
             }
             if(i == 1) {
-                feedTwo = '<div class="fb-page col-md-6" data-href="https://www.facebook.com/' + fbPageNames[1] + '" data-tabs="timeline,events" data-width="" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false"></div>';
+                feedTwo = '<div class="fb-page col-lg-6" data-href="https://www.facebook.com/' + fbPageNames[1] + '" data-tabs="events,timeline" data-width="" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false"></div>';
             }
         }
         fbHTML = '<div class="row" style="width: 100%;">' + feedOne + feedTwo + '</div>';
