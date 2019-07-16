@@ -70,14 +70,15 @@ function generatPrettyUrl(url) {
     return url;
 }
 
-// Genearate mailto links witin a string. There is a different generator for contacts table, this is used only for service modals.
+// Genearate mailto links within a string. There is a different generator for contacts table, this is used only for service modals.
+// https://stackoverflow.com/questions/24269116/convert-plain-text-email-to-clickable-link-regex-jquery
 function generateMailToLink(string) {
     var result = "";
     if(string.charAt(0) == '"' && string.substr(-1) == '"') {
         string = string.slice(1,-1);
     }
     // Unless we wrap the address to html, we will get an error. TO DO: fix.
-    string = '<p>' + string + '</p>'
+    string = '<p>' + string + '</p>';
     $(string).filter(function () {
         var html = $(this).html();
         var emailPattern = /[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/g;
@@ -86,7 +87,7 @@ function generateMailToLink(string) {
         if ( matched_str ) {
             var text = $(this).html();
             $.each(matched_str, function (index, value) {
-                text = text.replace(value,"<a href='mailto:"+value+"'>"+value+"</a>");
+                text = text.replace(value,"<a class='no-external-icon' href='mailto:"+value+"'>"+value+"</a>");
             });
             $(this).html(text);
             result = $(this).html(text)[0].innerHTML;
@@ -215,29 +216,27 @@ function addItem(item, listElement) {
                     priceText = "Free"
                 }
                 description = description + '<p class="service-info service-price" aria-label="' + i18n.get("Price") + '">' +
-                    '<i class="fa fa-money" data-toggle="tooltip" title="' + i18n.get("Price") + '" data-placement="top" ' +
-                    'aria-hidden="true"></i>' + priceText + '</p>';
+                    '<i class="fas fa-money-bill-alt" data-toggle="tooltip" title="' + i18n.get("Price") + '" data-placement="top"></i>' + priceText + '</p>';
             }
             // Website
             if(isValue(item.website)) {
                 var prettyLink = generatPrettyUrl(item.website);
                 description = description + '<p class="service-info service-website" aria-label="' + i18n.get("Price") +
-                    '"><i class="fa fa-globe" data-toggle="tooltip" title="' + i18n.get("Website") + '" ' +
-                    'data-placement="top" aria-hidden="true"></i><a target="_blank" href="' + item.website + '">' +
+                    '"><i class="fas fa-globe" data-toggle="tooltip" title="' + i18n.get("Website") + '" ' +
+                    'data-placement="top"></i><a target="_blank" href="' + item.website + '">' +
                     capitalize(prettyLink) + '</a></p>';
             }
             // Email & Phone
             if(isValue(item.email)) {
-                var mailToLink = JSON.stringify(capitalize(item.email));
-                mailToLink = generateMailToLink(mailToLink);
+                var mailToLink = generateMailToLink(capitalize(item.email));
                 description = description + '<p class="service-info service-email" aria-label="' + i18n.get("Email") + '">' +
-                    '<i class="fa fa-envelope-square" data-toggle="tooltip" title="' + i18n.get("Email") + '" ' +
-                    'data-placement="top" aria-hidden="true"></i>' + capitalize(mailToLink) +'</p>';
+                    '<i class="fas fa-envelope-square" data-toggle="tooltip" title="' + i18n.get("Email") + '" ' +
+                    'data-placement="top"></i>' + mailToLink +'</p>';
             }
             if(isValue(item.phoneNumber)) {
                 description = description + '<p class="service-info service-phone" aria-label="' + i18n.get("Phone") + '">' +
-                    '<i class="fa fa-phone-square" data-toggle="tooltip" title="' + i18n.get("Phone") + '" ' +
-                    'data-placement="top" aria-hidden="true"></i>' + capitalize(item.phoneNumber) + '</p>';
+                    '<i class="fas fa-phone-square" data-toggle="tooltip" title="' + i18n.get("Phone") + '" ' +
+                    'data-placement="top"></i>' + capitalize(item.phoneNumber) + '</p>';
             }
             // Replace links from the description
             if (description.indexOf("<a href=") !== -1) {
@@ -300,10 +299,10 @@ function bindActions() {
     function navigateToDefault(animationTime) {
         // Hide other sections & active nav styles.
         $("#navContacts").removeClass( "active" );
-        $(".yhteystiedot").hide(animationTime);
+        $("#contactsTab").hide(animationTime);
         // Show selected section + add active to nav
         $("#navInfo").addClass( "active" );
-        $(".esittely").show(animationTime);
+        $("#introductionTab").show(animationTime);
         // Hide infobox if visible.
         if(isInfoBoxVisible) {
             toggleModal();
@@ -323,10 +322,10 @@ function bindActions() {
     function navigateToContacts(animationTime) {
         // Hide other sections & active nav styles.
         $("#navInfo").removeClass( "active" );
-        $(".esittely").hide(animationTime);
+        $("#introductionTab").hide(animationTime);
         // Show selected section + add active to nav.
         $("#navContacts").addClass( "active" );
-        $(".yhteystiedot").show(animationTime);
+        $("#contactsTab").show(animationTime);
         // Hide infobox if visible.
         if(isInfoBoxVisible) {
             toggleModal();
@@ -413,6 +412,7 @@ function setAdjustingToFalse() {
 }
 
 var height = 0;
+var descriptionWidth = Math.round($('.news-description').width());
 function adjustParentHeight(delay, elementPosY) {
     clearTimeout(clearTimer);
     isAdjustingHeight = true;
@@ -449,6 +449,31 @@ function adjustParentHeight(delay, elementPosY) {
             }
             height = newHeight;
             setAdjustingToFalse();
+            // Adjust FB widget width if we are resizing horizontally.
+            if(fbPageNames.length == 1 && !isEmpty($('#introContent'))) {
+                // When navigating to/from contacts, the width is negative.
+                if(descriptionWidth < 1) {
+                    descriptionWidth = Math.round($('.news-description').width());
+                    if(!fbWidgetHeightSet && fbPageNames.length == 1) {
+                        $('.fb-page').attr("data-height", Math.round($('.news-description').height() - 50));
+                        fbWidgetHeightSet = true;
+                        FB.init({
+                            status     : true,
+                            xfbml      : true,
+                            version    : 'v3.3'
+                        });
+                    }
+                }
+                if(descriptionWidth != Math.round($('.news-description').width())) {
+                    descriptionWidth = Math.round($('.news-description').width());
+                    console.log(descriptionWidth);
+                    FB.init({
+                        status     : true,
+                        xfbml      : true,
+                        version    : 'v3.3'
+                    });
+                }
+            }
         }
         catch (e) {
             console.log("iframe size adjustment failed: " + e);
@@ -530,12 +555,12 @@ function adjustParentUrl(toAdd, type) {
     // Always place contacts at the end of the url.
     if(refUrl.indexOf('?yhteystiedot') > -1) {
         refUrl = refUrl.replace('?yhteystiedot', "");
-        refUrl = refUrl + '?yhteystiedot'
+        refUrl = refUrl + '?yhteystiedot';
         stateTitle = stateTitle + " | Yhteystiedot"
     }
     else if(refUrl.indexOf('?contacts') > -1) {
         refUrl = refUrl.replace('?contacts', "");
-        refUrl = refUrl + '?contacts'
+        refUrl = refUrl + '?contacts';
         stateTitle = stateTitle + " | Contacts"
     }
     // Remove ?, = if last character.

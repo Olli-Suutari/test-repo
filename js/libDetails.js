@@ -75,7 +75,13 @@ function asyncFetchV4Data() {
                 libName = data.name;
             }
             if(data.primaryContactInfo.email != null) {
-                email = data.primaryContactInfo.email.email;
+                // Add description if available.
+                if(isValue(data.primaryContactInfo.email.description)) {
+                    email = data.primaryContactInfo.email.email + data.primaryContactInfo.email.description;
+                }
+                else {
+                    email = data.primaryContactInfo.email.email;
+                }
             }
             description = data.description;
             transitInfo = data.transitInfo;
@@ -529,8 +535,7 @@ function generateImages(data) {
                         var igHref = 'target="_blank" href="https://www.instagram.com/p/' + igImages[i].shortcode + '/"';
                         var igLogo = '<a title="' + i18n.get("Open in instagram") + '" data-placement="bottom" ' +
                             'data-toggle="navigation-tooltip" class="slider-ig-logo no-external-icon"' + igHref + '>' +
-                            '<img width="42" height="42" class="no-borders" src="../images/icons/instagram.svg" alt="' +
-                        i18n.get("Open in instagram") + '"/></a>';
+                            '<i class="fab fa-instagram"></i></a>';
                         var likesAlt = igImages[i].likes + " " + i18n.get("Likes on Instagam");
                         if(igImages[i].likes == 1) {
                             likesAlt = igImages[i].likes + " " + i18n.get("Likes on Instagram singular");
@@ -793,12 +798,14 @@ function asyncLoadMap() {
             var addCoordinatesDeferred = jQuery.Deferred();
             setTimeout(function() {
             if(libraryList.length !== 0) {
-                var markerIcon = L.icon({
-                    // https://material.io/tools/icons/?style=baseline
-                    iconUrl: '../images/icons/local_library.svg',
-                    popupAnchor:  [-8, -3], // point from which the popup should open relative to the iconAnchor
-                    iconSize:     [24, 24], // size of the icon
+
+                var markerIcon = L.divIcon({
+                    html: '<i class="fas fa-book-reader"></i>',
+                    iconSize: [24, 24],
+                    popupAnchor:  [-10, -1], // point from which the popup should open relative to the iconAnchor
+                    className: 'lib-marker'
                 });
+
                 var counter = 0;
                 // coordinateErrorSet is used when a library is listed twice in the listing. (Mobile library of Wiitaunion)
                 var coordinateErrorSet = false;
@@ -875,6 +882,80 @@ function asyncLoadMap() {
 var noLinks = true;
 var igImages = [];
 var igName;
+var fbPageNames = [];
+var fbScriptLoaded = false;
+var fbWidgetHeightSet = false;
+function generateFbWidgets() {
+
+
+    if(fbPageNames.length == 0) {
+        return;
+    }
+
+
+    var fbHTML = "";
+    if(fbPageNames.length == 1) {
+        var descriptionHeight = $('.news-description').height();
+
+        console.log(descriptionHeight);
+        var descriptionHeight = "";
+        if (!isEmpty($('#introContent'))) {
+            $('.news-description').addClass("col-lg-6");
+            var descriptionHeight = Math.round($('.news-description').height() - 50);
+        }
+        else {
+            $('.news-description').hide();
+        }
+        console.log(descriptionHeight);
+        if(descriptionHeight < 0) {
+            descriptionHeight = "";
+        }
+        else {
+            fbWidgetHeightSet = true;
+        }
+        fbHTML =  '<div class="fb-page col-lg-6" data-href="https://www.facebook.com/' + fbPageNames[0] + '" data-tabs="timeline,events" data-width="" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false"></div>';
+        $('.news-description').after(fbHTML);
+    }
+    else {
+        var feedOne = "";
+        var feedTwo = "";
+        for (var i = 0; i < fbPageNames.length; i++) {
+            // Max 2 feeds.
+            if(i == 0) {
+                feedOne = '<div class="fb-page col-md-6" data-href="https://www.facebook.com/' + fbPageNames[0] + '" data-tabs="timeline,events" data-width="" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false"></div>';
+            }
+            if(i == 1) {
+                feedTwo = '<div class="fb-page col-md-6" data-href="https://www.facebook.com/' + fbPageNames[1] + '" data-tabs="timeline,events" data-width="" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false"></div>';
+            }
+        }
+        fbHTML = '<div class="row" style="width: 100%;">' + feedOne + feedTwo + '</div>';
+        $('.news-description').after(fbHTML);
+    }
+    // Load the fb script if not already loaded.
+    if(!fbScriptLoaded) {
+        fbScriptLoaded = true;
+        var fbScript = "https://connect.facebook.net/fi_FI/sdk.js#xfbml=1&version=v3.3";
+        if(lang != "fi") {
+            fbScript = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v3.3"
+        }
+        var script = document.createElement('script');
+        /*
+        script.onload = function () {
+            console.log("D O  A F T E R I N I T")
+        };*/
+        script.src = fbScript;
+        document.head.appendChild(script); //or something of the likes
+    }
+    // After lib has changed.
+    else {
+        FB.init({
+            status: true,
+            xfbml: true,
+            version: 'v3.3'
+        });
+    }
+}
+
 function asyncFetchLinks() {
     var linksDeferred = jQuery.Deferred();
     setTimeout(function() {
@@ -888,87 +969,96 @@ function asyncFetchLinks() {
             }
         var igExists = false;
         links.forEach(function (element) {
-                // Get url.
-                var url = element.url;
-                if (url === null) {
-                    return
+            // Get url.
+            var url = element.url;
+            if (url === null) {
+                return
+            }
+            var description = "";
+            if(element.description !== null && element.description.length > 1) {
+                description = element.description;
+            }
+            if (url.indexOf("facebook") !== -1) {
+                linkCount = linkCount +1;
+                $(".some-links").append('<a target="_blank" ' +
+                    'href="' + url + '" title="' + i18n.get("Librarys") + ' Facebook"> <i class="fab ' +
+                    'fa-facebook-square"></i></a>');
+
+                var fbName = url;
+                if (fbName.charAt(fbName.length - 1) == '/') {
+                    fbName = fbName.substr(0, fbName.length - 1);
                 }
-                if (url.indexOf("facebook") !== -1) {
-                    linkCount = linkCount +1;
-                    $(".some-links").append('<a target="_blank" ' +
-                        'href="' + url + '" title="Facebook"> <img src="../images/icons/facebook.svg" alt="' +
-                        i18n.get("Librarys") + ' Facebook"/>' +
-                        '</a>');
+                var index = fbName.lastIndexOf("/");
+                var fbName = fbName.substr(index+1);
+                fbPageNames.push(fbName);
+            }
+            else if (url.indexOf("instagram") !== -1) {
+                igExists = true;
+                linkCount = linkCount +1;
+                $(".some-links").append('<a target="_blank" title="' + i18n.get("Librarys") + ' Instagram"' +
+                    'href="' + url + '">  <i class="fab fa-instagram"></i></a>');
+                igName = url;
+                if (igName.charAt(igName.length - 1) == '/') {
+                    igName = igName.substr(0, igName.length - 1);
                 }
-                else if (url.indexOf("instagram") !== -1) {
-                    igExists = true;
-                    linkCount = linkCount +1;
-                    $(".some-links").append('<a target="_blank" title="Instagram"' +
-                        'href="' + url + '"> <img width="42" height="42" src="../images/icons/instagram.svg" alt="' +
-                        i18n.get("Librarys") + ' Instagram"/>' +
-                        '</a>');
-                    igName = url;
-                    if (igName.charAt(igName.length - 1) == '/') {
-                        igName = igName.substr(0, igName.length - 1);
-                    }
-                    var index = igName.lastIndexOf("/");
-                    var igName = igName.substr(index+1);
-                    // Fetch ig images (+ captions & likes) via the IG api.
-                    $.getJSON('https://www.instagram.com/' + igName + '/?__a=1', function (data) {
-                        var images = data.graphql.user.edge_owner_to_timeline_media.edges;
-                        for (var i=0; i<images.length; i++) {
-                            // Limit to 10 latest images.
-                            if(i===10) {
-                                linksDeferred.resolve();
-                                return;
-                            }
-                            var url = images[i].node.display_url;
-                            var shortcode = images[i].node.shortcode;
-                            var likes = images[i].node.edge_liked_by.count;
-                            var caption = images[i].node.edge_media_to_caption.edges[0].node.text;
-                            var tagsToReplace = [];
-                            var reFindTags = new RegExp(/#\S+\s*/g);
-                            var reFindTagsExec = reFindTags.exec(caption);
-                            while (reFindTagsExec != null) {
-                                var tagText = reFindTagsExec[0];
-                                tagText = tagText.replace(" ", "");
-                                var tagLink = tagText.substring(1);
-                                tagLink = '<a target="_blank" class="external-link" href="https://www.instagram.com/explore/tags/' + tagLink
-                                    + '/">' + tagText + '</a> ';
-                                //console.log(tagText + " " + tagLink);
-                                tagsToReplace.push({position: reFindTagsExec[0],
-                                    replacement: tagLink, type: "tag"});
-                                reFindTagsExec = reFindTags.exec(caption);
-                            }
-                            var reFindUsers = new RegExp(/@\S+\s*/g);
-                            var reFindUsersExec = reFindUsers.exec(caption);
-                            while (reFindUsersExec != null) {
-                                var tagText = reFindUsersExec[0];
-                                tagText = tagText.replace(" ", "");
-                                var tagLink = tagText.substring(1);
-                                tagLink = '<a target="_blank" class="external-link" href="https://www.instagram.com/' + tagLink
-                                    + '/">' + tagText + '</a> ';
-                                //console.log(tagText + " " + tagLink);
-                                tagsToReplace.push({position: reFindUsersExec[0],
-                                    replacement: tagLink, type: "user"});
-                                reFindUsersExec = reFindUsers.exec(caption);
-                            }
-                            for (var t = 0; t < tagsToReplace.length; t++) {
-                                // If we have tags #foobar & #foo, #foo would re-place #foobar incorrectly.
-                                if(tagsToReplace[t].type == "tag") {
-                                    caption = caption.replace(tagsToReplace[t].position,
-                                        tagsToReplace[t].replacement.replace("#", "%%%"));
-                                }
-                                else {
-                                    caption = caption.replace(tagsToReplace[t].position,
-                                        tagsToReplace[t].replacement.replace("@", "<<><<>"));
-                                }
-                            }
-                            caption = caption.replace(/%%%/g,'#');
-                            caption = caption.replace(/<<><<>/g,'@');
-                            igImages.push({url: url, shortcode: shortcode, likes: likes, caption: caption});
+                var index = igName.lastIndexOf("/");
+                var igName = igName.substr(index+1);
+                // Fetch ig images (+ captions & likes) via the IG api.
+                $.getJSON('https://www.instagram.com/' + igName + '/?__a=1', function (data) {
+                    var images = data.graphql.user.edge_owner_to_timeline_media.edges;
+                    for (var i=0; i<images.length; i++) {
+                        // Limit to 10 latest images.
+                        if(i===10) {
+                            linksDeferred.resolve();
+                            return;
                         }
-                        linksDeferred.resolve();
+                        var url = images[i].node.display_url;
+                        var shortcode = images[i].node.shortcode;
+                        var likes = images[i].node.edge_liked_by.count;
+                        var caption = images[i].node.edge_media_to_caption.edges[0].node.text;
+                        var tagsToReplace = [];
+                        var reFindTags = new RegExp(/#\S+\s*/g);
+                        var reFindTagsExec = reFindTags.exec(caption);
+                        while (reFindTagsExec != null) {
+                            var tagText = reFindTagsExec[0];
+                            tagText = tagText.replace(" ", "");
+                            var tagLink = tagText.substring(1);
+                            tagLink = '<a target="_blank" class="external-link" href="https://www.instagram.com/explore/tags/' + tagLink
+                                + '/">' + tagText + '</a> ';
+                            //console.log(tagText + " " + tagLink);
+                            tagsToReplace.push({position: reFindTagsExec[0],
+                                replacement: tagLink, type: "tag"});
+                            reFindTagsExec = reFindTags.exec(caption);
+                        }
+                        var reFindUsers = new RegExp(/@\S+\s*/g);
+                        var reFindUsersExec = reFindUsers.exec(caption);
+                        while (reFindUsersExec != null) {
+                            var tagText = reFindUsersExec[0];
+                            tagText = tagText.replace(" ", "");
+                            var tagLink = tagText.substring(1);
+                            tagLink = '<a target="_blank" class="external-link" href="https://www.instagram.com/' + tagLink
+                                + '/">' + tagText + '</a> ';
+                            //console.log(tagText + " " + tagLink);
+                            tagsToReplace.push({position: reFindUsersExec[0],
+                                replacement: tagLink, type: "user"});
+                            reFindUsersExec = reFindUsers.exec(caption);
+                        }
+                        for (var t = 0; t < tagsToReplace.length; t++) {
+                            // If we have tags #foobar & #foo, #foo would re-place #foobar incorrectly.
+                            if(tagsToReplace[t].type == "tag") {
+                                caption = caption.replace(tagsToReplace[t].position,
+                                    tagsToReplace[t].replacement.replace("#", "%%%"));
+                            }
+                            else {
+                                caption = caption.replace(tagsToReplace[t].position,
+                                    tagsToReplace[t].replacement.replace("@", "<<><<>"));
+                            }
+                        }
+                        caption = caption.replace(/%%%/g,'#');
+                        caption = caption.replace(/<<><<>/g,'@');
+                        igImages.push({url: url, shortcode: shortcode, likes: likes, caption: caption});
+                    }
+                    linksDeferred.resolve();
                     });
                 }
                 else {
@@ -986,7 +1076,7 @@ function asyncFetchLinks() {
                         prettyUrl = '<a target="_blank" href="' + url + '">' + prettyUrl + '</a>';
                         if(!checkIfContactExists(contactlist, prettyUrl) && !checkIfNameExists(contactlist, element.name)) {
                             contactlist.unshift({name: element.name,
-                                contact: prettyUrl});
+                                contact: prettyUrl + description});
                             linkCount = linkCount +1;
                         }
                     }
@@ -1015,14 +1105,12 @@ function asyncGenerateNumbers() {
                 for (var i = 0; i < phoneNumbers.length; i++) {
                     // Check if detail is unique.
                     if(!checkIfContactExists(numbersList, phoneNumbers[i].number)) {
+                        var description = "";
                         if(phoneNumbers[i].description !== null && phoneNumbers[i].description.length > 1) {
-                            numbersList.push({name: phoneNumbers[i].name, contact: phoneNumbers[i].number,
-                                description: phoneNumbers[i].description});
+                            description = phoneNumbers[i].description;
                         }
-                        else {
-                            numbersList.push({name: phoneNumbers[i].name,
-                                contact: phoneNumbers[i].number, description: ""});
-                        }
+                        numbersList.push({name: phoneNumbers[i].name,
+                            contact: phoneNumbers[i].number + description});
                     }
                     counter = counter +1;
                 }
@@ -1080,6 +1168,7 @@ function asyncGenerateStaff() {
                     if (!checkIfContactExists(staffList, contact) || !checkIfNameExists(staffList, name)){
                         // Don't push if contact or name is empty.
                         if(contact.length !== 0 && name.length !== 0) {
+                            // Note: Staff does not have description field.
                             staffList.push({name: name, contact: contact});
                         }
                     }
@@ -1140,7 +1229,7 @@ function generateContacts() {
                         }
                         $("#contactsTbody").append('<tr>' +
                             '<td>' + numbersList[i].name + '</td>' +
-                            '<td>' + contactDetail + numbersList[i].description + '</td>' +
+                            '<td>' + contactDetail + '</td>' +
                             '</tr>');
                     }
                     // Staff
@@ -1162,7 +1251,6 @@ function generateContacts() {
                     contactsDeferred.resolve();
                 }
             );
-
         }
         else {
             contactsDeferred.resolve();
@@ -1264,19 +1352,20 @@ function fetchInformation(language, lib) {
                     // No content at all.
                     if(noLeftCol && noSidebar) {
                         $("#introductionSidebar").append('<div id="noIntroContent"><h3>' +
-                            i18n.get("No content") + ' <i class="fa fa-frown-o"></i></h3></div>');
+                            i18n.get("No content") + ' <i class="fas fa-frown-o"></i></h3></div>');
                     }
-                    // Generate mailto links into the contacts table.
+                    // Generate mailto links into the contacts table + descriptions. If we do this for all things, modal links and hover popups break.
                     // https://www.joe-stevens.com/2010/02/18/convert-all-static-text-email-addresses-to-mailto-links-using-jquery/
                     $().ready(function() {
                         var regEx = /(\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)/;
-                        $("table td").filter(function() {
+                        $("#introContent, .accessibility-details, table td").filter(function() {
                             return $(this).html().match(regEx);
                         }).each(function() {
                             $(this).html($(this).html().replace(regEx, "<a href=\"mailto:$1\">$1</a>"));
                         });
                     });
-
+                    // Generate FB widget(s)
+                    generateFbWidgets();
                 }
                 adjustParentHeight(200);
             }
