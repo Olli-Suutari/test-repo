@@ -412,7 +412,6 @@ function setAdjustingToFalse() {
 }
 
 var height = 0;
-var descriptionWidth = Math.round($('.news-description').width());
 function adjustParentHeight(delay, elementPosY) {
     clearTimeout(clearTimer);
     isAdjustingHeight = true;

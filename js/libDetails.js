@@ -885,6 +885,7 @@ var igName;
 var fbPageNames = [];
 var fbScriptLoaded = false;
 var fbWidgetHeightSet = false;
+var descriptionWidth = Math.round($('.news-description').width());
 function generateFbWidgets() {
 
 
@@ -896,7 +897,6 @@ function generateFbWidgets() {
     var fbHTML = "";
     if(fbPageNames.length == 1) {
         var descriptionHeight = $('.news-description').height();
-
         console.log(descriptionHeight);
         var descriptionHeight = "";
         if (!isEmpty($('#introContent'))) {
@@ -912,6 +912,12 @@ function generateFbWidgets() {
         }
         else {
             fbWidgetHeightSet = true;
+        }
+        // If description + fb do not fit together, don't set fb height to description height.
+        descriptionWidth = Math.round($('.news-description').width());
+        var leftBarWidth = Math.round($('#leftBar').width());
+        if(leftBarWidth == descriptionWidth) {
+            descriptionHeight = "";
         }
         // If we use smaller than xl, event calendar date icons are lost because the frame gets too small.
         fbHTML =  '<div class="fb-page col-xl-6 col-md-12" data-href="https://www.facebook.com/' + fbPageNames[0] + '" data-tabs="timeline,events" data-width="500px" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false"></div>';
