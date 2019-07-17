@@ -909,6 +909,9 @@ function generateFbWidgets() {
         bsCols = "";
     }
     console.log(fbWidth)
+    if(fbWidth < leftBarWidth) {
+        fbWidth = leftBarWidth;
+    }
     if(leftBarWidth < 500) {
         adaptWidth = "false";
         fbWidth = Math.round($('body').width());
