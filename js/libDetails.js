@@ -886,70 +886,63 @@ var fbPageNames = [];
 var fbScriptLoaded = false;
 var fbWidgetHeightSet = false;
 var descriptionWidth = Math.round($('.news-description').width());
-var leftBarWidth;
 
 function generateFbWidgets() {
     // Do not generate the widget if we are in contacts. This will be re-triggered when moving to the description.
     if(fbPageNames.length == 0 || activeTab == 1) {
         return;
     }
-    leftBarWidth = Math.round($('#leftBar').width());
     var fbHTML = "";
-    console.log(leftBarWidth)
     var adaptWidth = "true";
     var fbWidth = 500;
     var bsCols = "col-lg-6 col-md-12";
     // The widget has a bug in iOS where switching to events tab does not work as it just jumps back to timeline.
     var tabs = "timeline,events";
-    // Descriptionheight is used with side by side layout. This is increased if 2 col layout is used.
-    var descriptionHeight = 500;
     if(isIOSMobile) {
         tabs = "timeline";
     }
+    // Descriptionheight is used with side by side layout. This is increased if 2 col layout is used.
+    var descriptionHeight = 500;
+    var leftBarWidth = Math.round($('#leftBar').outerWidth());
+    console.log(leftBarWidth)
+
     // If FB widget is not atleast 316 px in width, the event dates are not visible.
     if(leftBarWidth < 632) {
         bsCols = "";
     }
-    else {
-        descriptionHeight = $('.news-description').height();
-    }
-    if(fbWidth > leftBarWidth) {
-        fbWidth = leftBarWidth;
-    }
     if(leftBarWidth < 500) {
-        adaptWidth = "false";
         fbWidth = Math.round($('body').width());
+        adaptWidth = "false";
     }
     else if(leftBarWidth < 1000 && fbPageNames.length != 1) {
         fbWidth = fbWidth/2;
     }
+    if(fbWidth > leftBarWidth) {
+        console.log("ADJUST! " + leftBarWidth)
+        fbWidth = leftBarWidth ;
+    }
+    console.log(fbWidth)
     if(fbWidth < 316) {
         fbWidth = 316;
     }
     if(fbPageNames.length == 1) {
         console.log(descriptionHeight);
-        var descriptionHeight = "";
         if (!isEmpty($('#introContent'))) {
             $('.news-description').addClass(bsCols);
-            var descriptionHeight = Math.round($('.news-description').height() - 50);
+            if(leftBarWidth > 632) {
+                descriptionHeight = Math.round($('.news-description').height() -50);
+            }
         }
         else {
             $('.news-description').hide();
         }
-        console.log(descriptionHeight);
-        if(descriptionHeight < 0) {
-            descriptionHeight = "";
-        }
-        else {
-            fbWidgetHeightSet = true;
-        }
+        fbWidgetHeightSet = true;
         // If description + fb do not fit together, don't set fb height to description height.
         descriptionWidth = Math.round($('.news-description').width());
-        if(leftBarWidth == descriptionWidth) {
-            descriptionHeight = "";
-        }
+        console.log("fbWidth " + fbWidth)
+        console.log("descriptionHeight " + descriptionHeight)
         // If we use smaller than xl, event calendar date icons are lost because the frame gets too small.
-        fbHTML =  '<div class="fb-page ' + bsCols + '" style="100vmin; margin-bottom: 2em;" data-href="https://www.facebook.com/' + fbPageNames[0] + '" data-tabs="' + tabs + '" data-width="' + fbWidth + 'px" data-height="' + descriptionHeight + 'px" data-small-header="' + adaptWidth + '" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false"></div>';
+        fbHTML =  '<div class="fb-page ' + bsCols + '" style="width: ' + fbWidth + '; margin-bottom: 2em;" data-href="https://www.facebook.com/' + fbPageNames[0] + '" data-tabs="' + tabs + '" data-width="' + fbWidth + 'px" data-height="' + descriptionHeight + 'px" data-small-header="' + adaptWidth + '" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false"></div>';
         $('.news-description').after(fbHTML);
     }
     else {
