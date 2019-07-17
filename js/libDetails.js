@@ -903,9 +903,10 @@ function generateFbWidgets() {
     if(leftBarWidth < 632) {
         bsCols = "";
     }
+    console.log(fbWidth)
     if(leftBarWidth < 500) {
         adaptWidth = "false";
-        fbWidth = Math.round($('body').width()) + 25 + "px";
+        fbWidth = Math.round($('body').width()) + 15;
     }
     else if(leftBarWidth < 1000 && fbPageNames.length != 1) {
         fbWidth = fbWidth/2;
@@ -941,6 +942,7 @@ function generateFbWidgets() {
         $('.news-description').after(fbHTML);
     }
     else {
+        console.log(fbWidth)
         var feedOne = "";
         var feedTwo = "";
         for (var i = 0; i < fbPageNames.length; i++) {
@@ -963,10 +965,14 @@ function generateFbWidgets() {
             fbScript = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v3.3"
         }
         var script = document.createElement('script');
-        /*
         script.onload = function () {
+            FB.init({
+                status: true,
+                xfbml: true,
+                version: 'v3.3'
+            });
             console.log("D O  A F T E R I N I T")
-        };*/
+        }
         script.src = fbScript;
         document.head.appendChild(script); //or something of the likes
     }
