@@ -909,7 +909,8 @@ function generateFbWidgets() {
         bsCols = "";
     }
     console.log(fbWidth)
-    if(fbWidth < leftBarWidth) {
+    if(fbWidth > leftBarWidth) {
+        console.log("DOO")
         fbWidth = leftBarWidth;
     }
     if(leftBarWidth < 500) {
