@@ -901,6 +901,8 @@ function generateFbWidgets() {
     var bsCols = "col-lg-6 col-md-12";
     // The widget has a bug in iOS where switching to events tab does not work as it just jumps back to timeline.
     var tabs = "timeline,events";
+    // Descriptionheight is used with side by side layout. This is increased if 2 col layout is used.
+    var descriptionHeight = 500;
     if(isIOSMobile) {
         tabs = "timeline";
     }
@@ -908,9 +910,10 @@ function generateFbWidgets() {
     if(leftBarWidth < 632) {
         bsCols = "";
     }
-    console.log(fbWidth)
+    else {
+        descriptionHeight = $('.news-description').height();
+    }
     if(fbWidth > leftBarWidth) {
-        console.log("DOO")
         fbWidth = leftBarWidth;
     }
     if(leftBarWidth < 500) {
@@ -924,7 +927,6 @@ function generateFbWidgets() {
         fbWidth = 316;
     }
     if(fbPageNames.length == 1) {
-        var descriptionHeight = $('.news-description').height();
         console.log(descriptionHeight);
         var descriptionHeight = "";
         if (!isEmpty($('#introContent'))) {
