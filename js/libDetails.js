@@ -887,15 +887,17 @@ var fbScriptLoaded = false;
 var fbWidgetHeightSet = false;
 var descriptionWidth = Math.round($('.news-description').width());
 var leftBarWidth;
+
 function generateFbWidgets() {
-    if(fbPageNames.length == 0) {
+    // Do not generate the widget if we are in contacts. This will be re-triggered when moving to the description.
+    if(fbPageNames.length == 0 || activeTab == 1) {
         return;
     }
     leftBarWidth = Math.round($('#leftBar').width());
     var fbHTML = "";
     console.log(leftBarWidth)
     var adaptWidth = "true";
-    var fbWidth = "500px";
+    var fbWidth = 500;
     var bsCols = "col-lg-6 col-md-12";
     // If FB widget is not atleast 316 px in width, the event dates are not visible.
     if(leftBarWidth < 632) {
@@ -934,9 +936,8 @@ function generateFbWidgets() {
         if(leftBarWidth == descriptionWidth) {
             descriptionHeight = "";
         }
-
         // If we use smaller than xl, event calendar date icons are lost because the frame gets too small.
-        fbHTML =  '<div class="fb-page ' + bsCols + '" style="100vmin; margin-bottom: 2em;" data-href="https://www.facebook.com/' + fbPageNames[0] + '" data-tabs="timeline,events" data-width="' + fbWidth + '" data-height="' + descriptionHeight + 'px" data-small-header="' + adaptWidth + '" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false"></div>';
+        fbHTML =  '<div class="fb-page ' + bsCols + '" style="100vmin; margin-bottom: 2em;" data-href="https://www.facebook.com/' + fbPageNames[0] + '" data-tabs="timeline,events" data-width="' + fbWidth + 'px" data-height="' + descriptionHeight + 'px" data-small-header="' + adaptWidth + '" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false"></div>';
         $('.news-description').after(fbHTML);
     }
     else {
@@ -945,10 +946,10 @@ function generateFbWidgets() {
         for (var i = 0; i < fbPageNames.length; i++) {
             // Max 2 feeds.
             if(i == 0) {
-                feedOne = '<div class="fb-page ' + bsCols + '" data-href="https://www.facebook.com/' + fbPageNames[0] + '" data-tabs="timeline,events" data-width="' + fbWidth + '" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="' + adaptWidth + '" data-hide-cover="false" data-show-facepile="false"></div>';
+                feedOne = '<div class="fb-page ' + bsCols + '" data-href="https://www.facebook.com/' + fbPageNames[0] + '" data-tabs="timeline,events" data-width="' + fbWidth + 'px" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="' + adaptWidth + '" data-hide-cover="false" data-show-facepile="false"></div>';
             }
             if(i == 1) {
-                feedTwo = '<div class="fb-page ' + bsCols + '" data-href="https://www.facebook.com/' + fbPageNames[1] + '" data-tabs="timeline,events" data-width="' + fbWidth + '" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="' + adaptWidth + '" data-hide-cover="false" data-show-facepile="false"></div>';
+                feedTwo = '<div class="fb-page ' + bsCols + '" data-href="https://www.facebook.com/' + fbPageNames[1] + '" data-tabs="timeline,events" data-width="' + fbWidth + 'px" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="' + adaptWidth + '" data-hide-cover="false" data-show-facepile="false"></div>';
             }
         }
         fbHTML = '<div class="row" style="width: 100vmin; margin-bottom: 2em;">' + feedOne + feedTwo + '</div>';
@@ -977,6 +978,8 @@ function generateFbWidgets() {
             version: 'v3.3'
         });
     }
+    // Reset the array.
+    fbPageNames = [];
     adjustParentHeight();
 }
 
