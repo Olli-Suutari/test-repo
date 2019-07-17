@@ -1,4 +1,5 @@
 var isIOS = false;
+var isIOSMobile = false;
 var isIE = false;
 
 function toggleFullScreen(target) {
@@ -583,9 +584,17 @@ $(document).ready(function() {
         navigator.userAgent &&
         navigator.userAgent.indexOf('CriOS') == -1 &&
         navigator.userAgent.indexOf('FxiOS') == -1;
-
     if(testSafari || /^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
         isIOS = true;
+    }
+
+    // https://stackoverflow.com/questions/4617638/detect-ipad-users-using-jquery
+    var isIPad = navigator.userAgent.match(/iPad/i) != null;
+    function isIPhoneOrIPod(){
+        return navigator.platform.match(/i(Phone|Pod))/i);
+    }
+    if(isIPad || isIPhoneOrIPod()) {
+        isIOSMobile = true;
     }
 
     if(navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1)) {

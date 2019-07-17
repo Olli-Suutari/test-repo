@@ -901,6 +901,9 @@ function generateFbWidgets() {
     var bsCols = "col-lg-6 col-md-12";
     // The widget has a bug in iOS where switching to events tab does not work as it just jumps back to timeline.
     var tabs = "timeline,events";
+    if(isIOSMobile) {
+        tabs = "timeline";
+    }
     // If FB widget is not atleast 316 px in width, the event dates are not visible.
     if(leftBarWidth < 632) {
         bsCols = "";
@@ -940,7 +943,7 @@ function generateFbWidgets() {
             descriptionHeight = "";
         }
         // If we use smaller than xl, event calendar date icons are lost because the frame gets too small.
-        fbHTML =  '<div class="fb-page ' + bsCols + '" style="100vmin; margin-bottom: 2em;" data-href="https://www.facebook.com/' + fbPageNames[0] + '" data-tabs="timeline,events" data-width="' + fbWidth + 'px" data-height="' + descriptionHeight + 'px" data-small-header="' + adaptWidth + '" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false"></div>';
+        fbHTML =  '<div class="fb-page ' + bsCols + '" style="100vmin; margin-bottom: 2em;" data-href="https://www.facebook.com/' + fbPageNames[0] + '" data-tabs="' + tabs + '" data-width="' + fbWidth + 'px" data-height="' + descriptionHeight + 'px" data-small-header="' + adaptWidth + '" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false"></div>';
         $('.news-description').after(fbHTML);
     }
     else {
@@ -950,10 +953,10 @@ function generateFbWidgets() {
         for (var i = 0; i < fbPageNames.length; i++) {
             // Max 2 feeds.
             if(i == 0) {
-                feedOne = '<div class="fb-page ' + bsCols + '" data-href="https://www.facebook.com/' + fbPageNames[0] + '" data-tabs="timeline,events" data-width="' + fbWidth + 'px" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="' + adaptWidth + '" data-hide-cover="false" data-show-facepile="false"></div>';
+                feedOne = '<div class="fb-page ' + bsCols + '" data-href="https://www.facebook.com/' + fbPageNames[0] + '" data-tabs="' + tabs + '" data-width="' + fbWidth + 'px" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="' + adaptWidth + '" data-hide-cover="false" data-show-facepile="false"></div>';
             }
             if(i == 1) {
-                feedTwo = '<div class="fb-page ' + bsCols + '" data-href="https://www.facebook.com/' + fbPageNames[1] + '" data-tabs="timeline,events" data-width="' + fbWidth + 'px" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="' + adaptWidth + '" data-hide-cover="false" data-show-facepile="false"></div>';
+                feedTwo = '<div class="fb-page ' + bsCols + '" data-href="https://www.facebook.com/' + fbPageNames[1] + '" data-tabs="' + tabs + '" data-width="' + fbWidth + 'px" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="' + adaptWidth + '" data-hide-cover="false" data-show-facepile="false"></div>';
             }
         }
         fbHTML = '<div class="row" style="width: 100vmin; margin-bottom: 2em;">' + feedOne + feedTwo + '</div>';
@@ -962,14 +965,14 @@ function generateFbWidgets() {
     // Load the fb script if not already loaded.
     if(!fbScriptLoaded) {
         fbScriptLoaded = true;
-        var fbScript = "https://connect.facebook.net/fi_FI/sdk.js#xfbml=1&version=v2.9";
+        var fbScript = "https://connect.facebook.net/fi_FI/sdk.js#xfbml=1&version=v3.3";
         if(lang != "fi") {
-            fbScript = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.9"
+            fbScript = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v3.3"
         }
         var script = document.createElement('script');
-        script.onload = function () {
+        /*script.onload = function () {
             console.log("D O  A F T E R I N I T")
-        }
+        }*/
         script.src = fbScript;
         document.head.appendChild(script); //or something of the likes
     }
@@ -978,7 +981,7 @@ function generateFbWidgets() {
         FB.init({
             status: true,
             xfbml: true,
-            version: 'v2.9'
+            version: 'v3.3'
         });
     }
     adjustParentHeight();
