@@ -899,6 +899,8 @@ function generateFbWidgets() {
     var adaptWidth = "true";
     var fbWidth = 500;
     var bsCols = "col-lg-6 col-md-12";
+    // The widget has a bug in iOS where switching to events tab does not work as it just jumps back to timeline.
+    var tabs = "timeline,events";
     // If FB widget is not atleast 316 px in width, the event dates are not visible.
     if(leftBarWidth < 632) {
         bsCols = "";
@@ -906,7 +908,7 @@ function generateFbWidgets() {
     console.log(fbWidth)
     if(leftBarWidth < 500) {
         adaptWidth = "false";
-        fbWidth = Math.round($('body').width()) + 15;
+        fbWidth = Math.round($('body').width());
     }
     else if(leftBarWidth < 1000 && fbPageNames.length != 1) {
         fbWidth = fbWidth/2;
@@ -960,17 +962,12 @@ function generateFbWidgets() {
     // Load the fb script if not already loaded.
     if(!fbScriptLoaded) {
         fbScriptLoaded = true;
-        var fbScript = "https://connect.facebook.net/fi_FI/sdk.js#xfbml=1&version=v3.3";
+        var fbScript = "https://connect.facebook.net/fi_FI/sdk.js#xfbml=1&version=v2.9";
         if(lang != "fi") {
-            fbScript = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v3.3"
+            fbScript = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.9"
         }
         var script = document.createElement('script');
         script.onload = function () {
-            FB.init({
-                status: true,
-                xfbml: true,
-                version: 'v3.3'
-            });
             console.log("D O  A F T E R I N I T")
         }
         script.src = fbScript;
@@ -981,7 +978,7 @@ function generateFbWidgets() {
         FB.init({
             status: true,
             xfbml: true,
-            version: 'v3.3'
+            version: 'v2.9'
         });
     }
     adjustParentHeight();
