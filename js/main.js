@@ -590,10 +590,8 @@ $(document).ready(function() {
 
     // https://stackoverflow.com/questions/4617638/detect-ipad-users-using-jquery
     var isIPad = navigator.userAgent.match(/iPad/i) != null;
-    function isIPhoneOrIPod(){
-        return navigator.platform.match(/i(Phone|Pod))/i);
-    }
-    if(isIPad || isIPhoneOrIPod()) {
+    var isIPhone = (navigator.userAgent.match(/iPhone/i) != null) || (navigator.userAgent.match(/iPod/i) != null);
+    if(isIPad || isIPhone) {
         isIOSMobile = true;
     }
 
