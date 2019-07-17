@@ -884,7 +884,7 @@ var igImages = [];
 var igName;
 var fbPageNames = [];
 var fbScriptLoaded = false;
-var fbWidgetHeightSet = false;
+var fbWidgetSetUp = false;
 var descriptionWidth = Math.round($('.news-description').width());
 
 function generateFbWidgets() {
@@ -931,7 +931,6 @@ function generateFbWidgets() {
         else {
             $('.news-description').hide();
         }
-        fbWidgetHeightSet = true;
         // If description + fb do not fit together, don't set fb height to description height.
         descriptionWidth = Math.round($('.news-description').width());
         // If we use smaller than xl, event calendar date icons are lost because the frame gets too small.
@@ -962,7 +961,7 @@ function generateFbWidgets() {
         }
         var script = document.createElement('script');
         /*script.onload = function () {
-            console.log("D O  A F T E R I N I T")
+            console.log("D O  A F T E R  I N I T")
         }*/
         script.src = fbScript;
         document.head.appendChild(script); //or something of the likes
@@ -975,6 +974,7 @@ function generateFbWidgets() {
             version: 'v3.3'
         });
     }
+    fbWidgetSetUp = true;
     adjustParentHeight();
 }
 

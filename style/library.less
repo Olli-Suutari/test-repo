@@ -96,6 +96,12 @@ header {
     border-top: 1px solid @primary;
 }
 
+.fb-page {
+    padding-top: 20px;
+    /* If FB widget is not atleast 316 px in width, the event dates are not visible. */
+    min-width: 316px!important;
+}
+
 #introductionSidebar {
     padding-left: .1em;
 }
@@ -111,13 +117,6 @@ header {
     }
 }
 
-.fb-page {
-    padding-top: 20px;
-    /* If FB widget is not atleast 316 px in width, the event dates are not visible. */
-    min-width: 316px!important;
-
-}
-
 @media screen and (max-width: 499px) {
     #leftBar {
         margin-left: calc(50% - 45vw);
@@ -125,10 +124,7 @@ header {
         width: 100vmin;
         align-content: center;
     }
-    .fb-page {
-    }
 }
-
 
 /* Service listings */
 .main>.row:last-child {
@@ -242,9 +238,6 @@ ul.cols {
         margin-left: calc(50% - 48.33vw);
         margin-right: calc(50% - 50vw);
         width: 100vmin;
-    }
-    .trivia-cell-title {
-        text-align: right;
     }
 }
 

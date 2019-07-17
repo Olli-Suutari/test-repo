@@ -371,7 +371,7 @@ $(document).ready(function() {
                 resetSliderAfterLibChange();
                 igName = "";
                 fbPageNames = [];
-                fbWidgetHeightSet = false;
+                fbWidgetSetUp = false;
                 triviaIsEmpty = true;
                 mapLoaded = false;
                 contactsIsEmpty = true;

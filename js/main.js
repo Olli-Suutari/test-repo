@@ -317,7 +317,7 @@ function bindActions() {
             setTimeout(function(){
                 $("#sliderBox").addClass("small-slider");
             }, 600);
-            if(!fbWidgetHeightSet) {
+            if(!fbWidgetSetUp) {
                 generateFbWidgets();
             }
         }
