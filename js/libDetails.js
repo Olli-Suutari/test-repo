@@ -904,8 +904,6 @@ function generateFbWidgets() {
     // Descriptionheight is used with side by side layout. This is increased if 2 col layout is used.
     var descriptionHeight = 500;
     var leftBarWidth = Math.round($('#leftBar').outerWidth());
-    console.log(leftBarWidth)
-
     // If FB widget is not atleast 316 px in width, the event dates are not visible.
     if(leftBarWidth < 632) {
         bsCols = "";
@@ -918,15 +916,12 @@ function generateFbWidgets() {
         fbWidth = fbWidth/2;
     }
     if(fbWidth > leftBarWidth) {
-        console.log("ADJUST! " + leftBarWidth)
         fbWidth = leftBarWidth ;
     }
-    console.log(fbWidth)
     if(fbWidth < 316) {
         fbWidth = 316;
     }
     if(fbPageNames.length == 1) {
-        console.log(descriptionHeight);
         if (!isEmpty($('#introContent'))) {
             $('.news-description').addClass(bsCols);
             if(leftBarWidth > 632) {
@@ -939,14 +934,11 @@ function generateFbWidgets() {
         fbWidgetHeightSet = true;
         // If description + fb do not fit together, don't set fb height to description height.
         descriptionWidth = Math.round($('.news-description').width());
-        console.log("fbWidth " + fbWidth)
-        console.log("descriptionHeight " + descriptionHeight)
         // If we use smaller than xl, event calendar date icons are lost because the frame gets too small.
         fbHTML =  '<div class="fb-page ' + bsCols + '" style="width: ' + fbWidth + '; margin-bottom: 2em;" data-href="https://www.facebook.com/' + fbPageNames[0] + '" data-tabs="' + tabs + '" data-width="' + fbWidth + 'px" data-height="' + descriptionHeight + 'px" data-small-header="' + adaptWidth + '" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false"></div>';
         $('.news-description').after(fbHTML);
     }
     else {
-        console.log(fbWidth)
         var feedOne = "";
         var feedTwo = "";
         for (var i = 0; i < fbPageNames.length; i++) {
@@ -1013,7 +1005,6 @@ function asyncFetchLinks() {
                 $(".some-links").append('<a target="_blank" ' +
                     'href="' + url + '" title="' + i18n.get("Librarys") + ' Facebook"> <i class="fab ' +
                     'fa-facebook-square"></i></a>');
-
                 var fbName = url;
                 if (fbName.charAt(fbName.length - 1) == '/') {
                     fbName = fbName.substr(0, fbName.length - 1);
@@ -1055,7 +1046,6 @@ function asyncFetchLinks() {
                             var tagLink = tagText.substring(1);
                             tagLink = '<a target="_blank" class="external-link" href="https://www.instagram.com/explore/tags/' + tagLink
                                 + '/">' + tagText + '</a> ';
-                            //console.log(tagText + " " + tagLink);
                             tagsToReplace.push({position: reFindTagsExec[0],
                                 replacement: tagLink, type: "tag"});
                             reFindTagsExec = reFindTags.exec(caption);
@@ -1068,7 +1058,6 @@ function asyncFetchLinks() {
                             var tagLink = tagText.substring(1);
                             tagLink = '<a target="_blank" class="external-link" href="https://www.instagram.com/' + tagLink
                                 + '/">' + tagText + '</a> ';
-                            //console.log(tagText + " " + tagLink);
                             tagsToReplace.push({position: reFindUsersExec[0],
                                 replacement: tagLink, type: "user"});
                             reFindUsersExec = reFindUsers.exec(caption);
@@ -1388,7 +1377,7 @@ function fetchInformation(language, lib) {
                     // https://www.joe-stevens.com/2010/02/18/convert-all-static-text-email-addresses-to-mailto-links-using-jquery/
                     $().ready(function() {
                         var regEx = /(\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)/;
-                        $("#introContent, .accessibility-details, table td").filter(function() {
+                        $("#introContent, #accessibilityDetails, table td").filter(function() {
                             return $(this).html().match(regEx);
                         }).each(function() {
                             $(this).html($(this).html().replace(regEx, "<a href=\"mailto:$1\">$1</a>"));
