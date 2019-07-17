@@ -978,8 +978,6 @@ function generateFbWidgets() {
             version: 'v3.3'
         });
     }
-    // Reset the array.
-    fbPageNames = [];
     adjustParentHeight();
 }
 
