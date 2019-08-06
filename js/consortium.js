@@ -11,7 +11,7 @@ function groupByCity(arr) {
     return arr.reduce(function(res, obj) {
         var key = obj.city;
         // create a new object based on the object
-        var newObj = {city: key, id: obj.id, text: obj.text};
+        var newObj = {city: key, id: obj.id, text: obj.text, services: obj.services};
         // Wiitaunion mobile library is used in both "Pihtipudas" and "Viitasaari".
         // b identifier is added so both won't be selected by id in selector.
         if(obj.id == 85449) {
@@ -50,9 +50,11 @@ function modelMatcher (params, data) {
         // Check each child of the option
         for (var c = data.children.length - 1; c >= 0; c--) {
             var child = data.children[c];
-            child.parentText += data.parentText + " " + data.text;
+            var services = child.services;
+            //console.log(services)
+            child.parentText += data.parentText + " " + data.text + " " + JSON.stringify(services);
 
-            var matches = modelMatcher(params, child);
+            var matches = modelMatcher(params, child, services);
 
             // If there wasn't a match, remove the object in the array
             if (matches == null) {
@@ -85,9 +87,9 @@ function modelMatcher (params, data) {
 }
 
 function initSelect(items) {
-    var placeholderText = "Hae nimellä...";
+    var placeholderText = "Hae nimeä tai palvelua...";
     if(lang === "en") {
-        placeholderText = "Search by name...";
+        placeholderText = "Search by name or service...";
     }
     // If we use placeholder in IE, select always has focus and opens automatically.
     // https://stackoverflow.com/questions/29293452/ie-select2-always-gets-the-focus
@@ -302,7 +304,7 @@ $(document).ready(function() {
     // Fetch libraries of consortium
     else if(consortium !== undefined && city === undefined) {
         isLibaryList = true;
-        $.getJSON("https://api.kirjastot.fi/v4/library?lang=" + lang + "&consortium=" + consortium + "&limit=1500", function(data) {
+        $.getJSON("https://api.kirjastot.fi/v4/library?lang=" + lang + "&consortium=" + consortium + "&with=services&limit=1500", function(data) {
             for (var i=0; i<data.items.length; i++) {
                 // Include mobile libraries in consortium listings...
                 libraryList.push({
@@ -310,7 +312,8 @@ $(document).ready(function() {
                     city: data.items[i].city.toString(),
                     street: data.items[i].address.street,
                     zipcode: data.items[i].address.zipcode,
-                    coordinates: data.items[i].coordinates
+                    coordinates: data.items[i].coordinates,
+                    services: data.items[i].services
                 });
                 if(lang === "fi") {
                     libListMultiLangHelper.push({nameFi: encodeVal(data.items[i].name), id: data.items[i].id});
@@ -325,7 +328,8 @@ $(document).ready(function() {
                         city: "16055",
                         street: data.items[i].address.street,
                         zipcode: data.items[i].address.zipcode,
-                        coordinates: data.items[i].coordinates
+                        coordinates: data.items[i].coordinates,
+                        services: data.items[i].services
                     });
                 }
             }

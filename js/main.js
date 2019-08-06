@@ -62,7 +62,7 @@ function exitHandler() {
 }
 
 // Remove httml & www from url and / # from the end.
-function generatPrettyUrl(url) {
+function generatePrettyUrl (url) {
     url = url.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "");
     // Remove / and # from url if last characters
     if (url.substring(url.length-1) === "/" || url.substring(url.length-1) === "#") {
@@ -96,6 +96,40 @@ function generateMailToLink(string) {
         }
     });
     return result;
+}
+
+function generateWebropolSurveyFrames(description) {
+    if (description.indexOf("<a href=") !== -1) {
+        // Make all links external.
+        //description = description.replace(/(<a href=")+/g, '<a class="external-link" target="_blank" href="');
+        // Generate iframes from links that contain "embed"
+        var linksToReplace = [];
+        var reFindLinks = new RegExp(/<a\b[^>]*>(.*?)<\/a>/g);
+        var reFindLinksExec = reFindLinks.exec(description);
+        while (reFindLinksExec != null) {
+            // If link contains "embed", turn it into iframe.
+            if (reFindLinksExec[0].indexOf("webropol") !== -1) {
+                // Find url
+                var urlOfLink = new RegExp(/"(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?"/g).exec(reFindLinksExec[0]);
+                // Generate iframe
+                var iframeCode = '<iframe style="overflow-x: hidden;" frameborder="0" height="800px" scrolling="yes" src='  + urlOfLink[0] + ' width="100%"></iframe>';
+                // Push to array
+                linksToReplace.push({position: reFindLinksExec[0], replacement: iframeCode});
+            }
+            // Normal links
+            else {
+                // Push to array
+                linksToReplace.push({position: reFindLinksExec[0], replacement: reFindLinksExec[0].replace(/(<a href=")+/g, '<a class="external-link" target="_blank" href="')});
+            }
+            // Loop all links.
+            reFindLinksExec = reFindLinks.exec(description);
+        }
+        // Loop & add iframes from embedded links.
+        for (var i = 0; i < linksToReplace.length; i++) {
+            description = description.replace(linksToReplace[i].position, linksToReplace[i].replacement);
+        }
+    }
+    return description;
 }
 
 // Capitalize the 1st letter of a string.
@@ -221,7 +255,7 @@ function addItem(item, listElement) {
             }
             // Website
             if(isValue(item.website)) {
-                var prettyLink = generatPrettyUrl(item.website);
+                var prettyLink = generatePrettyUrl (item.website);
                 description = description + '<p class="service-info service-website" aria-label="' + i18n.get("Price") +
                     '"><i class="fas fa-globe" data-toggle="tooltip" title="' + i18n.get("Website") + '" ' +
                     'data-placement="top"></i><a target="_blank" href="' + item.website + '">' +

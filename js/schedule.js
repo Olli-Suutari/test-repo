@@ -110,6 +110,9 @@ function generateScheduleInfo(data) {
         $('#scheduleInfos').css("display", "none");
     }
     if(isWeekInfo) {
+        // Replace line breaks with br.
+        genericDescription = genericDescription.replace(/(?:\r\n|\r|\n)/g, '<br>');
+        genericDescription = generateLinks(genericDescription);
         $('#scheduleInfo').replaceWith('<span id="scheduleInfo" class="info-span-lg info-text"><i class="fas fa-info-circle" > </i> ' + genericDescription + '</span>');
         $('#scheduleInfoRow').css("display", "");
     }
@@ -117,13 +120,14 @@ function generateScheduleInfo(data) {
         $('#scheduleInfoRow').css("display", "none");
     }
     if(isSpecialInfo) {
+        holidayDescription = holidayDescription.replace(/(?:\r\n|\r|\n)/g, '<br>');
+        holidayDescription = generateLinks(holidayDescription);
         $('#specialInfo').replaceWith('<span id="specialInfo" class="info-span-lg info-text"><i class="fas fa-info-circle" > </i>' + holidayDescription + '</span>');
         $('#specialInfoRow').css("display", "");
     }
     else {
         $('#specialInfoRow').css("display", "none");
     }
-
 }
 var weekCounter = 0;
 var dateInSchedule;
@@ -325,7 +329,7 @@ function getWeekSchelude(direction, lib) {
                             staffPresentEnd = to;
                             // Store the row as a variable.
                             staffToday = '<tr class="time--sub time isTodayClass time--with-staff">' +
-                                '<td class="trn"><i class="fas fa-level-up fa-rotate-90"></i> ' + i18n.get("Service time") + '</td>' +
+                                '<td class="trn"><i class="fas fa-level-up-alt fa-rotate-90"></i> ' + i18n.get("Service time") + '</td>' +
                                 '<td>' + staffPresentStart + ' – ' + staffPresentEnd + '</td>' +
                                 '</tr>';
                         }
@@ -333,12 +337,12 @@ function getWeekSchelude(direction, lib) {
                         else if(time.status === 2) {
                             if (staffPresentStart === '') {
                                 selfServiceBefore = '<tr class="time--sub time isTodayClass time--no-staff">' +
-                                    '<td><i class="fas fa-level-up fa-rotate-90"></i> ' + i18n.get("Self-service") + '</td>' +
+                                    '<td><i class="fas fa-level-up-alt fa-rotate-90"></i> ' + i18n.get("Self-service") + '</td>' +
                                     '<td>' + from + ' – ' + to + '</td>' +
                                     '</tr>';
                             } else {
                                 selfServiceAfter = '<tr class="time--sub time isTodayClass time--no-staff">' +
-                                    '<td><i class="fas fa-level-up fa-rotate-90"></i> ' + i18n.get("Self-service") + '</td>' +
+                                    '<td><i class="fas fa-level-up-alt fa-rotate-90"></i> ' + i18n.get("Self-service") + '</td>' +
                                     '<td>' + from + ' – ' + to + '</td>' +
                                     '</tr>';
                             }

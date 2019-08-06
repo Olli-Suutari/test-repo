@@ -1,6 +1,17 @@
 var isIOS = false;
 var isIE = false;
 
+
+// THIS IS DUPLICATED ON MAIN.JS, WHICH IS NOT LOADED IN HOMEPAGE.HTML. TO DO; Make main.js essential.
+function generatePrettyUrl (url) {
+    url = url.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "");
+    // Remove / and # from url if last characters
+    if (url.substring(url.length-1) === "/" || url.substring(url.length-1) === "#") {
+        url = url.substring(0, url.length-1);
+    }
+    return url;
+}
+
 function moveParentToLibraryUrl(toAdd) {
     toAdd = toAdd.toLowerCase();
     toAdd = toAdd.replace(/ /g, "-");
@@ -138,6 +149,8 @@ function generateScheduleInfo(data) {
             }
         }
         if(holidayDescription !== undefined) {
+            holidayDescription = holidayDescription.replace(/(?:\r\n|\r|\n)/g, '<br>');
+            holidayDescription = generateLinks(holidayDescription);
                 $('#specialInfo').replaceWith('<span id="specialInfo" class="info-span info-text"><i class="fas fa-info-circle" > </i> '
                     + holidayDescription + '</span>');
         }
@@ -145,6 +158,8 @@ function generateScheduleInfo(data) {
             $('#specialInfo').replaceWith('<span id="specialInfo" style="display: none" class="info-span info-text"><i class="fas fa-info-circle" > </i></span>');
         }
         if(genericDescription !== undefined) {
+            genericDescription = genericDescription.replace(/(?:\r\n|\r|\n)/g, '<br>');
+            genericDescription = generateLinks(genericDescription);
             $('#scheduleInfo').replaceWith('<span id="scheduleInfo" class="info-span info-text"><i class="fas fa-info-circle" > </i> '
                 + genericDescription + '</span>');
         }
@@ -301,7 +316,7 @@ function getDaySchelude(direction, lib) {
                         staffPresentEnd = to;
                         // Store the row as a variable.
                         staffToday = '<tr class="time--sub time isTodayClass time--with-staff">' +
-                            '<td class="align-right trn"><i class="fas fa-level-up fa-rotate-90"></i> ' + i18n.get("Service time") + '</td>' +
+                            '<td class="align-right trn"><i class="fas fa-level-up-alt fa-rotate-90"></i> ' + i18n.get("Service time") + '</td>' +
                             '<td class="align-left">' + staffPresentStart + ' – ' + staffPresentEnd + '</td>' +
                             '</tr>';
                     }
@@ -309,12 +324,12 @@ function getDaySchelude(direction, lib) {
                     else if(time.status === 2) {
                         if (staffPresentStart === '') {
                             selfServiceBefore = '<tr class="time--sub time isTodayClass time--no-staff">' +
-                                '<td class="align-right"><i class="fas fa-level-up fa-rotate-90"></i> ' + i18n.get("Self-service") + '</td>' +
+                                '<td class="align-right"><i class="fas fa-level-up-alt fa-rotate-90"></i> ' + i18n.get("Self-service") + '</td>' +
                                 '<td class="align-left">' + from + ' – ' + to + '</td>' +
                                 '</tr>';
                         } else {
                             selfServiceAfter = '<tr class="time--sub time isTodayClass time--no-staff">' +
-                                '<td class="align-right"><i class="fas fa-level-up fa-rotate-90"></i> ' + i18n.get("Self-service") + '</td>' +
+                                '<td class="align-right"><i class="fas fa-level-up-alt fa-rotate-90"></i> ' + i18n.get("Self-service") + '</td>' +
                                 '<td class="align-left">' + from + ' – ' + to + '</td>' +
                                 '</tr>';
                         }
