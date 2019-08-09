@@ -553,11 +553,11 @@ function asyncFetchServices() {
                     if(urlUnescapeSpaces.indexOf(oppositeName) > -1) {
                         console.log("MATCH 1 " + urlUnescapeSpaces + " == " + oppositeName);
                         mathchFound = true;
-                        toClick = arrayOfServiceNames[i].name;
+                        toClick = decodeVal(arrayOfServiceNames[i].name);
                         console.log("toClick: " + toClick);
                         console.log(serviceNamesWithLinks)
                         for (var t = 0; t < serviceNamesWithLinks.length; t++) {
-                            var valueInLowerCase = serviceNamesWithLinks[t].toLowerCase();
+                            var valueInLowerCase = decodeVal(serviceNamesWithLinks[t].toLowerCase());
                             if(valueInLowerCase.indexOf(toClick) > -1) {
                                 toClick = serviceNamesWithLinks[t];
                                 console.log(toClick)
@@ -568,15 +568,15 @@ function asyncFetchServices() {
                             }
                         }
                     }
-                    else if(arrayOfServiceNamesInOppositeLang[i].customName !== "") {
+                    if(arrayOfServiceNamesInOppositeLang[i].customName !== "") {
                         var oppositeCustomName = arrayOfServiceNamesInOppositeLang[i].customName;
                         if(urlUnescapeSpaces.indexOf(oppositeCustomName) > -1) {
                             console.log("MATCH 2 " + urlUnescapeSpaces + " == " + oppositeCustomName);
                             mathchFound = true;
-                            toClick = arrayOfServiceNames[i].name;
+                            toClick = decodeVal(arrayOfServiceNames[i].customName);
+                            console.log(toClick)
                             for (var t = 0; t < serviceNamesWithLinks.length; t++) {
-                                var valueInLowerCase = serviceNamesWithLinks[t].toLowerCase();
-                                console.log(valueInLowerCase)
+                                var valueInLowerCase = decodeVal(serviceNamesWithLinks[t].toLowerCase());
                                 if(valueInLowerCase.indexOf(toClick) > -1) {
                                     toClick = serviceNamesWithLinks[t];
                                     setTimeout(function(){
