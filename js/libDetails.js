@@ -19,6 +19,8 @@ var links = null;
 var phoneNumbers = null;
 var pictures = null;
 var arrayOfServices = null;
+var arrayOfServiceNames = [];
+var arrayOfServiceNamesInOppositeLang = [];
 var slogan = null;
 var founded = null;
 var buildingInfo = null;
@@ -85,12 +87,60 @@ function asyncFetchV4Data() {
             }
             description = data.description;
             transitInfo = data.transitInfo;
+
+            for (var i = 0; i < arrayOfServices.length; i++) {
+                var name = arrayOfServices[i].standardName.toLowerCase();
+                var customName = "";
+                if(arrayOfServices[i].name !== null) {
+                    customName = arrayOfServices[i].name.toLowerCase();
+                    customName = customName.replace(/ä/g, "a");
+                    customName = customName.replace(/ö/g, "o");
+                    customName = customName.replace(/\(/g, "");
+                    customName = customName.replace(/\)/g, "");
+                    customName = customName.replace(/_/g, " ");
+                    customName = customName.replace(/-/g, " ");
+                }
+                arrayOfServiceNames.push({name: name, customName: customName});
+            }
             genericDeferred.resolve();
         });
     }, 1 );
     // Return the Promise so caller can't change the Deferred
     return genericDeferred.promise();
 }
+
+function asyncFetchServiceNamesInOppositeLang() {
+    var serviceNamesDeferred = jQuery.Deferred();
+    var oppositeLang = "fi";
+    if(lang == "fi") {
+        oppositeLang = "en";
+    }
+    setTimeout(function() {
+        // Disable caching: https://stackoverflow.com/questions/13391563/how-to-set-cache-false-for-getjson-in-jquery
+        $.getJSON("https://api.kirjastot.fi/v4/library/" + library + "?lang=" + oppositeLang + "&with=services", {_: new Date().getTime()}, function (data) {
+            var data = data.data.services;
+            for (var i = 0; i < data.length; i++) {
+                var name = data[i].standardName.toLowerCase();
+                var customName = "";
+                if(data[i].name !== null) {
+                    customName = data[i].name.toLowerCase();
+                    customName = customName.replace(/ä/g, "a");
+                    customName = customName.replace(/ö/g, "o");
+                    customName = customName.replace(/\(/g, "");
+                    customName = customName.replace(/\)/g, "");
+                    customName = customName.replace(/_/g, " ");
+                    customName = customName.replace(/-/g, " ");
+                }
+                arrayOfServiceNamesInOppositeLang.push({name: name, customName: customName});
+            }
+            serviceNamesDeferred.resolve();
+        });
+    }, 1 );
+    // Return the Promise so caller can't change the Deferred
+    return serviceNamesDeferred.promise();
+}
+
+
 /* Fetch things via v4 api, expect persons & building details */
 function asyncGenerateGenericDetails() {
     var genericDeferred = jQuery.Deferred();
@@ -272,7 +322,6 @@ function bindServiceClicks() {
                 textInside = textInside.replace(/\)/g, "");
                 textInside = textInside.replace(/_/g, " ");
                 textInside = textInside.replace(/-/g, " ");
-                // Loop services and check if refUrl contains one of them and click if so.
                 for (var i = 0; i < serviceNames.length; i++) {
                     var escapedName = serviceNames[i].toLowerCase();
                     escapedName = escapedName.replace(/ä/g, "a");
@@ -478,8 +527,11 @@ function asyncFetchServices() {
             urlUnescapeSpaces = urlUnescapeSpaces.replace(/\)/g, "");
             // Loop services and check if refUrl contains one of them and click if so.
             var toClick = "";
-            for (var i = 0; i < serviceNames.length; i++) {
-                var escapedName = serviceNames[i].toLowerCase();
+            var mathchFound = false;
+            console.log(serviceNamesWithLinks);
+            console.log(arrayOfServiceNamesInOppositeLang);
+            for (var i = 0; i < serviceNamesWithLinks.length; i++) {
+                var escapedName = serviceNamesWithLinks[i].toLowerCase();
                 escapedName = escapedName.replace(/ä/g, "a");
                 escapedName = escapedName.replace(/ö/g, "o");
                 escapedName = escapedName.replace(/\(/g, "");
@@ -487,11 +539,54 @@ function asyncFetchServices() {
                 escapedName = escapedName.replace(/_/g, " ");
                 escapedName = escapedName.replace(/-/g, " ");
                 if(urlUnescapeSpaces.indexOf(escapedName) > -1) {
+                    mathchFound = true;
                     toClick = serviceNames[i];
                     setTimeout(function(){
                         openOnLoad = true;
                         $("li").find('[data-name="'+ toClick +'"]').click();
                     }, 600);
+                }
+            }
+            if(!mathchFound) {
+                for (var i = 0; i < arrayOfServiceNames.length; i++) {
+                    var oppositeName = arrayOfServiceNamesInOppositeLang[i].name;
+                    if(urlUnescapeSpaces.indexOf(oppositeName) > -1) {
+                        console.log("MATCH 1 " + urlUnescapeSpaces + " == " + oppositeName);
+                        mathchFound = true;
+                        toClick = arrayOfServiceNames[i].name;
+                        console.log("toClick: " + toClick);
+                        console.log(serviceNamesWithLinks)
+                        for (var t = 0; t < serviceNamesWithLinks.length; t++) {
+                            var valueInLowerCase = serviceNamesWithLinks[t].toLowerCase();
+                            if(valueInLowerCase.indexOf(toClick) > -1) {
+                                toClick = serviceNamesWithLinks[t];
+                                console.log(toClick)
+                                setTimeout(function(){
+                                    openOnLoad = true;
+                                    $("li").find('[data-name="'+ toClick +'"]').click();
+                                }, 600);
+                            }
+                        }
+                    }
+                    else if(arrayOfServiceNamesInOppositeLang[i].customName !== "") {
+                        var oppositeCustomName = arrayOfServiceNamesInOppositeLang[i].customName;
+                        if(urlUnescapeSpaces.indexOf(oppositeCustomName) > -1) {
+                            console.log("MATCH 2 " + urlUnescapeSpaces + " == " + oppositeCustomName);
+                            mathchFound = true;
+                            toClick = arrayOfServiceNames[i].name;
+                            for (var t = 0; t < serviceNamesWithLinks.length; t++) {
+                                var valueInLowerCase = serviceNamesWithLinks[t].toLowerCase();
+                                console.log(valueInLowerCase)
+                                if(valueInLowerCase.indexOf(toClick) > -1) {
+                                    toClick = serviceNamesWithLinks[t];
+                                    setTimeout(function(){
+                                        openOnLoad = true;
+                                        $("li").find('[data-name="'+ toClick +'"]').click();
+                                    }, 600);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -657,14 +752,7 @@ function asyncFetchImages() {
                             // Activate arrow navigation when hovering over the small slider.
                             $("#sliderBox").mouseenter(function () {
                                 if (!$("#sliderBox").hasClass('hovering') && $("#sliderBox").hasClass("small-slider")) {
-                                    // If element is never focused, navigation may not work.
                                     $("#sliderBox").addClass('hovering');
-                                    $("#sliderForward").focus();
-                                    // If we blur instantly, arrow navigation won't work unless something has been clicked in the document.
-                                    setTimeout(function () {
-                                        $("#sliderForward").blur();
-                                    }, 5);
-                                    //$("#sliderForward").blur();
                                 }
                             });
                             $("#sliderBox").mouseleave(function () {
@@ -1310,7 +1398,7 @@ function fetchInformation(language, lib) {
         var fetchDeferred = jQuery.Deferred();
         setTimeout(function() {
             if(!isReFetching) {
-                $.when( asyncFetchV4Data() ).then(
+                $.when( asyncFetchV4Data() && asyncFetchServiceNamesInOppositeLang() ).then(
                     function() {
                         $.when( asyncGenerateGenericDetails(), asyncGenerateTrivia(), asyncFetchDepartments(),
                             asyncFetchLinks(), asyncFetchLocation()).then(

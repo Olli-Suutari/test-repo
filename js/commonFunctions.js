@@ -2,64 +2,6 @@ var isIOS = false;
 var isIOSMobile = false;
 var isIE = false;
 
-function toggleFullScreen(target) {
-    // if already full screen; exit
-    // else go fullscreen
-    // If slider, toggle small-slider class.
-    if(target === "#sliderBox") {
-        $('#sliderBox').toggleClass("small-slider");
-        $('#sliderBox').toggleClass("full-screen-slider");
-        adjustParentHeight(500)
-    }
-    else if(target === "#mapContainer") {
-        $('#mapContainer').toggleClass("map-borders");
-    }
-    if (
-        document.fullscreenElement ||
-        document.webkitFullscreenElement ||
-        document.mozFullScreenElement ||
-        document.msFullscreenElement
-    ) {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-        }
-    } else {
-        element = $(target).get(0);
-        if (element.requestFullscreen) {
-            element.requestFullscreen();
-        }
-        else if (element.webkitRequestFullscreen) {
-            element.webkitRequestFullscreen();
-        }
-        else if (element.mozRequestFullScreen) {
-            element.mozRequestFullScreen();
-        }
-        else if (element.msRequestFullscreen) {
-            element.msRequestFullscreen()
-        }
-    }
-}
-// toggleFullScreen is not fired when  exiting fullscreen on (chrome + others?) with ESC.
-document.addEventListener('fullscreenchange', exitHandler);
-document.addEventListener('webkitfullscreenchange', exitHandler);
-document.addEventListener('mozfullscreenchange', exitHandler);
-document.addEventListener('MSFullscreenChange', exitHandler);
-function exitHandler() {
-    if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
-        // TO DO: this leaves a smallish black margin to the left of the 1st image after exiting the slider.
-        $('#sliderBox').addClass("small-slider");
-        $('#sliderBox').removeClass("full-screen-slider");
-        $('#mapContainer').addClass("map-borders");
-    }
-    adjustParentHeight(1500)
-}
-
 // Remove httml & www from url and / # from the end.
 function generatePrettyUrl (url) {
     url = url.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "");
@@ -189,11 +131,24 @@ function adjustParentUrl(toAdd, type) {
     // Check for services.
     if(type !== "introduction" && type !== "contact") {
         // Loop services and check if refUrl contains one of them, if so remove it.
-        for (var i = 0; i < serviceNames.length; i++) {
-            var serviceName = encodeVal(serviceNames[i]);
+        for (var i = 0; i < serviceNamesWithLinks.length; i++) {
+            var serviceName = encodeVal(serviceNamesWithLinks[i]);
             if(refUrl.indexOf(serviceName) > -1) {
                 refUrl = refUrl.replace(serviceName, "");
-                stateTitle = stateTitle + " | " + serviceNames[i];
+                stateTitle = stateTitle + " | " + serviceNamesWithLinks[i];
+            }
+        }
+        // Loop services and check if refUrl contains one of them, if so remove it.
+        for (var i = 0; i < arrayOfServiceNamesInOppositeLang.length; i++) {
+            var serviceName = encodeVal(arrayOfServiceNamesInOppositeLang[i].name);
+            if(refUrl.indexOf(serviceName) > -1) {
+                refUrl = refUrl.replace(serviceName, "");
+                stateTitle = stateTitle + " | " + arrayOfServiceNamesInOppositeLang[i].name;
+            }
+            var serviceNameCustom = encodeVal(arrayOfServiceNamesInOppositeLang[i].customName);
+            if(refUrl.indexOf(serviceNameCustom) > -1) {
+                refUrl = refUrl.replace(serviceNameCustom, "");
+                stateTitle = stateTitle + " | " + arrayOfServiceNamesInOppositeLang[i].customName;
             }
         }
     }
@@ -253,9 +208,6 @@ function adjustParentUrl(toAdd, type) {
     }
 }
 
-// divClone & active tab are used with consortium.js
-var divClone = '';
-var map;
 $(document).ready(function() {
     // Apparently IOS does not support Full screen API:  https://github.com/googlevr/vrview/issues/112
     // Hide fullscreen toggler & increase slider/map sizes a bit on larger screens to compensate the lack of full screen.

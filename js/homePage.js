@@ -14,16 +14,6 @@ function moveParentToLibraryUrl(toAdd) {
     }
 }
 
-// Timer  is used to stop onresize event from firing after adjustment is done by triggering the function manually.
-var isAdjustingHeight = false;
-var clearTimer;
-function setAdjustingToFalse() {
-    clearTimer = setTimeout(function(){
-        isAdjustingHeight = false;
-    }, 1200);
-}
-
-var height = 0;
 function adjustHomePageHeight(delay) {
     clearTimeout(clearTimer);
     isAdjustingHeight = true;
