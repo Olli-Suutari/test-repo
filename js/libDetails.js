@@ -540,7 +540,7 @@ function asyncFetchServices() {
                 escapedName = escapedName.replace(/-/g, " ");
                 if(urlUnescapeSpaces.indexOf(escapedName) > -1) {
                     mathchFound = true;
-                    toClick = serviceNames[i];
+                    toClick = serviceNamesWithLinks[i];
                     setTimeout(function(){
                         openOnLoad = true;
                         $("li").find('[data-name="'+ toClick +'"]').click();

@@ -17,15 +17,13 @@ function asyncCheckUrlForKeskiLibrary() {
         }
         var matchFound = false;
         if(!matchFound) {
+            // *ÄÄÄÄ
             // Loop libraries and check if refUrl contains one of them and click if so.
             for (var i = 0; i < libraryList.length; i++) {
                 var urlUnescapeSpaces = refUrl.replace(/%20/g, " ");
                 urlUnescapeSpaces = refUrl.replace(/-/g, " ");
-                var escapedName = libraryList[i].text.toLowerCase();
-                escapedName = escapedName.replace(/ä/g, "a");
-                escapedName = escapedName.replace(/ö/g, "o");
-                escapedName = escapedName.replace(/\(/g, "");
-                escapedName = escapedName.replace(/\)/g, "");
+                console.log(urlUnescapeSpaces)
+                var escapedName = encodeVal(libraryList[i].text);
                 if(urlUnescapeSpaces.indexOf(escapedName) > -1) {
                     library = libraryList[i].id;
                     matchFound = true;
