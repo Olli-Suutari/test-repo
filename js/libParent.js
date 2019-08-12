@@ -36,7 +36,6 @@ window.addEventListener('message', function(event) {
                     name = "?" + libList[i].nameFi;
                     currentUrl = currentUrl.replace(/\?(.*)/g, name) + serviceNameInUrl;
                     console.log("currentUrl: " + currentUrl);
-
                     needsRedirect = true;
                 }
             }
@@ -77,7 +76,7 @@ window.addEventListener('message', function(event) {
                     */
                     storedUrl = currentUrl;
                     window.location.href = currentUrl;
-                }, 250);
+                }, 450);
 
             }, 50);
         }

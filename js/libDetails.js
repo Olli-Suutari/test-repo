@@ -582,7 +582,10 @@ function asyncFetchServices() {
                         console.log(matchingServiceLinkFound)
                         // If no matching service is available to click, remove name from url.
                         if(!matchingServiceLinkFound) {
-                            adjustParentUrl("", "service");
+                            console.log(refUrl)
+                            var index = refUrl.lastIndexOf("?");
+                            var serviceToRemove = refUrl.substr(index+1);
+                            adjustParentUrl(serviceToRemove.toString(), "removeService");
                         }
                     }
                 }

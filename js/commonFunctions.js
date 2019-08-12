@@ -105,6 +105,7 @@ function adjustParentHeight(delay, elementPosY) {
   https://gist.github.com/olli-suutari-jkl/8d6ccbc7d3c4e3b563bd5b7cbee095e2
  */
 function adjustParentUrl(toAdd, type) {
+    console.log(toAdd);
     refUrl = encodeVal(refUrl);
     // Sometimes refurl is set to github when paging back or forwards, reset in case so...
     if(refUrl.indexOf("github") >-1) {
@@ -127,16 +128,14 @@ function adjustParentUrl(toAdd, type) {
         }
     }
     // Remove item from url, if it already exists.
+    console.log(refUrl);
     refUrl = refUrl.replace(new RegExp(toAdd,"i"), "");
+    if(type == "removeService") {
+        toAdd = "";
+    }
     // Check for services.
-    if(type !== "introduction" && type !== "contact") {
+    if(type !== "introduction" && type !== "contact" && type !== "removeService") {
         console.log("HEY")
-        if(toAdd == "") {
-            console.log("IS EMPTY");
-            var index = refUrl.lastIndexOf("?");
-            var serviceToRemove = "?" + refUrl.substr(index+1);
-            refUrl =  refUrl.replace(serviceToRemove, "");
-        }
 
         // Loop services and check if refUrl contains one of them, if so remove it.
         for (var i = 0; i < serviceNamesWithLinks.length; i++) {
