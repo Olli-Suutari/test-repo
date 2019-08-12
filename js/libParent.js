@@ -76,7 +76,7 @@ window.addEventListener('message', function(event) {
                     */
                     storedUrl = currentUrl;
                     window.location.href = currentUrl;
-                }, 450);
+                }, 6450);
 
             }, 50);
         }
