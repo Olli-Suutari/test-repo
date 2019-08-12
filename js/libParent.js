@@ -66,13 +66,19 @@ window.addEventListener('message', function(event) {
         }
         if(needsRedirect) {
             setTimeout(function(){
-                /* IE does not update referrer if we use history.replaceState or .pushState , thus this wont work on ie.
-                https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/10474810/
-                Bonus: IE also loses referrer when using window.location.href = ...
-                // https://blog.mathiaskunto.com/2012/02/20/internet-explorer-loses-referrer-when-redirecting-or-linking-with-javascript/
-                */
-                storedUrl = currentUrl;
-                window.location.href = currentUrl;
+
+
+                console.log("DO: " + currentUrl)
+                setTimeout(function(){
+                    /* IE does not update referrer if we use history.replaceState or .pushState , thus this wont work on ie.
+                    https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/10474810/
+                    Bonus: IE also loses referrer when using window.location.href = ...
+                    // https://blog.mathiaskunto.com/2012/02/20/internet-explorer-loses-referrer-when-redirecting-or-linking-with-javascript/
+                    */
+                    storedUrl = currentUrl;
+                    window.location.href = currentUrl;
+                }, 250);
+
             }, 50);
         }
     }
