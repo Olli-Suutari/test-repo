@@ -131,6 +131,8 @@ function adjustParentUrl(toAdd, type) {
     // Check for services.
     if(type !== "introduction" && type !== "contact") {
         // Loop services and check if refUrl contains one of them, if so remove it.
+        /*
+
         for (var i = 0; i < serviceNamesWithLinks.length; i++) {
             var serviceName = encodeVal(serviceNamesWithLinks[i]);
             if(refUrl.indexOf(serviceName) > -1) {
@@ -151,6 +153,8 @@ function adjustParentUrl(toAdd, type) {
                 stateTitle = stateTitle + " | " + arrayOfServiceNamesInOppositeLang[i].customName;
             }
         }
+
+         */
     }
     if(lang === "fi") {
         refUrl = refUrl.replace(/contacts/g, "");
