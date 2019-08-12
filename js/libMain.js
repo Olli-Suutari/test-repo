@@ -175,11 +175,11 @@ function addItem(item, listElement) {
         }
     }
     else {
-        // serviceNames list is used to navigate to the service via url.
-        serviceNamesWithLinks.push(name);
         // Add popup link if additional details are available.
         if (isValue(item.shortDescription) || isValue(item.description) || isValue(item.website) ||
         isValue(item.email) || isValue(item.phoneNumber)) {
+            // serviceNames list is used to navigate to the service via url.
+            serviceNamesWithLinks.push(name);
             var description = "";
             if (item.shortDescription != null && item.shortDescription.length != 0 &&
                 !strippedValueEquals(item.shortDescription, item.name)) {

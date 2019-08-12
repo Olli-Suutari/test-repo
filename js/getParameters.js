@@ -66,6 +66,7 @@ function encodeVal(value) {
         return value;
     }
     value = value.toLowerCase();
+    value = value.replace(/,/g, "");
     value = value.replace(/ /g, "-");
     value = value.replace(/ä/g, "a");
     value = value.replace(/ö/g, "o");
@@ -82,6 +83,7 @@ function decodeVal(value) {
     }
     value = decodeURI(value);
     value = value.toLowerCase();
+    value = value.replace(/,/g, "");
     value = value.replace(/ /g, "-");
     value = value.replace(/ä/g, "a");
     value = value.replace(/ö/g, "o");

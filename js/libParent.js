@@ -19,12 +19,24 @@ window.addEventListener('message', function(event) {
         var currentUrl = window.location.href;
         var needsRedirect = false;
         var name = "";
+        var serviceNameInUrl = "";
+        console.log("referrer: " + referrer)
+        var refParamCount = (referrer.match(/\?/g) || []).length;
+        console.log(refParamCount);
+        if(refParamCount > 1) {
+            var index = referrer.lastIndexOf("?");
+            serviceNameInUrl = "?" + referrer.substr(index+1);
+            currentUrl = currentUrl = serviceNameInUrl;
+            needsRedirect = true;
+        }
         if(lang === "fi") {
             for (var i = 0; i < libList.length; i++) {
                 if (referrer.indexOf(libList[i].nameEn) > -1 && libList[i].id != currentLib &&
                     libList[i].nameEn !== libList[i].nameFi) {
                     name = "?" + libList[i].nameFi;
-                    currentUrl = currentUrl.replace(/\?(.*)/g, name);
+                    currentUrl = currentUrl.replace(/\?(.*)/g, name) + serviceNameInUrl;
+                    console.log("currentUrl: " + currentUrl);
+
                     needsRedirect = true;
                 }
             }
@@ -39,7 +51,10 @@ window.addEventListener('message', function(event) {
                 if (referrer.indexOf(libList[i].nameFi) > -1 && libList[i].id != currentLib &&
                     libList[i].nameEn !== libList[i].nameFi) {
                     name = "?" + libList[i].nameEn;
-                    currentUrl = currentUrl.replace(/\?(.*)/g, name);
+
+                    currentUrl = currentUrl.replace(/\?(.*)/g, name) + serviceNameInUrl;
+
+                    console.log(currentUrl);
                     needsRedirect = true;
                 }
             }
@@ -100,7 +115,7 @@ window.addEventListener('message', function(event) {
             var currentUrl = window.location.href;
             if(data.value == currentUrl || !(currentUrl.indexOf('?') > -1)) {
                 //history.replaceState("", "", data.value);
-                history.replaceState(stateObj, data.stateTitle, data.value);
+                history.pushState(stateObj, data.stateTitle, data.value);
             }
             else {
                 //history.pushState("", "", data.value);

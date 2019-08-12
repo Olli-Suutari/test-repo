@@ -130,6 +130,14 @@ function adjustParentUrl(toAdd, type) {
     refUrl = refUrl.replace(new RegExp(toAdd,"i"), "");
     // Check for services.
     if(type !== "introduction" && type !== "contact") {
+        console.log("HEY")
+        if(toAdd == "") {
+            console.log("IS EMPTY");
+            var index = refUrl.lastIndexOf("?");
+            var serviceToRemove = "?" + refUrl.substr(index+1);
+            refUrl =  refUrl.replace(serviceToRemove, "");
+        }
+
         // Loop services and check if refUrl contains one of them, if so remove it.
         for (var i = 0; i < serviceNamesWithLinks.length; i++) {
             var serviceName = encodeVal(serviceNamesWithLinks[i]);
@@ -143,12 +151,11 @@ function adjustParentUrl(toAdd, type) {
             var serviceName = encodeVal(arrayOfServiceNamesInOppositeLang[i].name);
             if(refUrl.indexOf(serviceName) > -1) {
                 refUrl = refUrl.replace(serviceName, "");
-                stateTitle = stateTitle + " | " + arrayOfServiceNamesInOppositeLang[i].name;
+                console.log(refUrl)
             }
             var serviceNameCustom = encodeVal(arrayOfServiceNamesInOppositeLang[i].customName);
             if(refUrl.indexOf(serviceNameCustom) > -1) {
                 refUrl = refUrl.replace(serviceNameCustom, "");
-                stateTitle = stateTitle + " | " + arrayOfServiceNamesInOppositeLang[i].customName;
             }
         }
     }
@@ -175,6 +182,7 @@ function adjustParentUrl(toAdd, type) {
             else if (refUrl.indexOf(nameEn) > -1) {
                 refUrl = refUrl.replace(
                     new RegExp(nameEn,"i"), "");
+
             }
         }
     }

@@ -93,6 +93,7 @@ function asyncFetchV4Data() {
                 var customName = "";
                 if(arrayOfServices[i].name !== null) {
                     customName = arrayOfServices[i].name.toLowerCase();
+                    customName = customName.replace(/,/g, "");
                     customName = customName.replace(/ä/g, "a");
                     customName = customName.replace(/ö/g, "o");
                     customName = customName.replace(/\(/g, "");
@@ -124,6 +125,7 @@ function asyncFetchServiceNamesInOppositeLang() {
                 var customName = "";
                 if(data[i].name !== null) {
                     customName = data[i].name.toLowerCase();
+                    customName = customName.replace(/,/g, "");
                     customName = customName.replace(/ä/g, "a");
                     customName = customName.replace(/ö/g, "o");
                     customName = customName.replace(/\(/g, "");
@@ -528,12 +530,13 @@ function asyncFetchServices() {
             // Loop services and check if refUrl contains one of them and click if so.
             var toClick = "";
             var mathchFound = false;
-            console.log(serviceNamesWithLinks);
-            console.log(arrayOfServiceNamesInOppositeLang);
+            //console.log(serviceNamesWithLinks);
+            //console.log(arrayOfServiceNamesInOppositeLang);
             for (var i = 0; i < serviceNamesWithLinks.length; i++) {
                 var escapedName = serviceNamesWithLinks[i].toLowerCase();
                 escapedName = escapedName.replace(/ä/g, "a");
                 escapedName = escapedName.replace(/ö/g, "o");
+                escapedName = escapedName.replace(",", "")
                 escapedName = escapedName.replace(/\(/g, "");
                 escapedName = escapedName.replace(/\)/g, "");
                 escapedName = escapedName.replace(/_/g, " ");
@@ -547,48 +550,79 @@ function asyncFetchServices() {
                     }, 600);
                 }
             }
+            console.log(arrayOfServiceNames);
+            console.log(arrayOfServiceNamesInOppositeLang);
+            var matchingServiceLinkFound = false;
             if(!mathchFound) {
-                for (var i = 0; i < arrayOfServiceNames.length; i++) {
-                    var oppositeName = arrayOfServiceNamesInOppositeLang[i].name;
-                    if(urlUnescapeSpaces.indexOf(oppositeName) > -1) {
-                        console.log("MATCH 1 " + urlUnescapeSpaces + " == " + oppositeName);
+                for (var i = 0; i < arrayOfServiceNamesInOppositeLang.length; i++) {
+
+                    if(arrayOfServiceNamesInOppositeLang[i].customName !== "") {
+                    var oppositeCustomName = encodeVal(arrayOfServiceNamesInOppositeLang[i].customName);
+                    oppositeCustomName = oppositeCustomName.replace(/-/g, " ");
+                    oppositeCustomName = oppositeCustomName.replace(/,/g, "");
+                    if(urlUnescapeSpaces.indexOf(oppositeCustomName) > -1) {
+                        console.log("MATCH 2 " + urlUnescapeSpaces + " == " + oppositeCustomName);
                         mathchFound = true;
-                        toClick = decodeVal(arrayOfServiceNames[i].name);
-                        console.log("toClick: " + toClick);
-                        console.log(serviceNamesWithLinks)
+                        toClick = decodeVal(arrayOfServiceNames[i].customName);
+                        if(toClick == "") {
+                            toClick = decodeVal(arrayOfServiceNames[i].name)
+                        }
+                        console.log(toClick)
                         for (var t = 0; t < serviceNamesWithLinks.length; t++) {
                             var valueInLowerCase = decodeVal(serviceNamesWithLinks[t].toLowerCase());
                             if(valueInLowerCase.indexOf(toClick) > -1) {
+                                matchingServiceLinkFound = true;
                                 toClick = serviceNamesWithLinks[t];
-                                console.log(toClick)
                                 setTimeout(function(){
                                     openOnLoad = true;
                                     $("li").find('[data-name="'+ toClick +'"]').click();
                                 }, 600);
                             }
                         }
-                    }
-                    if(arrayOfServiceNamesInOppositeLang[i].customName !== "") {
-                        var oppositeCustomName = arrayOfServiceNamesInOppositeLang[i].customName;
-                        if(urlUnescapeSpaces.indexOf(oppositeCustomName) > -1) {
-                            console.log("MATCH 2 " + urlUnescapeSpaces + " == " + oppositeCustomName);
-                            mathchFound = true;
-                            toClick = decodeVal(arrayOfServiceNames[i].customName);
-                            console.log(toClick)
-                            for (var t = 0; t < serviceNamesWithLinks.length; t++) {
-                                var valueInLowerCase = decodeVal(serviceNamesWithLinks[t].toLowerCase());
-                                if(valueInLowerCase.indexOf(toClick) > -1) {
-                                    toClick = serviceNamesWithLinks[t];
-                                    setTimeout(function(){
-                                        openOnLoad = true;
-                                        $("li").find('[data-name="'+ toClick +'"]').click();
-                                    }, 600);
-                                }
-                            }
+                        console.log(matchingServiceLinkFound)
+                        // If no matching service is available to click, remove name from url.
+                        if(!matchingServiceLinkFound) {
+                            adjustParentUrl("", "service");
                         }
                     }
                 }
             }
+        }
+        if(!mathchFound) {
+            for (var i = 0; i < arrayOfServiceNames.length; i++) {
+                // Service names may contain "-" eg. Celia-library services
+                var oppositeName = encodeVal(arrayOfServiceNamesInOppositeLang[i].name);
+                oppositeName = oppositeName.replace(/-/g, " ");
+                oppositeName = oppositeName.replace(/,/g, "");
+                //console.log(oppositeName + " " + urlUnescapeSpaces)
+                if(urlUnescapeSpaces.indexOf(oppositeName) > -1) {
+                    console.log("MATCH 1 " + urlUnescapeSpaces + " == " + oppositeName);
+                    mathchFound = true;
+                    console.log(arrayOfServiceNames[i])
+                    toClick = decodeVal(arrayOfServiceNames[i].name);
+                    if(arrayOfServiceNames[i].customName !== "") {
+                        toClick = decodeVal(arrayOfServiceNames[i].customName);
+                    }
+                    for (var t = 0; t < serviceNamesWithLinks.length; t++) {
+                        var valueInLowerCase = decodeVal(serviceNamesWithLinks[t].toLowerCase());
+                        if(valueInLowerCase.indexOf(toClick) > -1) {
+                            matchingServiceLinkFound = true;
+                            toClick = serviceNamesWithLinks[t];
+                            console.log(toClick)
+                            setTimeout(function(){
+                                openOnLoad = true;
+                                $("li").find('[data-name="'+ toClick +'"]').click();
+                            }, 600);
+                        }
+                    }
+                    // If no matching service is available to click, remove name from url.
+                    if(!matchingServiceLinkFound) {
+                        console.log("DOO")
+                        adjustParentUrl();
+                    }
+                }
+            }
+        }
         }
         servicesDeferred.resolve();
     }, 1 );
@@ -1145,7 +1179,10 @@ function asyncFetchLinks() {
                         var url = images[i].node.display_url;
                         var shortcode = images[i].node.shortcode;
                         var likes = images[i].node.edge_liked_by.count;
-                        var caption = images[i].node.edge_media_to_caption.edges[0].node.text;
+                        var caption = "";
+                        if(images[i].node.edge_media_to_caption.edges[0] !== undefined) {
+                            caption = images[i].node.edge_media_to_caption.edges[0].node.text;
+                        }
                         var tagsToReplace = [];
                         var reFindTags = new RegExp(/#\S+\s*/g);
                         var reFindTagsExec = reFindTags.exec(caption);

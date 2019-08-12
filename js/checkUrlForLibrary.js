@@ -8,6 +8,8 @@ function replaceJyvaskylaLibName(replaceWith) {
     adjustParentUrl(replaceWith, 'library');
 }
 
+var oldURL = "";
+
 function asyncCheckUrlForKeskiLibrary() {
     var urlDeferred = jQuery.Deferred();
     setTimeout(function() {
@@ -23,7 +25,11 @@ function asyncCheckUrlForKeskiLibrary() {
             // *ÄÄÄÄ
             // Loop libraries and check if refUrl contains one of them and click if so.
             for (var i = 0; i < libraryList.length; i++) {
-                var escapedName = encodeVal(libraryList[i].text);
+                var escapedName = libraryList[i].text.toLowerCase();
+                escapedName = escapedName.replace(/ä/g, "a");
+                escapedName = escapedName.replace(/ö/g, "o");
+                escapedName = escapedName.replace(/\(/g, "");
+                escapedName = escapedName.replace(/\)/g, "");
                 if(urlUnescapeSpaces.indexOf(escapedName) > -1) {
                     library = libraryList[i].id;
                     matchFound = true;
@@ -120,7 +126,6 @@ function asyncCheckUrlForKeskiLibrary() {
             }
             else if(refUrl.indexOf("palok") > -1) {
                 library = 85732;
-
                 if(lang === "fi") {
                     replaceJyvaskylaLibName("palokan-aluekirjasto");
                 }
