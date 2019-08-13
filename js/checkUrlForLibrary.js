@@ -8,8 +8,6 @@ function replaceJyvaskylaLibName(replaceWith) {
     adjustParentUrl(replaceWith, 'library');
 }
 
-var oldURL = "";
-
 function asyncCheckUrlForKeskiLibrary() {
     var urlDeferred = jQuery.Deferred();
     setTimeout(function() {
@@ -20,7 +18,7 @@ function asyncCheckUrlForKeskiLibrary() {
         var matchFound = false;
         var urlUnescapeSpaces = refUrl.replace(/%20/g, " ");
         urlUnescapeSpaces = refUrl.replace(/-/g, " ");
-        console.log(urlUnescapeSpaces)
+        //console.log(urlUnescapeSpaces)
         if(!matchFound) {
             // *ÄÄÄÄ
             // Loop libraries and check if refUrl contains one of them and click if so.

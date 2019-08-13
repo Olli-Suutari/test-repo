@@ -21,14 +21,7 @@ window.addEventListener('message', function(event) {
         var name = "";
         var serviceNameInUrl = "";
         console.log("referrer: " + referrer)
-        var refParamCount = (referrer.match(/\?/g) || []).length;
-        console.log(refParamCount);
-        if(refParamCount > 1) {
-            var index = referrer.lastIndexOf("?");
-            serviceNameInUrl = "?" + referrer.substr(index+1);
-            currentUrl = currentUrl = serviceNameInUrl;
-            needsRedirect = true;
-        }
+
         if(lang === "fi") {
             for (var i = 0; i < libList.length; i++) {
                 if (referrer.indexOf(libList[i].nameEn) > -1 && libList[i].id != currentLib &&
@@ -63,11 +56,30 @@ window.addEventListener('message', function(event) {
                 needsRedirect = true;
             }
         }
-        if(needsRedirect) {
+        setTimeout(function(){
+            var refParamCount = (referrer.match(/\?/g) || []).length;
+            if(refParamCount == 2) {
+                var index = referrer.lastIndexOf("?");
+                serviceNameInUrl = "?" + referrer.substr(index+1);
+
+                var redirectUrl = currentUrl + serviceNameInUrl;
+
+                if (currentUrl.toLowerCase().indexOf(serviceNameInUrl) === -1) {
+                    currentUrl = redirectUrl;
+                    referrer = currentUrl;
+                    console.log("SET REDIRECT TO TRUE WITH: " + currentUrl);
+                    needsRedirect = true;
+                }
+
+            }
+
+        }, 50);
             setTimeout(function(){
+                if(needsRedirect) {
 
+                history.replaceState( {} , 'foo', currentUrl );
 
-                console.log("DO: " + currentUrl)
+                console.log("REDIRECT TO: " + currentUrl)
                 setTimeout(function(){
                     /* IE does not update referrer if we use history.replaceState or .pushState , thus this wont work on ie.
                     https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/10474810/
@@ -76,10 +88,10 @@ window.addEventListener('message', function(event) {
                     */
                     storedUrl = currentUrl;
                     window.location.href = currentUrl;
-                }, 6450);
+                }, 16850);
+                }
 
-            }, 50);
-        }
+            }, 350);
     }
     // Scroll to position
     else if(data.type === "scroll") {
@@ -124,7 +136,7 @@ window.addEventListener('message', function(event) {
             }
             else {
                 //history.pushState("", "", data.value);
-                history.pushState(stateObj, data.stateTitle, data.value);
+                history.replaceState(stateObj, data.stateTitle, data.value);
             }
             storedUrl = data.value;
         }

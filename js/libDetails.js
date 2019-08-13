@@ -550,8 +550,6 @@ function asyncFetchServices() {
                     }, 600);
                 }
             }
-            console.log(arrayOfServiceNames);
-            console.log(arrayOfServiceNamesInOppositeLang);
             var matchingServiceLinkFound = false;
             if(!mathchFound) {
                 for (var i = 0; i < arrayOfServiceNamesInOppositeLang.length; i++) {
