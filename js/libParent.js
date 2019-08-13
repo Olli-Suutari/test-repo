@@ -56,42 +56,28 @@ window.addEventListener('message', function(event) {
                 needsRedirect = true;
             }
         }
-        setTimeout(function(){
-            var refParamCount = (referrer.match(/\?/g) || []).length;
-            if(refParamCount == 2) {
-                var index = referrer.lastIndexOf("?");
-                serviceNameInUrl = "?" + referrer.substr(index+1);
+        var refParamCount = (referrer.match(/\?/g) || []).length;
+        if(refParamCount == 2) {
+            var index = referrer.lastIndexOf("?");
+            serviceNameInUrl = "?" + referrer.substr(index+1);
 
-                var redirectUrl = currentUrl + serviceNameInUrl;
+            var redirectUrl = currentUrl + serviceNameInUrl;
 
-                if (currentUrl.toLowerCase().indexOf(serviceNameInUrl) === -1) {
-                    currentUrl = redirectUrl;
-                    referrer = currentUrl;
-                    console.log("SET REDIRECT TO TRUE WITH: " + currentUrl);
-                    needsRedirect = true;
-                }
-
+            if (currentUrl.toLowerCase().indexOf(serviceNameInUrl) === -1) {
+                currentUrl = redirectUrl;
+                referrer = currentUrl;
+                console.log("SET REDIRECT TO TRUE WITH: " + currentUrl);
+                needsRedirect = true;
             }
 
-        }, 50);
-            setTimeout(function(){
-                if(needsRedirect) {
-
-                history.replaceState( {} , 'foo', currentUrl );
-
-                console.log("REDIRECT TO: " + currentUrl)
-                setTimeout(function(){
-                    /* IE does not update referrer if we use history.replaceState or .pushState , thus this wont work on ie.
-                    https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/10474810/
-                    Bonus: IE also loses referrer when using window.location.href = ...
-                    // https://blog.mathiaskunto.com/2012/02/20/internet-explorer-loses-referrer-when-redirecting-or-linking-with-javascript/
-                    */
-                    storedUrl = currentUrl;
-                    window.location.href = currentUrl;
-                }, 16850);
-                }
-
-            }, 350);
+        }
+        setTimeout(function(){
+            if(needsRedirect) {
+                var stateObj = { urlValue: currentUrl };
+                history.replaceState( stateObj , '', currentUrl );
+                window.location.href = currentUrl;
+            }
+        }, 100);
     }
     // Scroll to position
     else if(data.type === "scroll") {
@@ -136,7 +122,7 @@ window.addEventListener('message', function(event) {
             }
             else {
                 //history.pushState("", "", data.value);
-                history.replaceState(stateObj, data.stateTitle, data.value);
+                history.pushState(stateObj, data.stateTitle, data.value);
             }
             storedUrl = data.value;
         }

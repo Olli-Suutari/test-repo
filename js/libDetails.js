@@ -577,7 +577,6 @@ function asyncFetchServices() {
                                 }, 600);
                             }
                         }
-                        console.log(matchingServiceLinkFound)
                         // If no matching service is available to click, remove name from url.
                         if(!matchingServiceLinkFound) {
                             console.log(refUrl)
