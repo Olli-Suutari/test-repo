@@ -565,7 +565,6 @@ function asyncFetchServices() {
                         if(toClick == "") {
                             toClick = decodeVal(arrayOfServiceNames[i].name)
                         }
-                        console.log(toClick)
                         for (var t = 0; t < serviceNamesWithLinks.length; t++) {
                             var valueInLowerCase = decodeVal(serviceNamesWithLinks[t].toLowerCase());
                             if(valueInLowerCase.indexOf(toClick) > -1) {
@@ -579,7 +578,6 @@ function asyncFetchServices() {
                         }
                         // If no matching service is available to click, remove name from url.
                         if(!matchingServiceLinkFound) {
-                            console.log(refUrl)
                             var index = refUrl.lastIndexOf("?");
                             var serviceToRemove = refUrl.substr(index+1);
                             adjustParentUrl(serviceToRemove, "removeService");
@@ -594,11 +592,8 @@ function asyncFetchServices() {
                 var oppositeName = encodeVal(arrayOfServiceNamesInOppositeLang[i].name);
                 oppositeName = oppositeName.replace(/-/g, " ");
                 oppositeName = oppositeName.replace(/,/g, "");
-                //console.log(oppositeName + " " + urlUnescapeSpaces)
                 if(urlUnescapeSpaces.indexOf(oppositeName) > -1) {
-                    console.log("MATCH 1 " + urlUnescapeSpaces + " == " + oppositeName);
                     matchFound = true;
-                    console.log(arrayOfServiceNames[i])
                     toClick = decodeVal(arrayOfServiceNames[i].name);
                     if(arrayOfServiceNames[i].customName !== "") {
                         toClick = decodeVal(arrayOfServiceNames[i].customName);
@@ -608,7 +603,6 @@ function asyncFetchServices() {
                         if(valueInLowerCase.indexOf(toClick) > -1) {
                             matchingServiceLinkFound = true;
                             toClick = serviceNamesWithLinks[t];
-                            console.log(toClick)
                             setTimeout(function(){
                                 openOnLoad = true;
                                 $("li").find('[data-name="'+ toClick +'"]').click();
@@ -617,7 +611,6 @@ function asyncFetchServices() {
                     }
                     // If no matching service is available to click, remove name from url.
                     if(!matchingServiceLinkFound) {
-                        console.log("DOO")
                         adjustParentUrl();
                     }
                 }

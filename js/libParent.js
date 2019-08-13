@@ -36,13 +36,11 @@ window.addEventListener('message', function(event) {
         if(refParamCount == 2) {
             var index = referrer.lastIndexOf("?");
             serviceNameInUrl = "?" + referrer.substr(index+1);
-            console.log("serviceNameInUrl " + serviceNameInUrl)
             if(serviceNameInUrl != "?yhteystiedot" && serviceNameInUrl != "?contacts"
             && serviceNameInUrl != fiLibNameInUrl && serviceNameInUrl != enLibNameInUrl) {
                 var redirectUrl = currentUrl + serviceNameInUrl;
                 if (currentUrl.toLowerCase().indexOf(serviceNameInUrl) === -1) {
                     currentUrl = redirectUrl;
-                    console.log("SET REDIRECT TO TRUE WITH: " + currentUrl);
                     needsRedirect = true;
                 }
             }
@@ -72,7 +70,6 @@ window.addEventListener('message', function(event) {
                         libList[i].nameEn !== libList[i].nameFi) {
                         name = "?" + libList[i].nameEn;
                         currentUrl = currentUrl.replace(/\?(.*)/g, name) + serviceNameInUrl;
-                        console.log("currentUrl: " + currentUrl);
                         needsRedirect = true;
                     }
                 }

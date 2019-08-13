@@ -128,7 +128,6 @@ function adjustParentUrl(toAdd, type) {
         }
     }
     // Remove item from url, if it already exists.
-    console.log("toAdd: " + toAdd);
     refUrl = refUrl.replace(new RegExp(toAdd,"i"), "");
     if(type == "removeService") {
         toAdd = "";
@@ -161,9 +160,6 @@ function adjustParentUrl(toAdd, type) {
             if(arrayOfServiceNamesInOppositeLang[i].name !== "") {
                 var oppositeName = encodeVal(arrayOfServiceNamesInOppositeLang[i].name);
                 oppositeName = oppositeName.replace(/,/g, "");
-                if(oppositeName == "celia-kirjaston-palvelut") {
-                    console.log(oppositeName +  " <> " + refUrl)
-                }
                 if(refUrl.indexOf("?" + oppositeName) > -1) {
                     serviceMathchFound = true;
                     refUrl = refUrl.replace("?" + decodeVal(arrayOfServiceNamesInOppositeLang[i].name), "");
