@@ -24,58 +24,61 @@ window.addEventListener('message', function(event) {
         var refParamCount = (referrer.match(/\?/g) || []).length;
         console.log(referrer);
         console.log(refParamCount);
-        var libNameIsServiceParam = false;
+        var fiLibNameInUrl = "";
+        var enLibNameInUrl = "";
+        for (var i = 0; i < libList.length; i++) {
+            var libNameEn = libList[i].nameEn;
+            var libNameFi = libList[i].nameFi;
+            if (referrer.indexOf("?" + libNameEn) > -1) {
+                enLibNameInUrl = libNameEn;
+            }
+            if (referrer.indexOf("?" + libNameFi) > -1) {
+                fiLibNameInUrl = libNameFi;
+            }
+        }
         if(refParamCount == 2) {
             var index = referrer.lastIndexOf("?");
             serviceNameInUrl = "?" + referrer.substr(index+1);
             console.log("serviceNameInUrl " + serviceNameInUrl)
-            if(serviceNameInUrl != "?yhteystiedot" && serviceNameInUrl != "?contacts") {
-                for (var i = 0; i < libList.length; i++) {
-                    var libNameEn = libList[i].nameEn;
-                    var libNameFi = libList[i].nameFi;
-                    if (serviceNameInUrl.indexOf("?" + libNameEn) > -1) {
-                        libNameIsServiceParam = true;
-                    }
-                    if (serviceNameInUrl.indexOf("?" + libNameFi) > -1) {
-                        libNameIsServiceParam = true;
-                    }
-                }
-                if(!libNameIsServiceParam) {
-                    var redirectUrl = currentUrl + serviceNameInUrl;
-                    if (currentUrl.toLowerCase().indexOf(serviceNameInUrl) === -1) {
-                        currentUrl = redirectUrl;
-                        referrer = currentUrl;
-                        console.log("SET REDIRECT TO TRUE WITH: " + currentUrl);
-                        needsRedirect = true;
-                    }
+            if(serviceNameInUrl != "?yhteystiedot" && serviceNameInUrl != "?contacts"
+            && serviceNameInUrl != fiLibNameInUrl && serviceNameInUrl != enLibNameInUrl) {
+                var redirectUrl = currentUrl + serviceNameInUrl;
+                if (currentUrl.toLowerCase().indexOf(serviceNameInUrl) === -1) {
+                    currentUrl = redirectUrl;
+                    console.log("SET REDIRECT TO TRUE WITH: " + currentUrl);
+                    needsRedirect = true;
                 }
             }
         }
         if(lang === "fi") {
-            for (var i = 0; i < libList.length; i++) {
-                if (referrer.indexOf(libList[i].nameEn) > -1 && libList[i].id != currentLib &&
-                    libList[i].nameEn !== libList[i].nameFi) {
-                    name = "?" + libList[i].nameFi;
-                    currentUrl = currentUrl.replace(/\?(.*)/g, name) + serviceNameInUrl;
-                    console.log("currentUrl: " + currentUrl);
-                    needsRedirect = true;
+            if(enLibNameInUrl != "") {
+                for (var i = 0; i < libList.length; i++) {
+                    if (enLibNameInUrl.indexOf(libList[i].nameEn) > -1 && libList[i].id != currentLib &&
+                        libList[i].nameEn !== libList[i].nameFi) {
+                        name = "?" + libList[i].nameFi;
+                        currentUrl = currentUrl.replace(/\?(.*)/g, name) + serviceNameInUrl;
+                        console.log("currentUrl: " + currentUrl);
+                        needsRedirect = true;
+                    }
                 }
             }
             if (referrer.indexOf("contacts") > -1) {
                 if(currentUrl.indexOf("yhteystiedot") === -1) {
                     currentUrl = currentUrl + "?yhteystiedot";
-                    //currentUrl = currentUrl.replace(/(contacts)/g, "yhteystiedot");
                     needsRedirect = true;
                 }
             }
         }
         else if(lang === "en") {
-            for (var i = 0; i < libList.length; i++) {
-                if (referrer.indexOf(libList[i].nameFi) > -1 && libList[i].id != currentLib &&
-                    libList[i].nameEn !== libList[i].nameFi) {
-                    name = "?" + libList[i].nameEn;
-                    currentUrl = currentUrl.replace(/\?(.*)/g, name) + serviceNameInUrl;
-                    needsRedirect = true;
+            if(fiLibNameInUrl != "") {
+                for (var i = 0; i < libList.length; i++) {
+                    if (fiLibNameInUrl.indexOf(libList[i].nameFi) > -1 && libList[i].id != currentLib &&
+                        libList[i].nameEn !== libList[i].nameFi) {
+                        name = "?" + libList[i].nameEn;
+                        currentUrl = currentUrl.replace(/\?(.*)/g, name) + serviceNameInUrl;
+                        console.log("currentUrl: " + currentUrl);
+                        needsRedirect = true;
+                    }
                 }
             }
             if (referrer.indexOf("yhteystiedot") > -1) {
