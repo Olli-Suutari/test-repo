@@ -127,30 +127,55 @@ function adjustParentUrl(toAdd, type) {
         }
     }
     // Remove item from url, if it already exists.
+    console.log("toAdd: " + toAdd);
     refUrl = refUrl.replace(new RegExp(toAdd,"i"), "");
     if(type == "removeService") {
         toAdd = "";
     }
-    // Check for services.
-    if(type !== "introduction" && type !== "contact" && type !== "removeService") {
-        // Loop services and check if refUrl contains one of them, if so remove it.
-        for (var i = 0; i < serviceNamesWithLinks.length; i++) {
-            var serviceName = encodeVal(serviceNamesWithLinks[i]);
-            if(refUrl.indexOf(serviceName) > -1) {
-                refUrl = refUrl.replace(serviceName, "");
-                stateTitle = stateTitle + " | " + serviceNamesWithLinks[i];
+
+    // Cleanup any potential service names.
+    var serviceMathchFound = false;
+    for (var i = 0; i < arrayOfServiceNamesInOppositeLang.length; i++) {
+        if(arrayOfServiceNamesInOppositeLang[i].customName !== "") {
+            var oppositeCustomName = encodeVal(arrayOfServiceNamesInOppositeLang[i].customName);
+            oppositeCustomName = oppositeCustomName.replace(/,/g, "");
+            if(refUrl.indexOf("?" + oppositeCustomName) > -1) {
+                serviceMathchFound = true;
+                refUrl = refUrl.replace("?" + decodeVal(arrayOfServiceNamesInOppositeLang[i].customName), "");
             }
         }
-        // Loop services and check if refUrl contains one of them, if so remove it.
-        for (var i = 0; i < arrayOfServiceNamesInOppositeLang.length; i++) {
-            var serviceName = encodeVal(arrayOfServiceNamesInOppositeLang[i].name);
-            if(refUrl.indexOf(serviceName) > -1) {
-                refUrl = refUrl.replace(serviceName, "");
-                console.log(refUrl)
+        if(!serviceMathchFound) {
+            if(arrayOfServiceNamesInOppositeLang[i].name !== "") {
+                var oppositeName = encodeVal(arrayOfServiceNamesInOppositeLang[i].name);
+                oppositeName = oppositeName.replace(/,/g, "");
+                if(oppositeName == "celia-kirjaston-palvelut") {
+                    console.log(oppositeName +  " <> " + refUrl)
+                }
+                if(refUrl.indexOf("?" + oppositeName) > -1) {
+                    serviceMathchFound = true;
+                    refUrl = refUrl.replace("?" + decodeVal(arrayOfServiceNamesInOppositeLang[i].name), "");
+                }
             }
-            var serviceNameCustom = encodeVal(arrayOfServiceNamesInOppositeLang[i].customName);
-            if(refUrl.indexOf(serviceNameCustom) > -1) {
-                refUrl = refUrl.replace(serviceNameCustom, "");
+        }
+    }
+    serviceMathchFound = false;
+    for (var i = 0; i < arrayOfServiceNames.length; i++) {
+        if(arrayOfServiceNames[i].customName !== "") {
+            var oppositeCustomName = encodeVal(arrayOfServiceNames[i].customName);
+            oppositeCustomName = oppositeCustomName.replace(/,/g, "");
+            if(refUrl.indexOf("?" + oppositeCustomName) > -1) {
+                serviceMathchFound = true;
+                refUrl = refUrl.replace("?" + decodeVal(arrayOfServiceNames[i].customName), "");
+            }
+        }
+        if(!serviceMathchFound) {
+            if(arrayOfServiceNames[i].name !== "") {
+                var oppositeName = encodeVal(arrayOfServiceNames[i].name);
+                oppositeName = oppositeName.replace(/,/g, "");
+                if(refUrl.indexOf("?" + oppositeName) > -1) {
+                    serviceMathchFound = true;
+                    refUrl = refUrl.replace("?" + decodeVal(arrayOfServiceNames[i].name), "");
+                }
             }
         }
     }
@@ -204,7 +229,6 @@ function adjustParentUrl(toAdd, type) {
     refUrl = refUrl.replace(/\?$/, '');
     refUrl = refUrl.replace(/=$/, '');
     try {
-        console.log("SEND PARENT: " + refUrl);
         parent.postMessage({value: refUrl, stateTitle: stateTitle, type: 'url'}, '*');
     }
     catch (e) {

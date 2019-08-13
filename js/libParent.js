@@ -20,8 +20,6 @@ window.addEventListener('message', function(event) {
         var needsRedirect = false;
         var name = "";
         var serviceNameInUrl = "";
-        console.log("referrer: " + referrer)
-
         if(lang === "fi") {
             for (var i = 0; i < libList.length; i++) {
                 if (referrer.indexOf(libList[i].nameEn) > -1 && libList[i].id != currentLib &&
@@ -43,10 +41,7 @@ window.addEventListener('message', function(event) {
                 if (referrer.indexOf(libList[i].nameFi) > -1 && libList[i].id != currentLib &&
                     libList[i].nameEn !== libList[i].nameFi) {
                     name = "?" + libList[i].nameEn;
-
                     currentUrl = currentUrl.replace(/\?(.*)/g, name) + serviceNameInUrl;
-
-                    console.log(currentUrl);
                     needsRedirect = true;
                 }
             }

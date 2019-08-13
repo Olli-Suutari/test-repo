@@ -87,7 +87,6 @@ function asyncFetchV4Data() {
             }
             description = data.description;
             transitInfo = data.transitInfo;
-
             for (var i = 0; i < arrayOfServices.length; i++) {
                 var name = arrayOfServices[i].standardName.toLowerCase();
                 var customName = "";
@@ -176,6 +175,14 @@ function asyncGenerateGenericDetails() {
         }
         // Transit details
         if (transitIsEmpty) {
+            // There is a bug that is hard to re-produce where the generate UI functions would be triggered even though the data is still null. It may be linked to slow networks. As a workaround, we reload the page if address details are null. TO DO: Better fix.
+            if(address == null) {
+                if (!window.location.hash) {
+                    window.location.href = window.location.href;
+                } else {
+                    window.location.reload();
+                }
+            }
             var cityName = address.city;
             if(coordinates != null && address.street != null && cityName != null) {
                 transitIsEmpty = false;
@@ -197,6 +204,14 @@ function asyncGenerateGenericDetails() {
                     infoText = i18n.get("Navigation to location");
                 }
                 $('#transitBody').append('<p><a target="_blank" href="' + linkToTransitInfo + '">' + infoText + '</a></p>')
+            }
+            if(transitInfo == null) {
+                console.log("ERROR")
+                if (!window.location.hash) {
+                    window.location.href = window.location.href;
+                } else {
+                    window.location.reload();
+                }
             }
             if (transitInfo.buses != null && transitInfo.buses !== "") {
                 transitIsEmpty = false;
@@ -531,7 +546,8 @@ function asyncFetchServices() {
             var toClick = "";
             var mathchFound = false;
             //console.log(serviceNamesWithLinks);
-            //console.log(arrayOfServiceNamesInOppositeLang);
+            console.log(arrayOfServiceNames);
+            console.log(arrayOfServiceNamesInOppositeLang);
             for (var i = 0; i < serviceNamesWithLinks.length; i++) {
                 var escapedName = serviceNamesWithLinks[i].toLowerCase();
                 escapedName = escapedName.replace(/ä/g, "a");
@@ -553,13 +569,11 @@ function asyncFetchServices() {
             var matchingServiceLinkFound = false;
             if(!mathchFound) {
                 for (var i = 0; i < arrayOfServiceNamesInOppositeLang.length; i++) {
-
                     if(arrayOfServiceNamesInOppositeLang[i].customName !== "") {
                     var oppositeCustomName = encodeVal(arrayOfServiceNamesInOppositeLang[i].customName);
                     oppositeCustomName = oppositeCustomName.replace(/-/g, " ");
                     oppositeCustomName = oppositeCustomName.replace(/,/g, "");
                     if(urlUnescapeSpaces.indexOf(oppositeCustomName) > -1) {
-                        console.log("MATCH 2 " + urlUnescapeSpaces + " == " + oppositeCustomName);
                         mathchFound = true;
                         toClick = decodeVal(arrayOfServiceNames[i].customName);
                         if(toClick == "") {
@@ -582,7 +596,7 @@ function asyncFetchServices() {
                             console.log(refUrl)
                             var index = refUrl.lastIndexOf("?");
                             var serviceToRemove = refUrl.substr(index+1);
-                            adjustParentUrl(serviceToRemove.toString(), "removeService");
+                            adjustParentUrl(serviceToRemove, "removeService");
                         }
                     }
                 }
