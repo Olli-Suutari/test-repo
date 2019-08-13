@@ -176,7 +176,7 @@ function asyncGenerateGenericDetails() {
         // Transit details
         if (transitIsEmpty) {
             // There is a bug that is hard to re-produce where the generate UI functions would be triggered even though the data is still null. It may be linked to slow networks. As a workaround, we reload the page if address details are null. TO DO: Better fix.
-            if(address == null) {
+            if(address == null || transitInfo == null || buildingInfo == null) {
                 fetchInformation(lang, library);
                 return;
             }
@@ -201,11 +201,6 @@ function asyncGenerateGenericDetails() {
                     infoText = i18n.get("Navigation to location");
                 }
                 $('#transitBody').append('<p><a target="_blank" href="' + linkToTransitInfo + '">' + infoText + '</a></p>')
-            }
-            if(transitInfo == null) {
-                console.log("ERROR")
-                fetchInformation(lang, library)
-                return;
             }
             if (transitInfo.buses != null && transitInfo.buses !== "") {
                 transitIsEmpty = false;

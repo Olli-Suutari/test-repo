@@ -20,10 +20,7 @@ window.addEventListener('message', function(event) {
         var needsRedirect = false;
         var name = "";
         var serviceNameInUrl = "";
-
         var refParamCount = (referrer.match(/\?/g) || []).length;
-        console.log(referrer);
-        console.log(refParamCount);
         var fiLibNameInUrl = "";
         var enLibNameInUrl = "";
         for (var i = 0; i < libList.length; i++) {
@@ -57,7 +54,6 @@ window.addEventListener('message', function(event) {
                         libList[i].nameEn !== libList[i].nameFi) {
                         name = "?" + libList[i].nameFi;
                         currentUrl = currentUrl.replace(/\?(.*)/g, name) + serviceNameInUrl;
-                        console.log("currentUrl: " + currentUrl);
                         needsRedirect = true;
                     }
                 }
