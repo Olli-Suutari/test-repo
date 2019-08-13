@@ -177,11 +177,8 @@ function asyncGenerateGenericDetails() {
         if (transitIsEmpty) {
             // There is a bug that is hard to re-produce where the generate UI functions would be triggered even though the data is still null. It may be linked to slow networks. As a workaround, we reload the page if address details are null. TO DO: Better fix.
             if(address == null) {
-                if (!window.location.hash) {
-                    window.location.href = window.location.href;
-                } else {
-                    window.location.reload();
-                }
+                fetchInformation(lang, library);
+                return;
             }
             var cityName = address.city;
             if(coordinates != null && address.street != null && cityName != null) {
@@ -207,11 +204,8 @@ function asyncGenerateGenericDetails() {
             }
             if(transitInfo == null) {
                 console.log("ERROR")
-                if (!window.location.hash) {
-                    window.location.href = window.location.href;
-                } else {
-                    window.location.reload();
-                }
+                fetchInformation(lang, library)
+                return;
             }
             if (transitInfo.buses != null && transitInfo.buses !== "") {
                 transitIsEmpty = false;
@@ -544,10 +538,7 @@ function asyncFetchServices() {
             urlUnescapeSpaces = urlUnescapeSpaces.replace(/\)/g, "");
             // Loop services and check if refUrl contains one of them and click if so.
             var toClick = "";
-            var mathchFound = false;
-            //console.log(serviceNamesWithLinks);
-            console.log(arrayOfServiceNames);
-            console.log(arrayOfServiceNamesInOppositeLang);
+            var matchFound = false;
             for (var i = 0; i < serviceNamesWithLinks.length; i++) {
                 var escapedName = serviceNamesWithLinks[i].toLowerCase();
                 escapedName = escapedName.replace(/ä/g, "a");
@@ -558,7 +549,7 @@ function asyncFetchServices() {
                 escapedName = escapedName.replace(/_/g, " ");
                 escapedName = escapedName.replace(/-/g, " ");
                 if(urlUnescapeSpaces.indexOf(escapedName) > -1) {
-                    mathchFound = true;
+                    matchFound = true;
                     toClick = serviceNamesWithLinks[i];
                     setTimeout(function(){
                         openOnLoad = true;
@@ -567,14 +558,14 @@ function asyncFetchServices() {
                 }
             }
             var matchingServiceLinkFound = false;
-            if(!mathchFound) {
+            if(!matchFound) {
                 for (var i = 0; i < arrayOfServiceNamesInOppositeLang.length; i++) {
                     if(arrayOfServiceNamesInOppositeLang[i].customName !== "") {
                     var oppositeCustomName = encodeVal(arrayOfServiceNamesInOppositeLang[i].customName);
                     oppositeCustomName = oppositeCustomName.replace(/-/g, " ");
                     oppositeCustomName = oppositeCustomName.replace(/,/g, "");
                     if(urlUnescapeSpaces.indexOf(oppositeCustomName) > -1) {
-                        mathchFound = true;
+                        matchFound = true;
                         toClick = decodeVal(arrayOfServiceNames[i].customName);
                         if(toClick == "") {
                             toClick = decodeVal(arrayOfServiceNames[i].name)
@@ -602,7 +593,7 @@ function asyncFetchServices() {
                 }
             }
         }
-        if(!mathchFound) {
+        if(!matchFound) {
             for (var i = 0; i < arrayOfServiceNames.length; i++) {
                 // Service names may contain "-" eg. Celia-library services
                 var oppositeName = encodeVal(arrayOfServiceNamesInOppositeLang[i].name);
@@ -611,7 +602,7 @@ function asyncFetchServices() {
                 //console.log(oppositeName + " " + urlUnescapeSpaces)
                 if(urlUnescapeSpaces.indexOf(oppositeName) > -1) {
                     console.log("MATCH 1 " + urlUnescapeSpaces + " == " + oppositeName);
-                    mathchFound = true;
+                    matchFound = true;
                     console.log(arrayOfServiceNames[i])
                     toClick = decodeVal(arrayOfServiceNames[i].name);
                     if(arrayOfServiceNames[i].customName !== "") {

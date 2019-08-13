@@ -20,6 +20,37 @@ window.addEventListener('message', function(event) {
         var needsRedirect = false;
         var name = "";
         var serviceNameInUrl = "";
+
+        var refParamCount = (referrer.match(/\?/g) || []).length;
+        console.log(referrer);
+        console.log(refParamCount);
+        var libNameIsServiceParam = false;
+        if(refParamCount == 2) {
+            var index = referrer.lastIndexOf("?");
+            serviceNameInUrl = "?" + referrer.substr(index+1);
+            console.log("serviceNameInUrl " + serviceNameInUrl)
+            if(serviceNameInUrl != "?yhteystiedot" && serviceNameInUrl != "?contacts") {
+                for (var i = 0; i < libList.length; i++) {
+                    var libNameEn = libList[i].nameEn;
+                    var libNameFi = libList[i].nameFi;
+                    if (serviceNameInUrl.indexOf("?" + libNameEn) > -1) {
+                        libNameIsServiceParam = true;
+                    }
+                    if (serviceNameInUrl.indexOf("?" + libNameFi) > -1) {
+                        libNameIsServiceParam = true;
+                    }
+                }
+                if(!libNameIsServiceParam) {
+                    var redirectUrl = currentUrl + serviceNameInUrl;
+                    if (currentUrl.toLowerCase().indexOf(serviceNameInUrl) === -1) {
+                        currentUrl = redirectUrl;
+                        referrer = currentUrl;
+                        console.log("SET REDIRECT TO TRUE WITH: " + currentUrl);
+                        needsRedirect = true;
+                    }
+                }
+            }
+        }
         if(lang === "fi") {
             for (var i = 0; i < libList.length; i++) {
                 if (referrer.indexOf(libList[i].nameEn) > -1 && libList[i].id != currentLib &&
@@ -31,9 +62,11 @@ window.addEventListener('message', function(event) {
                 }
             }
             if (referrer.indexOf("contacts") > -1) {
-                currentUrl = currentUrl + "?yhteystiedot";
-                //currentUrl = currentUrl.replace(/(contacts)/g, "yhteystiedot");
-                needsRedirect = true;
+                if(currentUrl.indexOf("yhteystiedot") === -1) {
+                    currentUrl = currentUrl + "?yhteystiedot";
+                    //currentUrl = currentUrl.replace(/(contacts)/g, "yhteystiedot");
+                    needsRedirect = true;
+                }
             }
         }
         else if(lang === "en") {
@@ -46,25 +79,11 @@ window.addEventListener('message', function(event) {
                 }
             }
             if (referrer.indexOf("yhteystiedot") > -1) {
-                currentUrl = currentUrl + "?contacts";
-                //currentUrl = currentUrl.replace(/(contacts)/g, "yhteystiedot");
-                needsRedirect = true;
+                if(currentUrl.indexOf("contacts") === -1) {
+                    currentUrl = currentUrl + "?contacts";
+                    needsRedirect = true;
+                }
             }
-        }
-        var refParamCount = (referrer.match(/\?/g) || []).length;
-        if(refParamCount == 2) {
-            var index = referrer.lastIndexOf("?");
-            serviceNameInUrl = "?" + referrer.substr(index+1);
-
-            var redirectUrl = currentUrl + serviceNameInUrl;
-
-            if (currentUrl.toLowerCase().indexOf(serviceNameInUrl) === -1) {
-                currentUrl = redirectUrl;
-                referrer = currentUrl;
-                console.log("SET REDIRECT TO TRUE WITH: " + currentUrl);
-                needsRedirect = true;
-            }
-
         }
         setTimeout(function(){
             if(needsRedirect) {

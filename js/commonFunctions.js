@@ -104,6 +104,7 @@ function adjustParentHeight(delay, elementPosY) {
 /* If iframe has no referrerpolicy="unsafe-url" attribute, FF private mode blocks url from passing to iframe.
   https://gist.github.com/olli-suutari-jkl/8d6ccbc7d3c4e3b563bd5b7cbee095e2
  */
+var checkedUrlForLibNamesInOppositeLang = false;
 function adjustParentUrl(toAdd, type) {
     refUrl = encodeVal(refUrl);
     // Sometimes refurl is set to github when paging back or forwards, reset in case so...
@@ -132,7 +133,19 @@ function adjustParentUrl(toAdd, type) {
     if(type == "removeService") {
         toAdd = "";
     }
-
+    // Remove lib name in opposite language, if any are present. If this is not done, it could sometimes result in infinite loop...
+    if(!checkedUrlForLibNamesInOppositeLang) {
+        for (var i = 0; i < libListMultiLang.length; i++) {
+            var libName = libListMultiLang[i].nameEn;
+            if(lang == "en") {
+                libName = libListMultiLang[i].nameFi;
+            }
+            if (refUrl.indexOf("?" + libName) > -1) {
+                refUrl = refUrl.replace("?" + libName, "");
+            }
+        }
+        checkedUrlForLibNamesInOppositeLang = true;
+    }
     // Cleanup any potential service names.
     var serviceMathchFound = false;
     for (var i = 0; i < arrayOfServiceNamesInOppositeLang.length; i++) {
@@ -179,8 +192,23 @@ function adjustParentUrl(toAdd, type) {
             }
         }
     }
+    if(lang === "fi" && toAdd == "yhteystiedot") {
+        var countYhteystiedotInUrl = (refUrl.match(/yhteystiedot/g) || []).length;
+        if(countYhteystiedotInUrl !== 0) {
+            toAdd = "";
+        }
+    }
+    else if(lang === "en" && toAdd == "contacts") {
+        refUrl = refUrl.replace(/yhteystiedot/g, "");
+        var countContactsInUrl = (refUrl.match(/contacts/g) || []).length;
+        if(countContactsInUrl !== 0 && toAdd == "contacts") {
+            toAdd = "";
+        }
+    }
     if(lang === "fi") {
         refUrl = refUrl.replace(/contacts/g, "");
+        var countYhteystiedotInUrl = (refUrl.match(/yhteystiedot/g) || []).length;
+
     }
     else if(lang === "en") {
         refUrl = refUrl.replace(/yhteystiedot/g, "");
