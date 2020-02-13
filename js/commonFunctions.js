@@ -1,6 +1,7 @@
 var isIOS = false;
 var isIOSMobile = false;
 var isIE = false;
+var bodyWidth = 0;
 
 // Remove httml & www from url and / # from the end.
 function generatePrettyUrl (url) {
@@ -39,14 +40,143 @@ function generateMailToLink(string) {
     return result;
 }
 
+
+function generateIgLinks(string) {
+    var result = "";
+    string = '<p>' + string + '</p>';
+    $(string).filter(function () {
+        // https://stackoverflow.com/questions/6038061/regular-expression-to-find-urls-within-a-string
+        var linkPattern = /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/g;
+        var matched_str = $(this).html().match(linkPattern);
+        if ( matched_str ) {
+            var text = $(this).html();
+            $(this).html(text);
+            result = $(this).html(text)[0].innerHTML;
+            return $(this)
+        }
+    });
+    if(result == "") {
+        result = string;
+    }
+    else {
+        // If the result contains a link, the layout is weird unless we wrap it to <p>
+        result = '<p>' + result + '</p>';
+    }
+    return result;
+}
+
 // Capitalize the 1st letter of a string.
 function capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+function capitalizeEmail(string) {
+    var stringSplitted = string.split("@");
+    var splittedByDots = stringSplitted[0].split(".");
+    string = "";
+    for (var i = 0; i < splittedByDots.length; i++) {
+        string = string + capitalize(splittedByDots[i]) + ".";
+    }
+    string = string.slice(0, -1) + '@';
+    string = string + stringSplitted[1];
+    return string;
+}
+// Function for adding "." to a string if the last character is not "?", "." or "!".
+function addMissingDot(string) {
+    var lastChar = string[string.length -1];
+    // Remove any potential " " chars from the end of the string.
+    while (lastChar == " ") {
+        string = string.slice(0, -1);
+        lastChar = string[string.length -1];
+    }
+    if(lastChar != "." && lastChar != "!" && lastChar != "?") {
+        string = string + ".";
+    }
+    return string;
+}
+
+// sanitizedHTMLString parses characters that would break html.
+function sanitizedHTMLString(string) {
+    string = string.replace('"', '&quot;');
+    string = string.replace("'", '&apos;');
+    string = string.replace("&", '&amp;');
+    string = string.replace("<", '&lt;');
+    string = string.replace(">", '&gt;');
+    return string;
+}
+
 // Function for checking if element is empty.
 function isEmpty( el ){
     return !$.trim(el.html())
+}
+
+function replaceQuotesWithServiceAndLibraryLinks(string, isModal) {
+    if (string.indexOf("blockquote") !== -1) {
+        var linksToServices = [];
+        var reFindLinks = new RegExp(/<blockquote>.*?(<p>.*?<\/p>).*?<\/blockquote>/g);
+        var reFindLinksExec = reFindLinks.exec(string);
+        while (reFindLinksExec != null) {
+            var textInside = reFindLinksExec[0].replace("<blockquote>", "");
+            textInside = textInside.replace("</blockquote>","");
+            textInside = textInside.replace("<p>","");
+            textInside = textInside.replace("</p>","");
+            textInside = textInside.toLowerCase();
+            textInside = textInside.replace(/ä/g, "a");
+            textInside = textInside.replace(/ö/g, "o");
+            textInside = textInside.replace(/\(/g, "");
+            textInside = textInside.replace(/\)/g, "");
+            textInside = textInside.replace(/_/g, " ");
+            textInside = textInside.replace(/-/g, " ");
+            var matchFound = false;
+            for (var i = 0; i < serviceNamesWithLinks.length; i++) {
+                var escapedName = serviceNamesWithLinks[i].toLowerCase();
+                escapedName = escapedName.replace(/ä/g, "a");
+                escapedName = escapedName.replace(/ö/g, "o");
+                escapedName = escapedName.replace(/\(/g, "");
+                escapedName = escapedName.replace(/\)/g, "");
+                escapedName = escapedName.replace(/_/g, " ");
+                escapedName = escapedName.replace(/-/g, " ");
+                if(textInside.indexOf(escapedName) > -1) {
+                    var linkToService = reFindLinksExec[0].replace('<p>',
+                        '<a class="service-link-in-modal" data-name="' + serviceNamesWithLinks[i] + '" href="javascript:void(0);">');
+                    if(!isModal) {
+                        linkToService = reFindLinksExec[0].replace('<p>',
+                            '<a class="service-link-in-description" data-name="' + serviceNamesWithLinks[i] + '" href="javascript:void(0);">');
+                    }
+                    linkToService = linkToService.replace('</p>', '</a>');
+                    linksToServices.push({position: reFindLinksExec[0], iframe: linkToService});
+                    matchFound = true;
+                }
+            }
+            if(!matchFound) {
+                for (var i = 0; i < libListMultiLang.length; i++) {
+                    if(textInside.indexOf(libListMultiLang[i].nameFi.replace('-', ' ')) > -1
+                        || textInside.indexOf(libListMultiLang[i].nameEn) > -1) {
+                        matchFound = true;
+                        var libName = libListMultiLang[i].nameFi;
+                        if(lang == "en") {
+                            libName = libListMultiLang[i].nameEn;
+                        }
+                        var linkToService = reFindLinksExec[0].replace('<p>',
+                            '<a class="library-link-in-description" data-lib="' + libListMultiLang[i].id + '" href="javascript:void(0);">');
+                        if(isModal) {
+                            linkToService = reFindLinksExec[0].replace('<p>',
+                                '<a class="library-link-in-modal" data-lib="' + libListMultiLang[i].id + '" href="javascript:void(0);">');
+                        }
+                        linkToService = linkToService.replace('</p>', '</a>');
+                        linksToServices.push({position: reFindLinksExec[0], iframe: linkToService});
+                    }
+                }
+            }
+            // Loop all links.
+            reFindLinksExec = reFindLinks.exec(string);
+        }
+        // Loop string and replace.
+        for (var i = 0; i < linksToServices.length; i++) {
+            string = string.replace(linksToServices[i].position, linksToServices[i].iframe);
+        }
+    }
+    return string;
 }
 
 // Timer  is used to stop onresize event from firing after adjustment is done by triggering the function manually.
@@ -90,6 +220,15 @@ function adjustParentHeight(delay, elementPosY) {
                     newHeight = newHeight + 3000;
                 }
             }
+            var popOverHeader = $('.popover-header');
+            if(popOverHeader.length) {
+                if(popOverHeader[0].innerText.toLowerCase().indexOf("celia") > -1) {
+                    var popOverHeight = $('.popover').height();
+                    if(newHeight < height) {
+                        newHeight = newHeight + popOverHeight;
+                    }
+                }
+            }
             if(newHeight !== height) {
                 parent.postMessage({value: newHeight, type: 'resize'}, '*');
             }
@@ -127,9 +266,11 @@ function adjustParentUrl(toAdd, type) {
             stateTitle = "Libraries"
         }
     }
-    // Remove item from url, if it already exists.
-    refUrl = refUrl.replace(new RegExp(toAdd,"i"), "");
-    if(type == "removeService") {
+    // Remove item from url, if it already exists. Library name and service names can both contain "omatoimikirjasto"
+    if(toAdd !== "omatoimikirjasto") {
+        refUrl = refUrl.replace(new RegExp(toAdd,"i"), "");
+    }
+    if(type == "cleanupUrl") {
         toAdd = "";
     }
     // Remove lib name in opposite language, if any are present. If this is not done, it could sometimes result in infinite loop...
@@ -226,7 +367,6 @@ function adjustParentUrl(toAdd, type) {
             else if (refUrl.indexOf(nameEn) > -1) {
                 refUrl = refUrl.replace(
                     new RegExp(nameEn,"i"), "");
-
             }
         }
     }
@@ -252,6 +392,12 @@ function adjustParentUrl(toAdd, type) {
     // Remove ?, = if last character.
     refUrl = refUrl.replace(/\?$/, '');
     refUrl = refUrl.replace(/=$/, '');
+    // In Finna, all things within "Content" are case-sensitive... :)
+    if(refUrl.indexOf('finna') > -1) {
+        if(refUrl.indexOf('/content/') > -1) {
+            refUrl = refUrl.replace('/content/', "/Content/");
+        }
+    }
     try {
         parent.postMessage({value: refUrl, stateTitle: stateTitle, type: 'url'}, '*');
     }
@@ -285,6 +431,7 @@ $(document).ready(function() {
     if(homePage || largeSchedules) {
         return;
     }
+    bodyWidth = $('body').width();
     // Add event listener for resizing the window, adjust parent when done so.
     // https://stackoverflow.com/questions/5489946/jquery-how-to-wait-for-the-end-of-resize-event-and-only-then-perform-an-ac
     var rtime;

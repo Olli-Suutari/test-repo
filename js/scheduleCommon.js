@@ -2,6 +2,7 @@
 var isLibaryList = false;
 // isScheduleEmpty is is used for displaying error message if no description or schedules is found.
 var isScheduleEmpty = false;
+var mobileSchedulesMoved = false;
 moment.locale(lang);
 var HHmmFormat = 'HH:mm';
 // Check that generic and special descriptions are not the same.
@@ -39,7 +40,6 @@ function generateLinks(string) {
     var result = "";
     string = '<p>' + string + '</p>';
     $(string).filter(function () {
-        var html = $(this).html();
         // https://stackoverflow.com/questions/6038061/regular-expression-to-find-urls-within-a-string
         var linkPattern = /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/g;
         var matched_str = $(this).html().match(linkPattern);
@@ -125,7 +125,7 @@ function bindScheduleKeyNavigation() {
 function detectswipe(el,func) {
     var swipe_det = new Object();
     swipe_det.sX = 0; swipe_det.sY = 0; swipe_det.eX = 0; swipe_det.eY = 0;
-    var min_x = 55;  // min x swipe for horizontal swipe
+    var min_x = 70;  // min x swipe for horizontal swipe
     var max_x = 1;  // max x difference for vertical swipe (ignored)
     var min_y = 1;  // min y swipe for vertical swipe (ignored)
     var max_y = 45;  // max y difference for horizontal swipe
@@ -203,6 +203,18 @@ $(document).ready(function() {
     // Detect left/right on schedules or move backwards/forwards in slider if in fullscreen mode or when hovering small slider..
     $(document).keydown(function(e) {
         switch(e.key) {
+            case " ": // Space detection for playing stopping Instagram videos within the slider.
+                // Slider hovering is not really used with schedules, but it's better? to do it here instead.
+                if(!$("#sliderBox").hasClass("small-slider") || $("#sliderBox").hasClass("hovering")
+                    || $("#sliderPrevious").is(":focus") || $("#sliderForward").is(":focus")) {
+                    if($('.rslides1_on').find('div.video-controls').length !== 0) {
+                        $("#sliderPrevious").blur();
+                        $("#sliderForward").blur();
+                        $('.play-stop-icon').focus();
+                        $('.play-stop-icon').click();
+                    }
+                }
+            break;
             case "ArrowLeft": // left
                 if($(".library-schedules").hasClass("hovering")
                     || $("#lastWeek").is(":focus") || $("#nextWeek").is(":focus")) {
@@ -226,7 +238,7 @@ $(document).ready(function() {
                         $("#navContacts").click();
                     }
                 }
-                break;
+            break;
             case "ArrowRight": // right
                 if($(".library-schedules").hasClass("hovering")
                     || $("#lastWeek").is(":focus") || $("#nextWeek").is(":focus")) {
@@ -251,7 +263,7 @@ $(document).ready(function() {
                         $("#navPalvelut").click();
                     }
                 }
-                break;
+            break;
             default: return; // exit this handler for other keys
         }
     });

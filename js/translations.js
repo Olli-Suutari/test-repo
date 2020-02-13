@@ -39,6 +39,14 @@ var dict = {
         fi: "Lisätietoja saavutettavuudesta",
         en: "Additional accessibility information",
     },
+    "Celia title": {
+        fi: "Celia-kirjaston palvelut",
+        en: "Celia-library services",
+    },
+    "Celia info": {
+        fi: "Celia tuottaa ja välittää kirjallisuutta lukemisesteisille saavutettavassa muodossa, mm. äänikirjoina ja pistekirjoina. Kirjastossa voit rekisteröityä Celian verkkopalvelun asiakkaaksi, lisätietoja tarjolla olevista palveluista saat ottamalla yhteyttä kirjastoon.",
+        en: "Celia produces and distributes literature in accessible formats, such as talking books and braille books. Registration for the Celia services is available here, for further details of available services, please contact the library.",
+    },
     "Accessible entrance": {
         fi: "Esteetön sisäänpääsy",
         en: "Accessible entrance",
@@ -112,20 +120,20 @@ var dict = {
         en: "Self-service",
     },
     "Previous slide": {
-        fi: "Siirry edelliseen kuvaan.",
-        en: "Slide to the previous picture.",
+        fi: "Siirry edelliseen.",
+        en: "Slide to the previous.",
     },
     "Next slide": {
-        fi: "Siirry seuraavaan kuvaan.",
-        en: "Slide to the next picture.",
+        fi: "Siirry seuraavaan.",
+        en: "Slide to the next.",
     },
     "Stop automatic playback": {
-        fi: "Pysäytä kuvien automaattinen toisto.",
-        en: "Stop the automatic playback of pictures.",
+        fi: "Pysäytä automaattinen toisto.",
+        en: "Stop the automatic playback.",
     },
     "Start automatic playback": {
-        fi: "Käynnistä kuvien automaattinen toisto.",
-        en: "Start the automatic playback of pictures.",
+        fi: "Käynnistä automaattinen toisto.",
+        en: "Start the automatic playback.",
     },
     "Pictures from the library": {
         fi: "Kuvia kirjastolta",
@@ -136,16 +144,16 @@ var dict = {
         en: "Picture from the library",
     },
     "Open in instagram": {
-        fi: "Avaa kuva Instagrammissa.",
-        en: "Open the photo in Instagram.",
+        fi: "Avaa Instagrammissa.",
+        en: "Open in Instagram.",
     },
     "Likes on Instagam": {
-        fi: "tykkääjää instagrammissa. Linkki avaa kuvan Instagrammissa.",
-        en: "likes on instagram. The link opens in Instagram.",
+        fi: "tykkääjää instagrammissa. Linkki avaa sisällön Instagrammissa.",
+        en: "likes on instagram. The link opens Instagram.",
     },
     "Likes on Instagam singular": {
-        fi: "tykkääjä instagrammissa - linkki avaa kuvan Instagrammissa.",
-        en: "like on instagram. - the link opens in Instagram.",
+        fi: "tykkääjä instagrammissa - linkki avaa sisällön Instagrammissa.",
+        en: "like on instagram. - the link opens Instagram.",
     },
     "Closed": {
         fi: "Suljettu",

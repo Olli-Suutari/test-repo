@@ -129,9 +129,51 @@ header {
     #leftBar {
         margin-left: calc(50% - 45vw);
         margin-right: calc(50% - 45vw);
-        width: 100vmin;
+        width: 96vmin;
         align-content: center;
     }
+}
+
+/* Event styles */
+
+.events-container, .rss-events {
+    display: block;
+    overflow-y: scroll;
+}
+
+.single-event {
+    display: flex;
+    border-left: solid 2px #8496B9;
+    flex-direction: column;
+    justify-content: start;
+    padding-left: 19px;
+    padding-top: 9px;
+    padding-bottom: 9px;
+    font-size: 1.02em;
+    margin-bottom: 1.4em
+}
+
+.single-event .fa {
+    font-size: 1.15em;
+    margin-right: .23em;
+    color: #5f696e;
+}
+
+.event-date-data {
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.event-date {
+
+}
+
+.event-time {
+    margin-left: 15px;
+}
+
+.event-title {
+    font-weight: 500;
 }
 
 /* Service listings */
@@ -182,13 +224,18 @@ ul.cols {
     height: 53px;
     width: 53px;
 }
-
-.accessibility-text-block {
-    margin-right: 6px;
+/* Important, because .celia-services is also .accessibility-images. To do: Better CSS. */
+.celia-services {
+    margin-right: 18px!important;
+    margin-top: 8px!important;
+    margin-bottom: 18px!important;
+    width: 52px!important;
+    height: 65px!important;
 }
 
 .accessibility-text-block {
     max-width: 100%;
+    margin-right: 6px;
     border: solid 2px #8496B9;
     border-radius: 13px;
     color: #FEFEFE;
@@ -207,12 +254,12 @@ ul.cols {
     padding-left: 10px;
 }
 
-.trivia-section {
+.trivia-section, .facebook-section {
     margin-top: 2.2em;
     width: 100%;
 }
 
-#triviaTitle {
+.title-underlined-centered {
     text-align: center!important;
     border-bottom: 2px solid @primary;
     padding-bottom: .3em;
@@ -242,7 +289,7 @@ ul.cols {
 }
 
 @media screen and (max-width: 499px) {
-    .trivia-section {
+    .trivia-section, .facebook-section {
         margin-left: calc(50% - 48.33vw);
         margin-right: calc(50% - 50vw);
         width: 100vmin;
@@ -539,6 +586,24 @@ ul.cols {
     z-index: 999999999!important;
 }
 
+.popover-header, .popover {
+    background: #f6f2f0;
+    border: none;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.popover .arrow {
+    display: none;
+}
+
+.popover {
+    padding: .9em .5em 0 0.5em;
+    -webkit-box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.75);
+    -moz-box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.75);
+    box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.75);
+}
+
 /* Modal */
 /* Fix modal scrolling on Safari on iPads & iPhones: https://stackoverflow.com/questions/44082430/in-ios-iframe-in-a-bootstrap-modal-can-not-scroll TO DO: Still broken? */
 .modal-body {
@@ -631,6 +696,7 @@ ul.cols {
     margin-top: -.3em;
     padding-left: 5em;
     padding-right: 5em;
+    word-break: break-word;
 }
 
 @media screen and (min-width: 500px) and (max-width: 768px) {

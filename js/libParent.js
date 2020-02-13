@@ -9,11 +9,6 @@ document.head.appendChild(css);
 var libList;
 var storedUrl = window.location.href;
 
-var parentIsIE = false;
-if(navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/))) {
-    parentIsIE = true;
-}
-
 window.addEventListener('message', function(event) {
     var data = event.data;
     if(data.type === "libList") {
@@ -136,12 +131,8 @@ window.addEventListener('message', function(event) {
                 history.replaceState(stateObj, data.stateTitle, data.value);
             }
             else {
-                if(parentIsIE) {
-                    history.replaceState(stateObj, data.stateTitle, data.value);
-                }
-                else {
-                    history.pushState(stateObj, data.stateTitle, data.value);
-                }
+                //history.pushState("", "", data.value);
+                history.pushState(stateObj, data.stateTitle, data.value);
             }
             storedUrl = data.value;
         }

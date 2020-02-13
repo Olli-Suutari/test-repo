@@ -5,6 +5,7 @@ function toggleFullScreen(target) {
     if(target === "#sliderBox") {
         $('#sliderBox').toggleClass("small-slider");
         $('#sliderBox').toggleClass("full-screen-slider");
+        $('.fa-stop').click();
         adjustParentHeight(500)
     }
     else if(target === "#mapContainer") {
@@ -59,8 +60,11 @@ function exitHandler() {
 function generateAccessibilityImg(translationName, iconPath) {
     translationName = i18n.get(translationName);
     iconPath = "../images/accessibility/" + iconPath;
-    $(".accessibility-images").append(' <img alt="' + translationName + '" ' +
-        'src="' + iconPath + '" data-placement="bottom" title="' + translationName + '" data-toggle="accessibility-tooltip"  /> ');
+    // Celia block should be generated 1st.
+    setTimeout(function(){
+        $(".accessibility-images").append(' <img alt="' + translationName + '" ' +
+            'src="' + iconPath + '" data-placement="bottom" title="' + translationName + '" data-toggle="accessibility-tooltip"  /> ');
+    }, 200);
 }
 
 function generateAccessibilityTextBlock(serviceName) {
@@ -69,7 +73,7 @@ function generateAccessibilityTextBlock(serviceName) {
     // Use timeout so actual icons are rendered first.
     setTimeout(function(){
         $(".accessibility-images").append(blockItem);
-    }, 100);
+    }, 300);
 }
 
 function generateWebropolSurveyFrames(description) {
@@ -106,9 +110,14 @@ function generateWebropolSurveyFrames(description) {
     return description;
 }
 
+function removeHtmlTags(string) {
+    string = string.replace(/<p>/g, "");
+    string = string.replace(/<\/p>/g, "");
+    return string;
+}
+
 // Function for adding a new palvelut item.
 // Define accessibility count here, define other counts later on.
-var accessibilityCount = 0;
 var accessibilityIsEmpty = true;
 var serviceNamesWithLinks = [];
 function addItem(item, listElement) {
@@ -116,6 +125,52 @@ function addItem(item, listElement) {
     // Use "Custom name", where available.
     if (item.name != null && item.name.length != 0) {
         name = item.name;
+    }
+    if(listElement == "accessibilityCelia") {
+        var celiaDescription = "";
+        if(isValue(item.shortDescription)) {
+            celiaDescription = capitalize(addMissingDot(item.shortDescription));
+        }
+        if(isValue(item.description)) {
+            if(removeHtmlTags(item.description) != celiaDescription) {
+                celiaDescription = celiaDescription + " " + capitalize(addMissingDot(removeHtmlTags(item.description)));
+            }
+        }
+        var standardName = item.standardName;
+        if(standardName.toLowerCase().indexOf("registeration") > -1 ||
+            standardName.toLowerCase().indexOf("rekisteröityminen") > -1 ) {
+            if(isValue(celiaDescription)) {
+                celiaDescription = standardName + ": " + celiaDescription;
+            }
+        }
+        if(celiaDescription == "") {
+            celiaDescription = i18n.get("Celia info");
+        }
+        celiaDescription = "<p>" + celiaDescription + '</p>';
+        if(isValue(item.website)) {
+            var prettyLink = generatePrettyUrl (item.website);
+            celiaDescription = celiaDescription + "<p class='service-info service-website' " +
+                " aria-label='" + i18n.get("Website") + "'>" +
+                "<i aria-hidden='true' class='fas fa-globe'></i><span class='sr-only'>" + i18n.get('Website') +
+                ":</span> <a target='_blank' href='" + item.website + "'>" +
+                capitalize(prettyLink) + "</a></p>";
+        }
+        if($(".celia-services").length) {
+            if ($(".celia-services").attr('data-content') != celiaDescription) {
+                var newDescription = celiaDescription + $(".celia-services").attr('data-content');
+                if(standardName.toLowerCase().indexOf("registration") > -1 ||
+                    standardName.toLowerCase().indexOf("rekisteröityminen") > -1 ) {
+                    newDescription = $(".celia-services").attr('data-content') + celiaDescription
+                }
+                $(".celia-services").attr('data-content', newDescription);
+            }
+        }
+        else {
+            var blockItem = '<img  class="celia-services" src="../images/accessibility/Celia.png" alt="Celia-logo" data-placement="bottom" title="' + i18n.get("Celia title") + '" data-content="' + celiaDescription + '" data-toggle="accessibility-tooltip">';
+            $(".accessibility-images").append(blockItem);
+            accessibilityCount = accessibilityCount + 1;
+            noServices = false;
+        }
     }
     if(listElement === "#accessibilityItems" && accessibilityIsEmpty) {
         // List of values separated by "," in the short description.
@@ -164,15 +219,6 @@ function addItem(item, listElement) {
                 $("#accessibilityDetails").append(item.description.replace(/(<a )+/g, '<a target="_blank" '));
             }
         }
-        if (accessibilityCount != 0 || !accessibilityIsEmpty) {
-            $("#accessibility").css('display', 'block');
-            $("#accessibilityTitle").prepend(i18n.get("Accessibility"));
-            if(accessibilityCount !== 0) {
-                $("#accessibilityBadge").append('(' + accessibilityCount + ')');
-                $('[data-toggle="accessibility-tooltip"]').tooltip();
-            }
-            noServices = false;
-        }
     }
     else {
         // Add popup link if additional details are available.
@@ -183,11 +229,7 @@ function addItem(item, listElement) {
             var description = "";
             if (item.shortDescription != null && item.shortDescription.length != 0 &&
                 !strippedValueEquals(item.shortDescription, item.name)) {
-                var shortDescription = item.shortDescription;
-                var lastChar = shortDescription[shortDescription.length -1];
-                if(lastChar != "." && lastChar != "!" && lastChar != "?") {
-                    shortDescription = shortDescription + ".";
-                }
+                var shortDescription = capitalize(addMissingDot(item.shortDescription));
                 description = '<p>' + shortDescription + '</p>';
             }
             // Add "long" description where available && not equal to the short one.
@@ -209,7 +251,7 @@ function addItem(item, listElement) {
             // Website
             if(isValue(item.website)) {
                 var prettyLink = generatePrettyUrl (item.website);
-                description = description + '<p class="service-info service-website" aria-label="' + i18n.get("Price") +
+                description = description + '<p class="service-info service-website" aria-label="' + i18n.get("Website") +
                     '"><i class="fas fa-globe" data-toggle="tooltip" title="' + i18n.get("Website") + '" ' +
                     'data-placement="top"></i><a target="_blank" href="' + item.website + '">' +
                     capitalize(prettyLink) + '</a></p>';
@@ -243,6 +285,18 @@ function addItem(item, listElement) {
                         var iframeCode = '<iframe frameborder="0" height="500px" scrolling="no" src='  + urlOfLink[0] + ' width="100%"></iframe>';
                         // Push to array
                         linksToReplace.push({position: reFindLinksExec[0], replacement: iframeCode});
+                    }
+                    // Microsoft Bookings calendars
+                    else if (reFindLinksExec[0].indexOf("/bookings/") !== -1) {
+                        // Find url
+                        var BookingUrlOfLink = new RegExp(/"(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?"/g).exec(reFindLinksExec[0]);
+                        // Generate iframe if not null (Link invalid)
+                        if(BookingUrlOfLink !== null) {
+                            var iframeCode = '<iframe frameborder="0" height="1550px" scrolling="yes"  src='  + BookingUrlOfLink[0] +
+                                ' width="100%" style="border: 0"></iframe>';
+                            // Push to array
+                            linksToReplace.push({position: reFindLinksExec[0], replacement: iframeCode});
+                        }
                     }
                     // Normal links
                     else {

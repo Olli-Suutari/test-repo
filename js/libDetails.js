@@ -1,6 +1,6 @@
 // Variables
 var withParams = "&with=pictures,services,buildingInfo,departments,mailAddress,links,phoneNumbers,primaryContactInfo," +
-    "persons,transitInfo&limit=1500";
+    "persons,transitInfo,customData&limit=1500";
 var jsonpUrlV4 = "https://api.kirjastot.fi/v4/library/" + library + "?lang=" + lang + withParams;
 var transitIsEmpty = true;
 var descriptionIsEmpty = true;
@@ -33,6 +33,7 @@ var persons = null;
 var contactlist = [];
 var numbersList = [];
 var staffList = [];
+var linksIncludeFacebook = false;
 
 /* Functions for checking if name or contact detail exists in arrays with keys "name" and "contact".
    IEC CRASHES: if (contactlist.findIndex(x => x.contact==data.phoneNumbers[i].number) === -1){
@@ -52,6 +53,129 @@ function checkIfContactExists(array, item) {
         }
     }
     return false;
+}
+
+function addEventToList(event) {
+    var eventDateSyntax = '<div class="event-date-data">' +
+        '<span class="event-date"><i class="fa fa-calendar-alt"></i> ' + event.date + '</span>' +
+        '<span class="event-time"><i class="fa fa-clock"></i> ' + event.time + '</span>' +
+        '</div>';
+    var eventTitleSyntax = '<div class="event-title">' +
+        '<i class="fa fa-pen-square fa-rotate-270"></i> ' +
+        '<a target="_blank" href="' + event.link + '">' + event.title + '</a>' +
+        '</div>';
+    var eventSyntax = '<div class="single-event">' +  eventDateSyntax + eventTitleSyntax + '</div>';
+    $('#rss-events').append(eventSyntax);
+}
+
+function fetchRSS(url) {
+    // For now, this only supports events from jyvaskyla.fi ... TO DO: Add support for other feeds.
+    if(!url.indexOf('jyvaskyla.fi') < -1) {
+        return;
+    }
+    $("#rss-feeds").rss(
+        // You can either provide a single feed URL or a list of URLs (via an array)
+        url,
+        {
+            // how many entries do you want?
+            // default: 4
+            // valid values: any integer
+            limit: 25,
+            // want to offset results being displayed?
+            // default: false
+            // valid values: any integer
+            offsetStart: false, // offset start point
+            offsetEnd: false, // offset end point
+            // will request the API via https
+            // default: false
+            // valid values: false, true
+            ssl: true,
+            // which server should be requested for feed parsing
+            // the server implementation is here: https://github.com/sdepold/feedr
+            // default: feedrapp.info
+            // valid values: any string
+            host: "feedrapp.info",
+            // option to seldomly render ads
+            // ads help covering the costs for the feedrapp server hosting and future improvements
+            // default: true
+            // valid values: false, true
+            support: false,
+            // outer template for the html transformation
+            // default: "<ul>{entries}</ul>"
+            // valid values: any string
+            layoutTemplate: "",
+            // localizes the date with moment.js (optional)
+            // default: 'en'
+            dateLocale: "fi",
+            // inner template for each entry
+            // default: '<li><a href="{url}">[{author}@{date}] {title}</a><br/>{shortBodyPlain}</li>'
+            // valid values: any string
+            entryTemplate: '' +
+                '',
+            // Defined the order of the feed's entries.
+            // Default: undefined (keeps the order of the original feed)
+            // valid values: All entry properties; title, link, content, contentSnippet, publishedDate, categories, author, thumbnail
+            // Order can be reversed by prefixing a dash (-)
+            order: "-publishedDate",
+            // a callback, which gets triggered when an error occurs
+            // default: function() { throw new Error("jQuery RSS: url don't link to RSS-Feed") }
+            error: function() {},
+            // a callback, which gets triggered when everything was loaded successfully
+            // this is an alternative to the next parameter (callback function)
+            // default: function(){}
+            success: function() {},
+            // a callback, which gets triggered once data was received but before the rendering.
+            // this can be useful when you need to remove a spinner or something similar
+            onData: function() {}
+        },
+        // callback function
+        // called after feeds are successfully loaded and after animations are done
+        function callback() {
+            var rawEvents = this.entries;
+            var events = [];
+            for (var t = 0; t < rawEvents.length; t++) {
+                var reMatchDate = new RegExp(/^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})*/g);
+                var reMatchDateExec = reMatchDate.exec(rawEvents[t].title);
+                var eventDate = reMatchDateExec[0];
+                // If we do not remove the date from the title, it will mess up matching the time.
+                var titleNoDate = rawEvents[t].title.replace(eventDate, '');
+                titleNoDate = titleNoDate.replace(' klo ', '');
+                var eventTime = titleNoDate.substring(0,5);
+                var eventTitle = rawEvents[t].title.substring(rawEvents[t].title.indexOf(" - ") + 3);
+                var standardTime = moment(eventDate + ' ' + eventTime, 'DD.MM.YYYY HH.mm').toDate();
+                events.push( { standardTime: standardTime, title: eventTitle, date: eventDate,
+                    time: eventTime, link: rawEvents[t].link  } )
+            }
+            if(events.length !== 0) {
+                console.log(events)
+                events.sort(function(a, b)
+                {
+                    if (a.standardTime > b.standardTime) return 1;
+                    if (a.standardTime < b.standardTime) return -1;
+                });
+                // Descriptionheight is used with side by side layout. This is increased if 2 col layout is used.
+                var descriptionHeight = 500;
+                var leftBarWidth = Math.round($('#leftBar').outerWidth());
+                if(leftBarWidth > 632) {
+                    descriptionHeight = Math.round($('.news-description').height() -50);
+                    if(descriptionHeight > 1500) {
+                        descriptionHeight = 1500;
+                    }
+                }
+                var bsCols = "col-lg-6 col-md-12";
+                if(leftBarWidth < 632) {
+                    bsCols = "";
+                }
+                $('.news-description').addClass(bsCols);
+                $('.events-section').addClass(bsCols);
+                $('.events-section').css('display', 'block');
+                $('.events-container').css('height', descriptionHeight);
+                for (var t = 0; t < events.length; t++) {
+                    addEventToList(events[t])
+                }
+            }
+        }
+    );
 }
 
 function asyncFetchV4Data() {
@@ -102,6 +226,19 @@ function asyncFetchV4Data() {
                 }
                 arrayOfServiceNames.push({name: name, customName: customName});
             }
+            for (var t = 0; t < data.customData.length; t++) {
+                if(data.customData[t].id == "events") {
+                    // To DO: Implement the RSS-feature once the event format is finalized (for keski-finna)
+                    //  || data.customData[t].id == "test"
+                    //fetchRSS(data.customData[t].value);
+                }
+            }
+            genericDeferred.resolve();
+        }).catch(function (jqXHR, textStatus, errorThrown) {
+            console.log("Error in fetching library data.")
+            console.error(jqXHR);
+            console.error(textStatus);
+            console.error(errorThrown);
             genericDeferred.resolve();
         });
     }, 1 );
@@ -117,13 +254,15 @@ function asyncFetchServiceNamesInOppositeLang() {
     }
     setTimeout(function() {
         // Disable caching: https://stackoverflow.com/questions/13391563/how-to-set-cache-false-for-getjson-in-jquery
-        $.getJSON("https://api.kirjastot.fi/v4/library/" + library + "?lang=" + oppositeLang + "&with=services", {_: new Date().getTime()}, function (data) {
-            var data = data.data.services;
-            for (var i = 0; i < data.length; i++) {
-                var name = data[i].standardName.toLowerCase();
+        $.getJSON("https://api.kirjastot.fi/v4/library/" + library + "?lang=" + oppositeLang + "&with=services,departments",
+            {_: new Date().getTime()}, function (data) {
+            var services = data.data.services;
+            var departments = data.data.departments;
+            for (var i = 0; i < services.length; i++) {
+                var name = services[i].standardName.toLowerCase();
                 var customName = "";
-                if(data[i].name !== null) {
-                    customName = data[i].name.toLowerCase();
+                if(services[i].name !== null) {
+                    customName = services[i].name.toLowerCase();
                     customName = customName.replace(/,/g, "");
                     customName = customName.replace(/ä/g, "a");
                     customName = customName.replace(/ö/g, "o");
@@ -133,6 +272,19 @@ function asyncFetchServiceNamesInOppositeLang() {
                     customName = customName.replace(/-/g, " ");
                 }
                 arrayOfServiceNamesInOppositeLang.push({name: name, customName: customName});
+            }
+            for (var i = 0; i < departments.length; i++) {
+                var name = departments[i].name.toLowerCase();
+                if(departments[i].name !== null) {
+                    name = name.replace(/,/g, "");
+                    name = name.replace(/ä/g, "a");
+                    name = name.replace(/ö/g, "o");
+                    name = name.replace(/\(/g, "");
+                    name = name.replace(/\)/g, "");
+                    name = name.replace(/_/g, " ");
+                    name = name.replace(/-/g, " ");
+                }
+                arrayOfServiceNamesInOppositeLang.push({name: name, customName: name});
             }
             serviceNamesDeferred.resolve();
         });
@@ -169,7 +321,39 @@ function asyncGenerateGenericDetails() {
                 description = generateWebropolSurveyFrames(description);
                 // Add target="_blank" to links. Same url links would open inside Iframe, links to outside  wouldn't work.
                 description = description.replace(/(<a )+/g, '<a target="_blank" ');
-                $("#introContent").append(description);
+
+                if (description.indexOf("blockquote") !== -1) {
+                    description = replaceQuotesWithServiceAndLibraryLinks(description, false);
+                    $("#introContent").append(description);
+                    $(".service-link-in-description").on('click', function () {
+                        var name = $(this).data('name');
+                        setTimeout(function(){
+                            $("li").find('[data-name="'+ name +'"]').click();
+                        }, 50);
+                    });
+                    $(".library-link-in-description").on('click', function () {
+                        var newId = $(this).data('lib');
+                        setTimeout(function(){
+                            var librarySelector = document.getElementById("librarySelector");
+                            librarySelector.value = newId;
+                            // IE 11 does not like dispatchEvent... :) https://stackoverflow.com/questions/27176983/dispatchevent-not-working-in-ie11
+                            if(isIE) {
+                                var event = document.createEvent("Event");
+                                event.initEvent("change", false, true);
+                                // args: string type, boolean bubbles, boolean cancelable
+                                librarySelector.dispatchEvent(event);
+                            }
+                            else {
+                                librarySelector.dispatchEvent(new Event("change"));
+
+                            }
+                        }, 50);
+                    });
+
+                }
+                else {
+                    $("#introContent").append(description);
+                }
                 descriptionIsEmpty = false;
             }
         }
@@ -241,7 +425,7 @@ function hideModal() {
     isInfoBoxVisible = false;
     $('#myModal').modal('hide');
     adjustParentHeight(50);
-    adjustParentUrl('', 'service');
+    adjustParentUrl('', 'cleanupUrl');
 }
 
 var openOnLoad = false;
@@ -283,7 +467,7 @@ function toggleModal(elementPosY) {
                             // calling hideModal here would result in a loop.
                             isInfoBoxVisible = false;
                             adjustParentHeight(50);
-                            adjustParentUrl('', 'service');
+                            adjustParentUrl('', 'cleanupUrl');
                         });
                         isModalCloseBinded = true;
                     }
@@ -311,47 +495,9 @@ function bindServiceClicks() {
         popupText = popupText.replace(/(<p>&nbsp;<\/p>)+/g, "");
         popupText = popupText.replace(/(<p><\/p>)+/g, "");
         popupText = popupText.replace(/(<p>\s<\/p>)+/g, "");
-
         if (popupText.indexOf("blockquote") !== -1) {
-            var linksToServices = [];
-            var reFindLinks = new RegExp(/<blockquote>.*?(<p>.*?<\/p>).*?<\/blockquote>/g);
-            var reFindLinksExec = reFindLinks.exec(popupText);
-            while (reFindLinksExec != null) {
-                var textInside = reFindLinksExec[0].replace("<blockquote>", "");
-                textInside = textInside.replace("</blockquote>","");
-                textInside = textInside.replace("<p>","");
-                textInside = textInside.replace("</p>","");
-                textInside = textInside.toLowerCase();
-                textInside = textInside.replace(/ä/g, "a");
-                textInside = textInside.replace(/ö/g, "o");
-                textInside = textInside.replace(/\(/g, "");
-                textInside = textInside.replace(/\)/g, "");
-                textInside = textInside.replace(/_/g, " ");
-                textInside = textInside.replace(/-/g, " ");
-                for (var i = 0; i < serviceNames.length; i++) {
-                    var escapedName = serviceNames[i].toLowerCase();
-                    escapedName = escapedName.replace(/ä/g, "a");
-                    escapedName = escapedName.replace(/ö/g, "o");
-                    escapedName = escapedName.replace(/\(/g, "");
-                    escapedName = escapedName.replace(/\)/g, "");
-                    escapedName = escapedName.replace(/_/g, " ");
-                    escapedName = escapedName.replace(/-/g, " ");
-                    if(textInside.indexOf(escapedName) > -1) {
-                        var linkToService = reFindLinksExec[0].replace('<p>',
-                            '<a class="service-link-in-modal" data-name="' + serviceNames[i] + '" href="javascript:void(0);">');
-                        linkToService = linkToService.replace('</p>', '</a>');
-                        linksToServices.push({position: reFindLinksExec[0], iframe: linkToService});
-                    }
-                }
-                // Loop all links.
-                reFindLinksExec = reFindLinks.exec(popupText);
-            }
-            // Loop & add iframes from embedded links.
-            for (var i = 0; i < linksToServices.length; i++) {
-                popupText = popupText.replace(linksToServices[i].position, linksToServices[i].iframe);
-            }
+            popupText = replaceQuotesWithServiceAndLibraryLinks(popupText, true);
         }
-
         // Check if large or small text/modal.
         if(popupText.length > 260) {
             $('#modal').addClass("modal-lg");
@@ -364,6 +510,8 @@ function bindServiceClicks() {
         $("#modalContent").replaceWith('<div id="modalContent">' + popupText + '</div>');
         // Bind click event for clicking links to other services inside the modal.
         $(".service-link-in-modal").on('click', function () {
+            var currentServiceName = $('#modalTitle').text();
+            adjustParentUrl(currentServiceName, "cleanupUrl");
             var name = $(this).data('name');
             toggleModal();
             setTimeout(function(){
@@ -410,6 +558,7 @@ function bindServiceClicks() {
     isServiceClickBinded = true;
 }
 
+var accessibilityCount = 0;
 function asyncFetchServices() {
     var servicesDeferred = jQuery.Deferred();
     setTimeout(function() {
@@ -438,8 +587,20 @@ function asyncFetchServices() {
         }
         for (var i = 0; i < arrayOfServices.length; i++) {
             // Collections
-            if (arrayOfServices[i].name != null && arrayOfServices[i].name.length != 0 || arrayOfServices[i].standardName != null) {
-                if (arrayOfServices[i].type == "collection") {
+            if (arrayOfServices[i].name != null && arrayOfServices[i].name.length != 0 ||
+                arrayOfServices[i].standardName != null) {
+                var itemName;
+                if(arrayOfServices[i].name != null) {
+                    itemName = arrayOfServices[i].name;
+                }
+                else {
+                    itemName = arrayOfServices[i].standardName;
+                }
+                if(itemName.toLowerCase().indexOf("celia") !== -1) {
+                    // Accessibility count is increased in the function.
+                    addItem(arrayOfServices[i], 'accessibilityCelia');
+                }
+                else if (arrayOfServices[i].type == "collection") {
                     if (!roomsAndCollectionsAdded) {
                         collectionCount = collectionCount + 1;
                         collections.push(arrayOfServices[i]);
@@ -522,6 +683,35 @@ function asyncFetchServices() {
             $("#hardwareAndServicesBadge").append('(' + serviceCount + ')');
             noServices = false;
         }
+        if (accessibilityCount != 0 || !accessibilityIsEmpty) {
+            $("#accessibility").css('display', 'block');
+            $("#accessibilityTitle").prepend(i18n.get("Accessibility"));
+            if(accessibilityCount !== 0) {
+                $("#accessibilityBadge").append('(' + accessibilityCount + ')');
+                setTimeout(function(){
+                    $('[data-toggle="accessibility-tooltip"]').popover({
+                        trigger: 'manual',
+                        html: true,
+                        animation: true
+                    })
+                        .on('mouseenter', function () {
+                            var _this = this;
+                            $(this).popover('show');
+                            $('.popover').on('mouseleave', function () {
+                                $(_this).popover('hide');
+                            });
+                        }).on('mouseleave', function () {
+                        var _this = this;
+                        setTimeout(function () {
+                            if (!$('.popover:hover').length) {
+                                $(_this).popover('hide');
+                            }
+                        }, 100);
+                    });
+                }, 500);
+            }
+            noServices = false;
+        }
         // Add event listener for clicking links.
         bindServiceClicks();
         if (!roomsAndCollectionsAdded || !hardwareAndServicesAdded || !accessibilityAdded) {
@@ -543,7 +733,7 @@ function asyncFetchServices() {
                 escapedName = escapedName.replace(/\)/g, "");
                 escapedName = escapedName.replace(/_/g, " ");
                 escapedName = escapedName.replace(/-/g, " ");
-                if(urlUnescapeSpaces.indexOf(escapedName) > -1) {
+                if(urlUnescapeSpaces.indexOf("?" + escapedName) > -1) {
                     matchFound = true;
                     toClick = serviceNamesWithLinks[i];
                     setTimeout(function(){
@@ -580,7 +770,7 @@ function asyncFetchServices() {
                         if(!matchingServiceLinkFound) {
                             var index = refUrl.lastIndexOf("?");
                             var serviceToRemove = refUrl.substr(index+1);
-                            adjustParentUrl(serviceToRemove, "removeService");
+                            adjustParentUrl(serviceToRemove, "cleanupUrl");
                         }
                     }
                 }
@@ -590,9 +780,12 @@ function asyncFetchServices() {
             for (var i = 0; i < arrayOfServiceNames.length; i++) {
                 // Service names may contain "-" eg. Celia-library services
                 var oppositeName = encodeVal(arrayOfServiceNamesInOppositeLang[i].name);
+                if(arrayOfServiceNamesInOppositeLang[i].customName !== "") {
+                    oppositeName = encodeVal(arrayOfServiceNamesInOppositeLang[i].customName);
+                }
                 oppositeName = oppositeName.replace(/-/g, " ");
                 oppositeName = oppositeName.replace(/,/g, "");
-                if(urlUnescapeSpaces.indexOf(oppositeName) > -1) {
+                if(urlUnescapeSpaces.indexOf("?" + oppositeName) > -1) {
                     matchFound = true;
                     toClick = decodeVal(arrayOfServiceNames[i].name);
                     if(arrayOfServiceNames[i].customName !== "") {
@@ -626,6 +819,12 @@ function asyncFetchServices() {
 function asyncFetchDepartments() {
     var departmentsDeferred = jQuery.Deferred();
     setTimeout(function() {
+        if(departments == null) {
+            console.log("Something went wrong in fetching the data.")
+            setTimeout(function() {
+                window.location.reload();
+            }, 500 );
+        }
         if (departments.length === 0) {
             departmentsDeferred.resolve();
         }
@@ -633,6 +832,7 @@ function asyncFetchDepartments() {
             for (var i = 0; i < departments.length; i++) {
                 // Collections
                 roomCount = roomCount +1;
+                arrayOfServiceNames.push({name: departments[i].name, customName: departments[i].name});
                 addItem(departments[i], '#roomsAndCollectionsItems');
             }
             departmentsDeferred.resolve();
@@ -655,6 +855,10 @@ function generateImages(data) {
             counter = counter +1;
             if(counter === data.length) {
                 if(igImages.length !== 0) {
+                    // Sort by date.
+                    igImages.sort(function(a,b){
+                        return new Date(b.timeStamp) - new Date(a.timeStamp);
+                    });
                     for (var i = 0; i < igImages.length; i++) {
                         var igHref = 'target="_blank" href="https://www.instagram.com/p/' + igImages[i].shortcode + '/"';
                         var igLogo = '<a title="' + i18n.get("Open in instagram") + '" data-placement="bottom" ' +
@@ -668,9 +872,35 @@ function generateImages(data) {
                             'data-toggle="navigation-tooltip" class="ig-love-btn ig-love-btn-counter no-external-icon" '
                             + igHref + '><span>&#x2764;</span><span>' + igImages[i].likes + '</span></a>';
                         var igCaption = '<figcaption class="ig-caption">' + igImages[i].caption + '</figcaption>';
+                        var imgItem = "";
+                        var vidItem = "";
+                        if(igImages[i].type == "video") {
+                            sliderHasIGVideo = true;
+                            vidItem = '<div class="video-container"> ' +
+                                '<div class="video-frame">' +
+                                    '<video id="sliderVid' + i + '" class="ig-img ig-vid stopped" poster="' + igImages[i].poster + '">' +
+                                    '<source src="' + igImages[i].url + '" type="video/mp4">' +
+                                    '<source src="' + igImages[i].url + '" type="video/webm">' +
+                                    'Selaimesi ei tue videoita. | Your browser does not support video.' +
+                                    '</video>' +
+                                    '<div class="video-controls">' +
+                                        '<button type="button" class="play-pause" id="playPause">' +
+                                        '<i class="play-stop-icon fas fa-play-circle"></i></button>'+
+                                        '<input type="range" class="seek-bar" id="seekBar" value="0">'+
+                                        '<div class="video-time-display"><span class="video-timestamp">0:00</span>' +
+                                        '<span class="video-end">0:00</span></div>' +
+                                        '<button type="button" class="mute" id="mute">' +
+                                        '<i class="play-mute-icon fas fa-volume-up"></i></button>'+
+                                        '<input type="range" class="volume-bar" id="volumeBar' + [i] + '" min="0" max="1" step="0.1" value="1">'+
+                                    '</div>' +
+                                '</div>';
+                        }
+                        else {
+                            imgItem = '<img class="ig-img" src="' + igImages[i].url + '">';
+                        }
                         var igContainer = '<div class="ig-likes-logo-container">' + igHeart + igLogo + '</div>';
-                            $(".rslides").append('<li class="ig-img-container">' + igContainer  +
-                                '<figure><img class="ig-img" src="' + igImages[i].url + '">' + igCaption + '</figure></li>');
+                        $(".rslides").append('<li class="ig-img-container">' + igContainer  +
+                            '<figure>' + imgItem + vidItem + igCaption + '</figure></li>');
                         counter = counter +1;
                     }
                     imageListDeferred.resolve();
@@ -690,7 +920,9 @@ function asyncGenerateTrivia() {
     setTimeout(function() {
         if (isEmpty($('#buildingDetails')) && !isReFetching) {
             // If display none by default, colspan gets messed up.
-            $('#triviaTitle').append( i18n.get("Trivia"));
+            if($('#triviaTitle').text().length === 0) {
+                $('#triviaTitle').append( i18n.get("Trivia"));
+            }
             if(buildingInfo == null && founded == null) {
                 triviaIsEmpty = true;
                 $(".trivia-section").css("display", "block");
@@ -884,7 +1116,7 @@ function asyncFetchLocation() {
             if (email != null && email.length !== 0) {
                 contactsIsEmpty = false;
                 if(!checkIfContactExists(contactlist, email)) {
-                    contactlist.push({name: i18n.get("Generic email"), contact: email});
+                    contactlist.push({name: i18n.get("Generic email"), contact: capitalizeEmail(email)});
                 }
             }
             // Show navigation if content.
@@ -901,10 +1133,30 @@ function asyncFetchLocation() {
 function asyncLoadMap() {
     var mapDeferred = jQuery.Deferred();
     setTimeout(function() {
+        // Add fallback layer to the default titles in case something goes wrong (err 429 etc.)
+        L.tileLayer.fallback('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
         // Load wikimedia map styles instead of openstreetmap.
         //L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
         // https://wiki.openstreetmap.org/wiki/Tiles
-        L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png').addTo(map);
+        //L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png').addTo(map);
+        //L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png').addTo(map);
+
+        var wmsLayer = L.TileLayer.wmsHeader(
+            'https://maps.wikimedia.org/osm-intl/',
+            {
+                layers: 'ne:ne',
+                format: 'image/png',
+                transparent: true,
+            },
+            [
+                { header: 'Authorization', value: 'basic ' + 'YWxhZGRpbjpvcGVuc2VzYW1l' },
+                //{ header: 'Authorization', value: 'JWT ' + MYAUTHTOKEN },
+                { header: 'content-type', value: 'text/plain'},
+            ],
+            null
+        ).addTo(map);
+
+
         //L.tileLayer.provider('Wikimedia').addTo(map);
         // Min/max zoom levels + default focus.
         map.options.minZoom = 6;
@@ -1011,7 +1263,6 @@ function generateFbWidgets() {
     var fbHTML = "";
     var adaptWidth = "true";
     var fbWidth = 500;
-    var bsCols = "col-lg-6 col-md-12";
     // The widget has a bug in iOS where switching to events tab does not work as it just jumps back to timeline.
     var tabs = "timeline,events";
     if(isIOSMobile) {
@@ -1021,9 +1272,6 @@ function generateFbWidgets() {
     var descriptionHeight = 500;
     var leftBarWidth = Math.round($('#leftBar').outerWidth());
     // If FB widget is not atleast 316 px in width, the event dates are not visible.
-    if(leftBarWidth < 632) {
-        bsCols = "";
-    }
     if(leftBarWidth < 500) {
         fbWidth = Math.round($('body').width());
         adaptWidth = "false";
@@ -1039,9 +1287,14 @@ function generateFbWidgets() {
     }
     if(fbPageNames.length == 1) {
         if (!isEmpty($('#introContent'))) {
-            $('.news-description').addClass(bsCols);
             if(leftBarWidth > 632) {
                 descriptionHeight = Math.round($('.news-description').height() -50);
+                if(descriptionHeight > 1500) {
+                    descriptionHeight = 1500;
+                }
+                if(descriptionHeight < 370) {
+                    descriptionHeight = 370;
+                }
             }
         }
         else {
@@ -1050,8 +1303,9 @@ function generateFbWidgets() {
         // If description + fb do not fit together, don't set fb height to description height.
         descriptionWidth = Math.round($('.news-description').width());
         // If we use smaller than xl, event calendar date icons are lost because the frame gets too small.
-        fbHTML =  '<div class="fb-page ' + bsCols + '" style="width: ' + fbWidth + '; margin-bottom: 2em;" data-href="https://www.facebook.com/' + fbPageNames[0] + '" data-tabs="' + tabs + '" data-width="' + fbWidth + 'px" data-height="' + descriptionHeight + 'px" data-small-header="' + adaptWidth + '" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false"></div>';
-        $('.news-description').after(fbHTML);
+        fbHTML =  '<div class="fb-page" style="width: ' + fbWidth + '; margin-bottom: 2em;" data-href="https://www.facebook.com/' + fbPageNames[0] + '" data-tabs="' + tabs + '" data-width="' + fbWidth + 'px" data-height="' + descriptionHeight + 'px" data-small-header="' + adaptWidth + '" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false"></div>';
+        $('.facebook-section').append(fbHTML);
+        //$('.news-description').after(fbHTML);
     }
     else {
         var feedOne = "";
@@ -1059,55 +1313,124 @@ function generateFbWidgets() {
         // Feeds 3 & 4 are only used with iOS mobile..
         var feedThree = "";
         var feedFour = "";
+        // Sort to descending order (Show jkl main library first instead of music)
+        fbPageNames.sort(function (a, b) {
+            if (a > b) {
+                return -1;
+            }
+            if (b > a) {
+                return 1;
+            }
+            return 0;
+        });
         for (var i = 0; i < fbPageNames.length; i++) {
             // Max 2 feeds.
             if(i == 0) {
-                feedOne = '<div class="fb-page ' + bsCols + '" data-href="https://www.facebook.com/' + fbPageNames[0] + '" data-tabs="' + tabs + '" data-width="' + fbWidth + 'px" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="' + adaptWidth + '" data-hide-cover="false" data-show-facepile="false"></div>';
+                feedOne = '<div class="fb-page" data-href="https://www.facebook.com/' + fbPageNames[0] + '" data-tabs="' + tabs + '" data-width="' + fbWidth + 'px" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="' + adaptWidth + '" data-hide-cover="false" data-show-facepile="false"></div>';
             }
             if(i == 1) {
                 // 2nd item is for events in iOS
                 if(isIOSMobile){
                     tabs = "events"
                 }
-                feedTwo = '<div class="fb-page ' + bsCols + '" data-href="https://www.facebook.com/' + fbPageNames[1] + '" data-tabs="' + tabs + '" data-width="' + fbWidth + 'px" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="' + adaptWidth + '" data-hide-cover="false" data-show-facepile="false"></div>';
+                feedTwo = '<div class="fb-page" data-href="https://www.facebook.com/' + fbPageNames[1] + '" data-tabs="' + tabs + '" data-width="' + fbWidth + 'px" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="' + adaptWidth + '" data-hide-cover="false" data-show-facepile="false"></div>';
             }
             if(i == 2 && isIOSMobile) {
                 tabs = "timeline";
-                feedThree = '<div class="fb-page ' + bsCols + '" data-href="https://www.facebook.com/' + fbPageNames[2] + '" data-tabs="' + tabs + '" data-width="' + fbWidth + 'px" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="' + adaptWidth + '" data-hide-cover="false" data-show-facepile="false"></div>';
+                feedThree = '<div class="fb-page" data-href="https://www.facebook.com/' + fbPageNames[2] + '" data-tabs="' + tabs + '" data-width="' + fbWidth + 'px" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="' + adaptWidth + '" data-hide-cover="false" data-show-facepile="false"></div>';
             }
             if(i == 3 && isIOSMobile) {
                 tabs = "events";
-                feedFour = '<div class="fb-page ' + bsCols + '" data-href="https://www.facebook.com/' + fbPageNames[3] + '" data-tabs="' + tabs + '" data-width="' + fbWidth + 'px" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="' + adaptWidth + '" data-hide-cover="false" data-show-facepile="false"></div>';
+                feedFour = '<div class="fb-page" data-href="https://www.facebook.com/' + fbPageNames[3] + '" data-tabs="' + tabs + '" data-width="' + fbWidth + 'px" data-height="' + descriptionHeight + 'px" data-small-header="true" data-adapt-container-width="' + adaptWidth + '" data-hide-cover="false" data-show-facepile="false"></div>';
             }
         }
-        fbHTML = '<div class="row" style="width: 100vmin; margin-bottom: 2em;">' + feedOne + feedTwo +
+        fbHTML = '<div>' + feedOne + feedTwo +
             feedThree + feedFour + '</div>';
-        $('.news-description').after(fbHTML);
+        $('.facebook-section').append(fbHTML);
+        //$('.news-description').after(fbHTML);
     }
     // Load the fb script if not already loaded.
     if(!fbScriptLoaded) {
         fbScriptLoaded = true;
-        var fbScript = "https://connect.facebook.net/fi_FI/sdk.js#xfbml=1&version=v3.3";
+        var fbScript = "https://connect.facebook.net/fi_FI/sdk.js#xfbml=1&version=v4.0";
         if(lang != "fi") {
-            fbScript = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v3.3"
+            fbScript = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v4.0"
         }
         var script = document.createElement('script');
-        /*script.onload = function () {
-            console.log("D O  A F T E R  I N I T")
-        }*/
+        script.onload = function () {
+            if (typeof FB !== 'undefined') {
+                $('.facebook-section').css('display', 'block');
+                adjustParentHeight(300);
+            }
+            else {
+                console.log("Facebook failed to load, possibly due to content blocking.")
+                return;
+            }
+        };
         script.src = fbScript;
-        document.head.appendChild(script); //or something of the likes
+        document.head.appendChild(script);
     }
     // After lib has changed.
     else {
         FB.init({
             status: true,
             xfbml: true,
-            version: 'v3.3'
+            version: 'v4.0'
         });
+        if (typeof FB !== 'undefined') {
+            $('.facebook-section').css('display', 'block');
+            adjustParentHeight(300);
+        }
+        else {
+            console.log("Facebook failed to load, possibly due to content blocking.")
+            return;
+        }
     }
+    adjustParentHeight(800);
     fbWidgetSetUp = true;
-    adjustParentHeight();
+}
+
+function generateIGCaption(caption) {
+    var tagsToReplace = [];
+    var reFindTags = new RegExp(/#\S+\s*/g);
+    var reFindTagsExec = reFindTags.exec(caption);
+    while (reFindTagsExec != null) {
+        var tagText = reFindTagsExec[0];
+        tagText = tagText.replace(" ", "");
+        var tagLink = tagText.substring(1);
+        tagLink = '<a target="_blank" class="external-link" href="https://www.instagram.com/explore/tags/' + tagLink
+            + '/">' + tagText + '</a> ';
+        tagsToReplace.push({position: reFindTagsExec[0],
+            replacement: tagLink, type: "tag"});
+        reFindTagsExec = reFindTags.exec(caption);
+    }
+    var reFindUsers = new RegExp(/@\S+\s*/g);
+    var reFindUsersExec = reFindUsers.exec(caption);
+    while (reFindUsersExec != null) {
+        var tagText = reFindUsersExec[0];
+        tagText = tagText.replace(" ", "");
+        var tagLink = tagText.substring(1);
+        tagLink = '<a target="_blank" class="external-link" href="https://www.instagram.com/' + tagLink
+            + '/">' + tagText + '</a> ';
+        tagsToReplace.push({position: reFindUsersExec[0],
+            replacement: tagLink, type: "user"});
+        reFindUsersExec = reFindUsers.exec(caption);
+    }
+    for (var t = 0; t < tagsToReplace.length; t++) {
+        // If we have tags #foobar & #foo, #foo would re-place #foobar incorrectly.
+        if(tagsToReplace[t].type == "tag") {
+            caption = caption.replace(tagsToReplace[t].position,
+                tagsToReplace[t].replacement.replace("#", "%%%"));
+        }
+        else {
+            caption = caption.replace(tagsToReplace[t].position,
+                tagsToReplace[t].replacement.replace("@", "<<><<>"));
+        }
+    }
+    caption = caption.replace(/%%%/g,'#');
+    caption = caption.replace(/<<><<>/g,'@');
+    caption = generateIgLinks(caption); // TO DO: GenerateLinks requires http(s):// to work.
+    return caption;
 }
 
 function asyncFetchLinks() {
@@ -1148,6 +1471,7 @@ function asyncFetchLinks() {
                 if(isIOSMobile) {
                     fbPageNames.push(fbName);
                 }
+                linksIncludeFacebook = true;
             }
             else if (url.indexOf("instagram") !== -1) {
                 igExists = true;
@@ -1160,64 +1484,75 @@ function asyncFetchLinks() {
                 }
                 var index = igName.lastIndexOf("/");
                 var igName = igName.substr(index+1);
+                var imagesAddedCount = 0;
+                var isFetchingIGVideo = false;
                 // Fetch ig images (+ captions & likes) via the IG api.
                 $.getJSON('https://www.instagram.com/' + igName + '/?__a=1', function (data) {
                     var images = data.graphql.user.edge_owner_to_timeline_media.edges;
-                    for (var i=0; i<images.length; i++) {
-                        // Limit to 10 latest images.
-                        if(i===10) {
-                            linksDeferred.resolve();
-                            return;
+                    for (var i=0; i<images.length; i++ && i) {
+                        if(i > 9) {
+                            return
                         }
-                        var url = images[i].node.display_url;
-                        var shortcode = images[i].node.shortcode;
-                        var likes = images[i].node.edge_liked_by.count;
-                        var caption = "";
-                        if(images[i].node.edge_media_to_caption.edges[0] !== undefined) {
-                            caption = images[i].node.edge_media_to_caption.edges[0].node.text;
+                        if (images[i].node.__typename == "GraphVideo") {
+                            isFetchingIGVideo = true;
+                            $.getJSON('https://www.instagram.com/p/' + images[i].node.shortcode + '/?__a=1', function (result) {
+                                var videoData = result.graphql.shortcode_media;
+                                var videoSrc = videoData.video_url;
+                                var poster = videoData.thumbnail_src;
+                                var timeStamp = new Date(videoData.taken_at_timestamp*1000);
+                                var likes = videoData.edge_media_preview_like.count;
+                                var shortcode = videoData.shortcode;
+                                var caption = "";
+                                if(videoData.edge_media_to_caption.edges[0] !== undefined) {
+                                    caption = videoData.edge_media_to_caption.edges[0].node.text;
+                                    caption = generateIGCaption(caption)
+                                }
+                                igImages.push({
+                                    url: videoSrc,
+                                    poster: poster,
+                                    shortcode: shortcode,
+                                    likes: likes,
+                                    caption: caption,
+                                    type: "video",
+                                    timeStamp: timeStamp
+                                });
+                                imagesAddedCount = imagesAddedCount + 1;
+                                isFetchingIGVideo = false;
+                                if (imagesAddedCount == 10 || imagesAddedCount == images.length) {
+                                    linksDeferred.resolve();
+                                }
+                            });
                         }
-                        var tagsToReplace = [];
-                        var reFindTags = new RegExp(/#\S+\s*/g);
-                        var reFindTagsExec = reFindTags.exec(caption);
-                        while (reFindTagsExec != null) {
-                            var tagText = reFindTagsExec[0];
-                            tagText = tagText.replace(" ", "");
-                            var tagLink = tagText.substring(1);
-                            tagLink = '<a target="_blank" class="external-link" href="https://www.instagram.com/explore/tags/' + tagLink
-                                + '/">' + tagText + '</a> ';
-                            tagsToReplace.push({position: reFindTagsExec[0],
-                                replacement: tagLink, type: "tag"});
-                            reFindTagsExec = reFindTags.exec(caption);
-                        }
-                        var reFindUsers = new RegExp(/@\S+\s*/g);
-                        var reFindUsersExec = reFindUsers.exec(caption);
-                        while (reFindUsersExec != null) {
-                            var tagText = reFindUsersExec[0];
-                            tagText = tagText.replace(" ", "");
-                            var tagLink = tagText.substring(1);
-                            tagLink = '<a target="_blank" class="external-link" href="https://www.instagram.com/' + tagLink
-                                + '/">' + tagText + '</a> ';
-                            tagsToReplace.push({position: reFindUsersExec[0],
-                                replacement: tagLink, type: "user"});
-                            reFindUsersExec = reFindUsers.exec(caption);
-                        }
-                        for (var t = 0; t < tagsToReplace.length; t++) {
-                            // If we have tags #foobar & #foo, #foo would re-place #foobar incorrectly.
-                            if(tagsToReplace[t].type == "tag") {
-                                caption = caption.replace(tagsToReplace[t].position,
-                                    tagsToReplace[t].replacement.replace("#", "%%%"));
+                        else {
+                            var url = images[i].node.display_url;
+                            var shortcode = images[i].node.shortcode;
+                            var likes = images[i].node.edge_liked_by.count;
+                            // https://stackoverflow.com/questions/20943089/how-to-convert-unix-timestamp-to-calendar-date-moment-js
+                            // UNIX timestamp it is count of seconds from 1970, so you need to convert it to JS Date object:
+                            var timeStamp = new Date(images[i].node.taken_at_timestamp*1000);
+                            var caption = "";
+                            if(images[i].node.edge_media_to_caption.edges[0] !== undefined) {
+                                caption = images[i].node.edge_media_to_caption.edges[0].node.text;
+                                caption = generateIGCaption(caption)
                             }
-                            else {
-                                caption = caption.replace(tagsToReplace[t].position,
-                                    tagsToReplace[t].replacement.replace("@", "<<><<>"));
+                            igImages.push({url: url, shortcode: shortcode, likes: likes,
+                                caption: caption, type: "image", timeStamp: timeStamp
+                            });
+                            imagesAddedCount = imagesAddedCount + 1;
+                            if (imagesAddedCount == 10 || imagesAddedCount == images.length) {
+                                if(!isFetchingIGVideo) {
+                                    linksDeferred.resolve();
+                                }
                             }
                         }
-                        caption = caption.replace(/%%%/g,'#');
-                        caption = caption.replace(/<<><<>/g,'@');
-                        igImages.push({url: url, shortcode: shortcode, likes: likes, caption: caption});
                     }
+                }).catch(function (jqXHR, textStatus, errorThrown) {
+                    console.log("Error in fetching Instagram photos.");
+                    console.error(jqXHR);
+                    console.error(textStatus);
+                    console.error(errorThrown);
                     linksDeferred.resolve();
-                    });
+                });
                 }
                 else {
                     // Add the link to the contact details listing
@@ -1230,10 +1565,11 @@ function asyncFetchLinks() {
                         if (prettyUrl.substring(prettyUrl.length-1) === "/" || prettyUrl.substring(prettyUrl.length-1) === "#") {
                             prettyUrl = prettyUrl.substring(0, prettyUrl.length-1);
                         }
+                        prettyUrl = capitalize(prettyUrl);
                         // Generate the link
                         prettyUrl = '<a target="_blank" href="' + url + '">' + prettyUrl + '</a>';
                         if(!checkIfContactExists(contactlist, prettyUrl) && !checkIfNameExists(contactlist, element.name)) {
-                            contactlist.unshift({name: element.name,
+                            contactlist.unshift({name: capitalize(sanitizedHTMLString(element.name)),
                                 contact: prettyUrl + description});
                             linkCount = linkCount +1;
                         }
@@ -1313,7 +1649,7 @@ function asyncGenerateStaff() {
                     // Check if name or detail is unique.
                     var contact = "";
                     if(persons[i].email != null) {
-                        contact = contact + persons[i].email;
+                        contact = contact + capitalizeEmail(persons[i].email);
                         if(persons[i].phone != null && persons[i].phone.length !== 0) {
                             contact = contact + "<br>" + persons[i].phone;
                         }
@@ -1430,10 +1766,10 @@ function fetchInformation(language, lib) {
             if(!isReFetching) {
                 $.when( asyncFetchV4Data() && asyncFetchServiceNamesInOppositeLang() ).then(
                     function() {
-                        $.when( asyncGenerateGenericDetails(), asyncGenerateTrivia(), asyncFetchDepartments(),
+                        $.when(  asyncFetchDepartments(), asyncFetchServices(), asyncGenerateTrivia(),
                             asyncFetchLinks(), asyncFetchLocation()).then(
                             function() {
-                                $.when( asyncFetchImages(), asyncFetchServices(), asyncLoadMap(), generateContacts()  ).then(
+                                $.when( asyncGenerateGenericDetails(), asyncFetchImages(), asyncLoadMap(), generateContacts() ).then(
                                     function() {
                                         // Generate links & contacts text based on if links were found or not.
                                         if(!noLinks) {
@@ -1491,12 +1827,22 @@ function fetchInformation(language, lib) {
                     if(isScheduleEmpty && !schedulesAreAvailable && noImages && triviaIsEmpty) {
                         noSidebar = true;
                     }
-                    if(noLeftCol) {
+                    // Facebook widget is generated after this check happens. If links include FB, don't hide.
+                    if(noLeftCol && !linksIncludeFacebook) {
                         // Hide the content on left, make the sidebar 100% in width.
+                        if(bodyWidth < 767) {
+                            if(isScheduleEmpty) {
+                                $("#leftBar").css("display", "none");
+                                $("#introductionSidebar").removeClass("col-lg-5 col-xl-4 order-2 sidebar");
+                                $("#introductionSidebar").addClass("col-md-12");
+                            }
+                        }
+                        else {
+                            $("#leftBar").css("display", "none");
+                            $("#introductionSidebar").removeClass("col-lg-5 col-xl-4 order-2 sidebar");
+                            $("#introductionSidebar").addClass("col-md-12");
+                        }
                         $(".details").css("display", "none");
-                        $("#leftBar").css("display", "none");
-                        $("#introductionSidebar").removeClass("col-lg-5 col-xl-4 order-2 sidebar");
-                        $("#introductionSidebar").addClass("col-md-12");
                         $("#sliderBox").removeClass("small-slider");
                         $("#expandSlider").css("display", "none");
                         $('.slider-play-container').css('margin-left', '-10px');
