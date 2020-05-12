@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Prevent Edge from formatting schedule times as phone numbers. -->
+  <meta name="format-detection" content="telephone=no">
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="../style/lib/leaflet.css"/>
+  <link rel="stylesheet" href="../style/events.css">
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="../js/lib/jquery.translate.js"></script>
+  <script src="../js/translations.js"></script>
+  <script src="../js/lib/leaflet.min.js"></script>
+  <script src="../js/lib/leafletTileFallback.min.js"></script>
+  <script src="../js/getParameters.js"></script>
+  <script src="../js/lib/moment.min.js"></script>
+  <script src="../js/lib/moment-fi.js"></script>
+  <script src="../js/commonFunctions.js"></script>
+  <script src="../js/consortium.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Events -->
+    <div class="events-page">
+      <div class="events-container">
+        <div class="event-filters">
+            <h2 class="sr-only">Tapahtumien rajaus</h2>
+            <button id="toggleEventFilters" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+              Rajaa tapahtumia
+            </button>
+          <div class="collapse" id="collapseExample">
+            <div class="event-filter-container event-tags-filter">
+              <fieldset class="event-tags-fieldset">
+                <legend><h3 class="event-category-filter-title">Kategoria</h3></legend>
+              </fieldset>
+            </div>
+            <div class="event-filter-container event-location-filter">
+              <fieldset class="event-locations-fieldset">
+                <legend><h3 class="event-location-filter-title">Sijainti</h3></legend>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+          <div class="keski-events-archive" id="keskiEvents">
+            <h1 class="events-section-title"></h1>
+            <ul id="keskiEventsUl"></ul>
+          </div>
+        </div>
+      </div>
+    <!-- Events modal -->
+    <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalTitle" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title" id="eventModalTitle">Event</h1>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div id="eventModalBody" class="modal-body">
+            <div id="eventDescription"></div>
+            <div id="eventMapRow" class="">
+              <div id="eventMapContainer" class=""></div>
+            </div>
+            <div id="eventImageContainer"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary close-event-modal" data-dismiss="modal"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+</body>
+<noscript><h2 class="no-js-notification">Tapahtumien hakuun tarvitaan JavaScriptiä. Selaimesi ei tue Javascriptiä tai se on estetty.
+  <br>In order to fetch events, this page requires Javascript. Your browser does not support it or it has been blocked.
+  </h2></noscript>
+</html>
