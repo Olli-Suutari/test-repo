@@ -1652,7 +1652,6 @@ function fetchInformation(language, lib) {
     }
     $.when( triggerFetch() ).then(
         function() {
-            console.log(eventListGenerated);
             if (!eventListGenerated && !isReFetching) {
                 // If event list is generated, trigger the function for generating the event list for selected library.
                 var waitEventListGenerationfunction = setInterval(function(){

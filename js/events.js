@@ -1,64 +1,30 @@
-"use strict";
-
 var isEventsPage = false;
-var isEnglish = false;
 var eventTags = [];
 var eventLocations = [];
 var allEvents = [];
 var filteredEvents = [];
 var eventMap;
+// Load FA from keski-finna.fi // TO DO; use svg for icons in other locations.
 var faPath = "https://keski-finna.fi/external/finna/style/fa/svgs/solid/";
 
+// Function for generating navigation links to event venue.
 function generateLinkToTransitInfo(coordinates, street, zipcode, city, text) {
     var linkToTransitInfo = street + ", " + city + "::" + coordinates.lat + ", " + coordinates.lon;
     var infoText = i18n.get("Route and transportation"); //var infoText = text;
-
+    // Use the matka.fi if in Jyväskylä for public transportation details.
     linkToTransitInfo = "https://opas.matka.fi/reitti/POS/" + linkToTransitInfo;
     linkToTransitInfo = encodeURI(linkToTransitInfo); // Matka.fi does not support all cities for public transport details, see: https://www.traficom.fi/fi/asioi-kanssamme/reittiopas
-
+    // Link to Google maps for other cities. TO DO: Use matka.fi api to determine if the location has nearby public transportation.
     if (city !== "Jyväskylä") {
         linkToTransitInfo = "https://www.google.com";
-
         if (lang === "fi") {
             linkToTransitInfo = "https://www.google.fi";
         }
-
         linkToTransitInfo = linkToTransitInfo + "/maps/dir//";
         linkToTransitInfo = linkToTransitInfo + street + ", " + zipcode + ", " + city + "/@" + coordinates.lat + ", " + coordinates.lon + ", 15z/";
         infoText = i18n.get("Navigation to location");
     }
-
-    return '<a target="_blank" class="external-navigation-link" href="' + linkToTransitInfo + '">' + infoText + '</a>'; //$('#transitBody').append('<p><a target="_blank" href="' + linkToTransitInfo + '">' + infoText + '</a></p>')
-} // Adds tags to eventTags array if they do not already exists. Increases type count if already exists.
-
-
-function addTagToTagArray(tag) {
-    var tagAlreadyExists = false;
-
-    for (var t = 0; t < eventTags.length; t++) {
-        if (eventTags[t].id == tag.id) {
-            eventTags[t].count = eventTags[t].count + 1;
-            tagAlreadyExists = true;
-        }
-    }
-
-    if (!tagAlreadyExists) {
-        eventTags.push({
-            id: tag.id,
-            nameFi: tag.fi,
-            nameEn: tag.en,
-            count: 1
-        });
-    }
-}
-
-var checkedTags = [];
-var checkedLocations = [];
-
-function tagExists(tag) {
-    return filteredEvents.some(function (el) {
-        return el.tags == tag;
-    });
+    return '<a target="_blank" class="external-navigation-link" href="' + linkToTransitInfo + '">' + infoText + '</a>';
 }
 
 function fetchEvents() {
@@ -69,7 +35,6 @@ function fetchEvents() {
         dataType: "json",
         success: function success(data) {
             generateEventList(data);
-            console.log(data);
         },
         error: function error(request, status, _error) {
             console.log(_error);
@@ -83,7 +48,6 @@ function fetchEvents() {
 
 function generateEventListForLib(library) {
     var eventList = [];
-
     for (var i = 0; i < allEvents.length; i++) {
         for (var t = 0; t < allEvents[i].organizers.length; t++) {
             if (allEvents[i].organizers[t].libId == library) {
@@ -91,34 +55,29 @@ function generateEventListForLib(library) {
             }
         }
     }
-
     if (eventList.length != 0) {
         $("#eventsTitle").css('display', 'block');
-    } // Show up to 5 upcoming events. + toggle for more.
-
-
+    }
+    // Show up to 5 upcoming events. + toggle for more.
     for (var e = 0; e < eventList.length; e++) {
         var showMoreClass = "";
-
         if (e > 4) {
             showMoreClass = "show-more-events";
         }
-
         $('#keskiEventsUl').append('<li class="event-li ' + showMoreClass + '" >' + eventList[e].listItem + '</li>');
-    } // Generate the button for displaying more than 5 events + bind the functionality.
-
-
+    }
+    // Generate the button for displaying more than 5 events + bind the functionality.
     if (eventList.length > 5) {
         $('#keskiEventsUl').append('<li class="event-li load-more-events">' + '<button class="show-all-events-btn btn-secondary">' + i18n.get('Show all events') + '</button>' + '</li>');
         $(".show-all-events-btn").on('click', function () {
             $('.show-more-events').removeClass('show-more-events');
             $('.show-all-events-btn').hide();
         });
-    } // Open the event if url contains an event link.
+    }
 
-
+    // TO DO
+    // Open the event if url contains an event link.
     var pageUrl = window.location.href;
-
     if (pageUrl.indexOf('?event=') > -1) {
         // If we use simple indexOf match articles that contain other articles names are problematic,
         // eg. event=test and event=test-2
@@ -156,10 +115,8 @@ function generateEventListForLib(library) {
         popupText = popupText.replace(/(<p>&nbsp;<\/p>)+/g, "");
         popupText = popupText.replace(/(<p><\/p>)+/g, "");
         popupText = popupText.replace(/(<p>\s<\/p>)+/g, ""); // Make all links external.
-
         popupText = popupText.replace(/(<a href=")+/g, '<a class="external-link" target="_blank" href="');
         /* Generate location info & map. */
-
         var itemLocation = '<p class="event-detail event-location" aria-label="' + i18n.get("Event location") + '">' + '<img data-toggle="tooltip" title="' + i18n.get("Event location") + '" data-placement="top" alt="" ' + 'src="' + faPath + 'map-marker.svg" class="fa-svg event-details-icon">' + locationText + '</p>';
         $('#modalTitle').replaceWith('<h1 class="modal-title underlined-title" id="modalTitle">' + popupTitle + '</h1>');
         $('#modal').addClass('modal-lg');
@@ -174,29 +131,24 @@ function generateEventListForLib(library) {
         }
 
         $('#eventImageContainer').html('<div id="eventImageContainer">' + image + '</div>'); // Show modal.
-        //console.log("e.pageY " + e.pageY + " | ta "  +offSet);
-        // Use animate, $('#myModal').css('top', -posY); works pretty badly.
 
         $('#myModal').css({
             position: 'absolute',
             left: 0,
             top: $(this).offset().top - 85 // Element position -85,
 
-        }).animate(); // Show modal.
-
-        var offSet = e.pageY; // If we trigger the click programmatically, e.pageY will be undefined...
-
+        }).animate();
+        // Show modal.
+        var offSet = e.pageY;
+        // If we trigger the click programmatically, e.pageY will be undefined...
         if (offSet === undefined) {
-            offSet = e.target; // OffsetTop is always about 200 px too little...
-
+            offSet = e.target;
+            // OffsetTop is always about 200 px too little...
             offSet = offSet.offsetTop + 200;
-        } //console.log("e.pageY " + e.pageY + " | ta "  +offSet);
-
-
-        toggleModal(offSet); // Adjust parent url.
-
-        adjustParentUrl($(this).data('name'), "service"); // Update the page url.
-
+        }
+        toggleModal(offSet);
+        // TO DO: adjustParentUrl($(this).data('name'), "service"); // Update the page url.
+        /*
         var itemUrl = $(this).data('url').toString();
         var currentUrl = window.location.href.toString(); // Do not add to url if already there.
 
@@ -207,6 +159,7 @@ function generateEventListForLib(library) {
             };
             history.replaceState(stateObj, popupTitle, itemUrl);
         }
+         */
     });
     $("#myModal").on('hide.bs.modal', function () {
         var pageUrl = window.location.href;
@@ -217,7 +170,7 @@ function generateEventListForLib(library) {
             var stateObj = {
                 urlValue: pageUrl
             };
-            history.replaceState(stateObj, '', pageUrl);
+            // TO DO: history.replaceState(stateObj, '', pageUrl);
         }
     });
 }
@@ -236,31 +189,26 @@ function generateEventItem(event, id) {
     var tagDisplay = "";
 
     if (event.tags.length !== 0) {
-        tags = event.tags; // Find ID from : { "id": 4, "fi": "Lapset", "en": "Children" }.
-
+        tags = event.tags;
         for (var t = 0; t < tags.length; t++) {
-            var tagsJson = JSON.parse(tags[t]); // Add tagID to list,
-
+            var tagsJson = JSON.parse(tags[t]);
+            // Add tagID to list,
             tagIdList.push(tagsJson.id);
-            addTagToTagArray(tags[t]);
-
             if (lang == "fi") {
                 var tagEnd = ", ";
-
                 if (t == tags.length - 1 || tags.length == 1) {
                     tagEnd = "";
-                } else if (t == tags.length - 2) {
+                }
+                else if (t == tags.length - 2) {
                     tagEnd = " & ";
                 }
-
                 var casedTag = tagsJson.fi;
-
                 if (t != 0) {
                     casedTag = casedTag.toLowerCase();
                 }
-
                 tagDisplay = tagDisplay + casedTag + tagEnd;
-            } else {
+            }
+            else {
                 tagDisplay = tagDisplay + tagsJson.en + ". ";
             }
         }
@@ -337,14 +285,13 @@ function generateEventItem(event, id) {
     }
 
     var itemTitle = event.title;
-
-    if (isEnglish && event.english_title !== null && event.english_title != "") {
+    if (lang != "fi" && event.english_title !== null && event.english_title != "") {
         itemTitle = event.english_title;
     }
 
     var itemContent = event.content;
 
-    if (isEnglish && event.english_content !== null && event.english_content != "") {
+    if (lang != "fi" && event.english_content !== null && event.english_content != "") {
         itemContent = event.english_content;
     }
 
@@ -360,20 +307,16 @@ function generateEventItem(event, id) {
         var customCity = customLocationData.city; // Google maps returns place name as: Placename, address. If there is no Placename, only address is returned.
 
         var customPlace = customLocationData.name;
-
         if (customPlace == undefined) {
             customPlace = "";
-        } else {
+        }
+        else {
             var startOfPlace = customPlace.slice(0, 4);
             var startOfAddress = customStreet.slice(0, 4);
-
             if (startOfPlace == startOfAddress) {
                 customPlace = customPlace + ', ' + customCity;
-            } //customLocation = customPlace + ", " + customStreet + " " + customStreetNumber + ", " + customCity;
-
-        } //customLocation = customPlace + ", " + customStreet + " " + customStreetNumber + ", " + customCity;
-
-
+            }
+        }
         customLocation = customPlace;
         var customCoordinates = {
             lat: customLocationData.lat,
@@ -430,13 +373,15 @@ function generateEventItem(event, id) {
             if (event.organizer[i] == 0) {// TO DO: Other
                 //event.organizer[i] = { location: libraryList[x].text, coordinates: libraryList[x].coordinates,
                 //    city: libraryList[x].city };
-            } else if (event.organizer[i] == 1) {
+            }
+            else if (event.organizer[i] == 1) {
                 event.organizer[i] = {
                     location: "Keski-kirjastot",
                     coordinates: null,
                     city: null
                 };
-            } else if (event.organizer[i] == 2) {
+            }
+            else if (event.organizer[i] == 2) {
                 event.organizer[i] = {
                     location: i18n.get('Web event'),
                     coordinates: null,
@@ -449,71 +394,60 @@ function generateEventItem(event, id) {
 
     if (event.organizer.length > 1) {
         eventLocation = event.organizer.length + " " + i18n.get('event locations');
-    } else {
+    }
+    else {
         if (event.organizer[0] !== undefined) {
             eventLocation = event.organizer[0].location;
-        } else {
+        }
+        else {
             // TO DO: No event location?
             eventLocation = i18n.get('Other location');
         }
-    } // Accessible icons: https://fontawesome.com/how-to-use/on-the-web/other-topics/accessibility
+    }
+    // Accessible icons: https://fontawesome.com/how-to-use/on-the-web/other-topics/accessibility
     // Add price where available.
-
-
     if (event.price != "") {
         eventPrice = event.price + " €"; //eventPrice = '<span class="event-price">' + eventPrice + '</span>';
-
         eventPrice = '<span class="event-detail event-price" aria-label="' + i18n.get("Price") + '">' + '<img data-toggle="tooltip" title="' + i18n.get("Price") + '" data-placement="top" alt="" ' + 'src="' + faPath + 'money-bill-alt.svg" class="fa-svg event-details-icon">' + eventPrice + '</span>';
-    } // Website
-
-
+    }
+    // Website
     var itemLink = "";
-
     if (event.link_url !== null && event.link_url != "") {
         var prettyUrl = generatePrettyUrl(event.link_url);
         itemLink = '<span class="event-detail event-link" aria-label="' + i18n.get("Website") + '">' + '<img data-toggle="tooltip" title="' + i18n.get("Website") + '" data-placement="top" alt="" ' + 'src="' + faPath + 'globe.svg" class="fa-svg event-details-icon"><a href="' + event.link_url + '">' + prettyUrl + '</a></span>';
     }
-
+    // Location
     var locationData = event.organizer;
-
     if (customLocation !== "") {
         eventLocation = customLocation;
         locationData = customLocationObject;
     }
-
     var itemLocation = '<span class="event-detail event-location" aria-label="' + i18n.get("Event location") + '">' + '<img data-toggle="tooltip" title="' + i18n.get("Event location") + '" data-placement="top" alt="" ' + 'src="' + faPath + 'map-marker-alt.svg" class="fa-svg event-details-icon">' + eventLocation + '</span>';
     var locationInfo = "";
     var locationHelpText = "";
-
     if (event.location_info != "" && event.location_info != undefined) {
-        // TO DO: TRANSLATIONS.
         locationHelpText = event.location_info;
-
         if (locationHelpText.charAt(locationHelpText.length - 1) != ".") {
             locationHelpText = locationHelpText + ".";
         }
     }
-
     if (locationHelpText !== "") {
         locationInfo = '<span class="event-detail event-location-info" aria-label="' + i18n.get("Location information") + '">' + '<img data-toggle="tooltip" title="' + i18n.get("Location information") + '" data-placement="top" alt="" ' + 'src="' + faPath + 'location-arrow.svg" class="fa-svg event-details-icon">' + locationHelpText + '</span>';
-    } // Generate the transit info.
-
-
+    }
+    // Generate the transit info.
     var linkToNavigation = "";
     var linksToNavigation = []; // TO DO: Multiple locations.
-
     if (locationData.length == 1) {
         var location = locationData[0];
-
         if (location.address != null && location.city != null && location.coordinates != null) {
             linkToNavigation = generateLinkToTransitInfo(location.coordinates, location.address.street, location.address.zipcode, location.city) + ". ";
         }
     }
-
     if (linkToNavigation != "") {
         linkToNavigation = '<span class="event-detail event-transit" aria-label="' + i18n.get("Navigation to location") + '">' + '<img data-toggle="tooltip" title="' + i18n.get("Navigation to location") + '" data-placement="top" alt="" ' + 'src="' + faPath + 'directions.svg" class="fa-svg event-details-icon">' + linkToNavigation + '</span>';
     }
 
+    // Generate modal infoboxes.
     var itemInfoBoxes = '<div class="event-info-box">' + dateDisplayRow + tagDisplay + eventPrice + itemLink + itemLocation + locationInfo + linkToNavigation + '</div>';
     itemContent = '<div class="event-content">' + itemContent + itemInfoBoxes + '</div>';
     locationData = JSON.stringify(locationData); // If the event location is the library, do not display this information in the event list.
@@ -521,24 +455,28 @@ function generateEventItem(event, id) {
     var index = libraryList.map(function (o) {
         return o.id;
     }).indexOf(library);
-    var selectedLibName = libraryList[index].text;
 
+    var selectedLibName = libraryList[index].text;
     if (eventLocation == selectedLibName) {
         itemLocation = "";
     }
 
-    var listItem = '<a id="event-' + id + '" class="event-item-link" href="javascript:void(0);"' + "data-url='" + event.perma_link + "' data-image='" + itemImg + "' " + "data-name='" + itemTitle + "' data-message='" + itemContent + "' data-location-text='" + eventLocation + "' data-location='" + locationData + "' data-location-info='" + locationInfo + "'>" + '<div class="event-li-details">' + '<span class="event-li-title event-detail">' + '<i class="svg-inline--fa fas fa-marker fa-read-me" data-toggle="tooltip" title="" data-placement="top"></i> ' + itemTitle + '</span>' + dateDisplayRow + itemLocation + '</div>' + '</a>';
-    +allEvents.push({
-        id: id,
-        tags: tagIdList,
-        city: eventCityList,
-        url: event.perma_link,
-        organizers: event.organizer,
-        listItem: listItem
-    });
-} // ARGS: Date in dd.mm.YYYY hh.mm (eq. 17.03.2020 14.00)
+    var listItem = '<a id="event-' + id + '" class="event-item-link" href="javascript:void(0);"' + "data-url='" + event.perma_link +
+        "' data-image='" + itemImg + "' " + "data-name='" + itemTitle + "' data-message='" + itemContent + "' data-location-text='" +
+        eventLocation + "' data-location='" + locationData + "' data-location-info='" + locationInfo + "'>" + '<div class="event-li-details">' +
+        '<span class="event-li-title event-detail">' + '<i class="svg-inline--fa fas fa-marker fa-read-me" data-toggle="tooltip" title="" data-placement="top"></i> ' +
+        itemTitle + '</span>' + dateDisplayRow + itemLocation + '</div>' + '</a>'; +
+        allEvents.push({
+            id: id,
+            tags: tagIdList,
+            city: eventCityList,
+            url: event.perma_link,
+            organizers: event.organizer,
+            listItem: listItem
+        });
+}
 
-
+// ARGS: Date in dd.mm.YYYY hh.mm (eq. 17.03.2020 14.00)
 function formatEventTimeToDate(rawDate) {
     // 10 first chars = date.
     var startDateDay = rawDate.substr(0, 10); // 5 last chars = time.
@@ -570,38 +508,42 @@ function generateEventList(events) {
 
     for (var i = 0; i < events.length; i++) {
         generateEventItem(events[i].acf, events[i].id);
-    } // Set eventListGenerated to true, this will be used in libDetails to fetch per library event generation.
-
-
+    }
+    // Set eventListGenerated to true, this will be used in libDetails to fetch per library event generation.
     eventListGenerated = true;
 }
 
 var eventMap;
+// Leaflet layerGroups are required for clearing multiple event location pointers at once
 var layerGroup = null;
-
 function asyncGenerateEventMap(locations) {
     var mapDeferred = jQuery.Deferred();
     setTimeout(function () {
         if (!eventMap) {
-            eventMap = L.map('eventMapContainer'); // Add fallback layer to the default titles in case something goes wrong (err 429 etc.)
-
-            L.tileLayer.fallback('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(eventMap); //L.tileLayer('https://map-api.finna.fi/v1/rendered/{z}/{x}/{y}.png').addTo(map); < Blocked for non-finna.
+            eventMap = L.map('eventMapContainer');
+            // Add fallback layer to the default titles in case something goes wrong (err 429 etc.)
+            console.log(refUrl);
+            if (refUrl.indexOf('finna') > -1) {
+                // Blocked for non-finna websites.
+                L.tileLayer.fallback('https://map-api.finna.fi/v1/rendered/{z}/{x}/{y}.png').addTo(eventMap);
+            }
+            else {
+                L.tileLayer.fallback('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(eventMap);
+            }
             // Limitations: free usage for up to 75,000 mapviews per month, none-commercial services only. For bigger usage and other cases contact CARTO sales for enterprise service key.
-            //L.tileLayer.fallback('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png').addTo(eventMap);
-
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png').addTo(eventMap); //L.tileLayer('https://map-api.finna.fi/v1/rendered/{z}/{x}/{y}.png').addTo(eventMap); // Blocked for non-finna.
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png').addTo(eventMap);
             // Min/max zoom levels + default focus.
-
             eventMap.options.minZoom = 6;
             eventMap.options.maxZoom = 18;
             eventMap.setView(["62.750", "25.700"], 10.5);
-            layerGroup = L.layerGroup().addTo(eventMap); // Set the contribution text.
-
-            $('.leaflet-control-attribution').replaceWith('<div class="leaflet-control-attribution leaflet-control">© <a target="_blank" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | <a target="_blank" href="https://carto.com/attributions">CARTO</a></div>');
-        } else {
+            layerGroup = L.layerGroup().addTo(eventMap);
+            // Set the contribution text.
+            $('.leaflet-control-attribution').replaceWith('<div class="leaflet-control-attribution leaflet-control">' +
+                '© <a target="_blank" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | <a target="_blank" href="https://carto.com/attributions">CARTO</a></div>');
+        }
+        else {
             layerGroup.clearLayers();
         }
-
         var lastCoordinates = null;
         var markerIcon = L.divIcon({
             html: '<img data-toggle="tooltip" title="' + i18n.get("Event location") + '" alt="" ' + 'src="' + faPath + 'book-reader.svg" class="fa-svg fa-leaflet-map-marker">',
@@ -660,18 +602,8 @@ function asyncGenerateEventMap(locations) {
                             eventMap.whenReady(function () {
                                 setTimeout(function () {
                                     eventMap.invalidateSize();
-                                    eventMap.setView([lastCoordinates.lat, lastCoordinates.lon], 10.5); //eventMap.setView(["62.750", "25.700"], 6);
-                                    // Open popup
-
-                                    /*
-                                    eventMap.eachLayer(function (layer) {
-                                        console.log("DO FOO")
-                                        if(layer._latlng !== undefined) {
-                                            layer.fire('click');
-                                        }
-                                    });
-                                    */
-
+                                    eventMap.setView([lastCoordinates.lat, lastCoordinates.lon], 10.5);
+                                    // Open popups
                                     layerGroup.eachLayer(function (layer) {
                                         layer.openPopup();
                                     });
@@ -682,41 +614,12 @@ function asyncGenerateEventMap(locations) {
                     }
                 }
             }, 1); // Return the Promise so caller can't change the Deferred
-
             return addCoordinatesDeferred.promise();
         }
 
         $.when(addCoordinatesToMap()).then(function () {
-            // If we are in the contacts tab, set map view.
-            // If we try to set view & open the popup in asyncLoadMap, things get messed.
-
-            /*
-            if(lat !== undefined) {
-                map.setView([lat, lon], 16);
-            } else {
-                map.setView(["62.750", "25.700"], 6);
-            }
-            */
-            //eventMap.setView(["62.750", "25.700"], 6);
             mapDeferred.resolve();
         });
     }, 1); // Return the Promise so caller can't change the Deferred
-
     return mapDeferred.promise();
 }
-
-$(document).ready(function () {
-    isEventsPage = $('.lib-events').length === 1;
-
-    if (isEventsPage) {
-        console.log(document.documentElement.lang);
-        console.log(document.getElementsByTagName('html')[0].getAttribute('lang'));
-
-        if (document.getElementsByTagName('html')[0].getAttribute('lang') !== "fi") {
-            isEnglish = true;
-        }
-
-        $(".close-event-modal").text(i18n.get("Close"));
-        $("#eventsTitle").text(i18n.get("Events"));
-    }
-});

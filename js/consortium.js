@@ -152,7 +152,9 @@ function asyncReplaceIdWithCity() {
                         // Fetch events if events page.
                         isEventsPage = $('.lib-events').length === 1;
                         if (isEventsPage) {
-                            fetchEvents();
+                            if (refUrl.indexOf("finna") > -1 || refUrl.indexOf("localhost") > -1) {
+                                fetchEvents();
+                            }
                         }
                         citiesDeferred.resolve();
 
@@ -189,7 +191,7 @@ function generateSelect() {
         $.when(asyncCheckUrlForKeskiLibrary(), asyncReplaceIdWithCity()).then(
             function(){
                 // Trigger schedule fetching.
-                if(homePage) {
+                if(homePage && $('.homepage-widget-week').length === 0) {
                     getDaySchelude(0, library);
                 }
                 else {
@@ -455,7 +457,12 @@ $(document).ready(function() {
 
             }
             if(homePage) {
-                getDaySchelude(0, library);
+                if ($('.homepage-widget-week').length === 0) {
+                    getDaySchelude(0, library);
+                }
+                else {
+                    getWeekSchelude(0, library);
+                }
                 adjustHomePageHeight(50);
             }
             else {
