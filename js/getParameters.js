@@ -113,6 +113,7 @@ if(refUrl.length === 0) {
 }
 
 refUrl = decodeVal(refUrl);
+
 // Navigate to contacts or services, if parameter is in the url.
 // Active tab: 0 = info, 1 = contact details
 var activeTab = 0;

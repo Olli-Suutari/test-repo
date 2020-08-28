@@ -246,6 +246,7 @@ function adjustParentHeight(delay, elementPosY) {
 var checkedUrlForLibNamesInOppositeLang = false;
 function adjustParentUrl(toAdd, type) {
     refUrl = encodeVal(refUrl);
+    console.log(refUrl)
     // Sometimes refurl is set to github when paging back or forwards, reset in case so...
     if(refUrl.indexOf("github") >-1) {
         refUrl = (window.location != window.parent.location)
@@ -271,10 +272,21 @@ function adjustParentUrl(toAdd, type) {
         refUrl = refUrl.replace(new RegExp(toAdd,"i"), "");
     }
     if(type == "cleanupUrl") {
+        console.log("DO CLEANUP")
         toAdd = "";
     }
+    // Remove contacts from url if navigating to introduction.
+    if(type === "search") {
+        if(refUrl.indexOf('?haku=') > -1) {
+            refUrl = refUrl.replace(
+                new RegExp(/(\?haku=.*\*)/,"i"), "");
+        }
+        if(isValue(toAdd)) {
+            refUrl = refUrl + '?haku=' + toAdd + '*';
+        }
+    }
     // Remove lib name in opposite language, if any are present. If this is not done, it could sometimes result in infinite loop...
-    if(!checkedUrlForLibNamesInOppositeLang) {
+    if(!checkedUrlForLibNamesInOppositeLang && type !== "search") {
         for (var i = 0; i < libListMultiLang.length; i++) {
             var libName = libListMultiLang[i].nameEn;
             if(lang == "en") {
@@ -288,43 +300,45 @@ function adjustParentUrl(toAdd, type) {
     }
     // Cleanup any potential service names.
     var serviceMathchFound = false;
-    for (var i = 0; i < arrayOfServiceNamesInOppositeLang.length; i++) {
-        if(arrayOfServiceNamesInOppositeLang[i].customName !== "") {
-            var oppositeCustomName = encodeVal(arrayOfServiceNamesInOppositeLang[i].customName);
-            oppositeCustomName = oppositeCustomName.replace(/,/g, "");
-            if(refUrl.indexOf("?" + oppositeCustomName) > -1) {
-                serviceMathchFound = true;
-                refUrl = refUrl.replace("?" + decodeVal(arrayOfServiceNamesInOppositeLang[i].customName), "");
-            }
-        }
-        if(!serviceMathchFound) {
-            if(arrayOfServiceNamesInOppositeLang[i].name !== "") {
-                var oppositeName = encodeVal(arrayOfServiceNamesInOppositeLang[i].name);
-                oppositeName = oppositeName.replace(/,/g, "");
-                if(refUrl.indexOf("?" + oppositeName) > -1) {
+    if(type !== "search") {
+        for (var i = 0; i < arrayOfServiceNamesInOppositeLang.length; i++) {
+            if(arrayOfServiceNamesInOppositeLang[i].customName !== "") {
+                var oppositeCustomName = encodeVal(arrayOfServiceNamesInOppositeLang[i].customName);
+                oppositeCustomName = oppositeCustomName.replace(/,/g, "");
+                if(refUrl.indexOf("?" + oppositeCustomName) > -1) {
                     serviceMathchFound = true;
-                    refUrl = refUrl.replace("?" + decodeVal(arrayOfServiceNamesInOppositeLang[i].name), "");
+                    refUrl = refUrl.replace("?" + decodeVal(arrayOfServiceNamesInOppositeLang[i].customName), "");
+                }
+            }
+            if(!serviceMathchFound) {
+                if(arrayOfServiceNamesInOppositeLang[i].name !== "") {
+                    var oppositeName = encodeVal(arrayOfServiceNamesInOppositeLang[i].name);
+                    oppositeName = oppositeName.replace(/,/g, "");
+                    if(refUrl.indexOf("?" + oppositeName) > -1) {
+                        serviceMathchFound = true;
+                        refUrl = refUrl.replace("?" + decodeVal(arrayOfServiceNamesInOppositeLang[i].name), "");
+                    }
                 }
             }
         }
-    }
-    serviceMathchFound = false;
-    for (var i = 0; i < arrayOfServiceNames.length; i++) {
-        if(arrayOfServiceNames[i].customName !== "") {
-            var oppositeCustomName = encodeVal(arrayOfServiceNames[i].customName);
-            oppositeCustomName = oppositeCustomName.replace(/,/g, "");
-            if(refUrl.indexOf("?" + oppositeCustomName) > -1) {
-                serviceMathchFound = true;
-                refUrl = refUrl.replace("?" + decodeVal(arrayOfServiceNames[i].customName), "");
-            }
-        }
-        if(!serviceMathchFound) {
-            if(arrayOfServiceNames[i].name !== "") {
-                var oppositeName = encodeVal(arrayOfServiceNames[i].name);
-                oppositeName = oppositeName.replace(/,/g, "");
-                if(refUrl.indexOf("?" + oppositeName) > -1) {
+        serviceMathchFound = false;
+        for (var i = 0; i < arrayOfServiceNames.length; i++) {
+            if(arrayOfServiceNames[i].customName !== "") {
+                var oppositeCustomName = encodeVal(arrayOfServiceNames[i].customName);
+                oppositeCustomName = oppositeCustomName.replace(/,/g, "");
+                if(refUrl.indexOf("?" + oppositeCustomName) > -1) {
                     serviceMathchFound = true;
-                    refUrl = refUrl.replace("?" + decodeVal(arrayOfServiceNames[i].name), "");
+                    refUrl = refUrl.replace("?" + decodeVal(arrayOfServiceNames[i].customName), "");
+                }
+            }
+            if(!serviceMathchFound) {
+                if(arrayOfServiceNames[i].name !== "") {
+                    var oppositeName = encodeVal(arrayOfServiceNames[i].name);
+                    oppositeName = oppositeName.replace(/,/g, "");
+                    if(refUrl.indexOf("?" + oppositeName) > -1) {
+                        serviceMathchFound = true;
+                        refUrl = refUrl.replace("?" + decodeVal(arrayOfServiceNames[i].name), "");
+                    }
                 }
             }
         }
@@ -370,7 +384,7 @@ function adjustParentUrl(toAdd, type) {
             }
         }
     }
-    if(toAdd !== ''){
+    if(toAdd !== '' && type !== "search"){
         refUrl = refUrl + "?" + toAdd;
     }
     refUrl = refUrl.replace(/(%3f)/g, "?");

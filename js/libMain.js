@@ -440,6 +440,19 @@ function bindActions() {
 // divClone & active tab are used with consortium.js
 var divClone = '';
 var map;
+// Create typing timer for search functionality so the url is not updated after each keystroke.
+var typingTimer;
+function updateSearchTerm() {
+    var libSearchText = $('.select2-search__field').val();
+    if (libSearchText === '' || libSearchText == undefined) {
+        console.log("DO CLEANUP IN FU")
+        adjustParentUrl('', 'search');
+        return
+    }
+    console.log("SEARCH FOR: " + libSearchText)
+    adjustParentUrl(libSearchText, 'search')
+}
+
 $(document).ready(function() {
     bindActions();
     $( "#closeInfoBtn" ).on('click', function () {
@@ -480,5 +493,31 @@ $(document).ready(function() {
     // Fetch details if not generating select for libraries, otherwise trigger this in consortium.js
     if(consortium === undefined && city === undefined) {
         fetchInformation(lang);
+    }
+    // Bind search  url updater
+    if (!homePage) {
+        $(document).on('keyup keydown', 'input.select2-search__field', function(e) {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(updateSearchTerm, 500);
+        })
+
+        $('#librarySelector').on('select2:close', function (e) {
+            console.log("DO CLEANUP ON CLOSE")
+            adjustParentUrl('', 'search');
+        });
+        if(refUrl.indexOf('?haku=') > -1) {
+            console.log("REFURL IN MAINS")
+            console.log(refUrl)
+            var myRegexp = /(\?haku=(.*)\*)/g;
+            var match = myRegexp.exec(refUrl);
+            var searchTerm = match[2];
+            setTimeout(function(){
+                $('#librarySelector').select2('open');
+                $('.select2-search__field').val(searchTerm);
+            }, 700);
+            console.log(match[2]); // abc
+
+        }
+
     }
 }); // OnReady
